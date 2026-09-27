@@ -1,0 +1,48 @@
+/* inicio.css — estilos específicos de la página inicio.html */
+
+.rc-hero {
+  position: relative;
+}
+
+.rc-hero::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(201,162,39,.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.rc-hero .rc-btn-gold {
+  padding: 14px 34px;
+  font-size: .98rem;
+}
+
+/* Números de la sección "Tu cuenta" resaltan en dorado claro al pasar el ratón */
+.rc-stat {
+  transition: border-color .2s ease, transform .15s ease;
+}
+.rc-stat:hover {
+  border-color: var(--gold-400);
+  transform: translateY(-2px);
+}
+.rc-stat:hover .num {
+  color: var(--gold-300);
+}
+
+/* Diferenciar el bloque de "Juegos destacados" del de "Explora más" */
+.rc-main > .rc-panel:nth-of-type(2) {
+  border-color: rgba(201,162,39,.4);
+}
+
+.rc-main > .rc-panel:nth-of-type(3) .rc-game-card .icon {
+  opacity: .85;
+}
+
+@media (max-width: 640px) {
+  .rc-hero { padding: 40px 14px 32px; }
+}
