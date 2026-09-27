@@ -4,22 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Dados</title>
-<link rel="stylesheet" href="shared/style.css">
-<style>
-  .dice-zone { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-  .dice-pair { display: flex; gap: 16px; }
-  .die {
-    width: 76px; height: 76px; border-radius: 12px; background: var(--cream-050);
-    display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr);
-    padding: 10px; box-shadow: 0 6px 16px rgba(0,0,0,.35);
-  }
-  .die.rolling { animation: die-shake .1s linear infinite; }
-  @keyframes die-shake { 0%{transform:rotate(0)} 50%{transform:rotate(8deg)} 100%{transform:rotate(-8deg)} }
-  .pip { width: 12px; height: 12px; border-radius: 50%; background: var(--ink-900); align-self: center; justify-self: center; opacity: 0; }
-  .sum-display { font-family: var(--font-display); font-size: 2rem; color: var(--gold-400); }
-  .modes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .modes button.active { border-color: var(--gold-400); background: rgba(201,162,39,.25); }
-</style>
+<link rel="stylesheet" href="../css/dados.css">
 </head>
 <body>
 

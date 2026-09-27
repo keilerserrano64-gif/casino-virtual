@@ -4,58 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Ruleta</title>
-<link rel="stylesheet" href="shared/style.css">
-<style>
-  .wheel-zone { display: flex; flex-direction: column; align-items: center; gap: 18px; }
-  .wheel {
-    width: 160px; height: 160px; border-radius: 50%;
-    background: conic-gradient(from 0deg,
-      #7a1f2b 0deg 20deg, #151210 20deg 40deg, #7a1f2b 40deg 60deg, #151210 60deg 80deg,
-      #7a1f2b 80deg 100deg, #151210 100deg 120deg, #7a1f2b 120deg 140deg, #151210 140deg 160deg,
-      #7a1f2b 160deg 180deg, #151210 180deg 200deg, #7a1f2b 200deg 220deg, #151210 220deg 240deg,
-      #7a1f2b 240deg 260deg, #151210 260deg 280deg, #7a1f2b 280deg 300deg, #151210 300deg 320deg,
-      #7a1f2b 320deg 340deg, #151210 340deg 360deg);
-    border: 4px solid var(--gold-500);
-    position: relative;
-    transition: transform 2.2s cubic-bezier(.17,.67,.24,1);
-  }
-  .wheel::after {
-    content: ''; position: absolute; inset: 30%; border-radius: 50%;
-    background: var(--felt-900); border: 2px solid var(--gold-400);
-  }
-  .result-number {
-    width: 74px; height: 74px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.8rem; font-weight: 800; font-family: var(--font-display);
-    border: 3px solid var(--gold-400); color: #fff;
-    background: var(--ink-900);
-  }
-  .result-number.red { background: var(--burgundy-600); }
-  .result-number.black { background: #1b1613; }
-  .result-number.green { background: var(--win-green); }
-
-  .bet-modes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .bet-modes button.active { border-color: var(--gold-400); background: rgba(201,162,39,.25); }
-
-  .number-grid {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
-    max-width: 420px; margin: 0 auto;
-  }
-  .num-btn {
-    padding: 8px 0; border-radius: 4px; border: 1px solid rgba(255,255,255,.15);
-    color: #fff; font-weight: 700; cursor: pointer; font-size: .82rem;
-  }
-  .num-btn.red { background: var(--burgundy-600); }
-  .num-btn.black { background: #1b1613; }
-  .num-btn.green { background: var(--win-green); grid-column: span 6; }
-  .num-btn.selected { outline: 3px solid var(--gold-400); }
-
-  .history-strip { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
-  .history-strip span {
-    width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: .74rem; font-weight: 700; color: #fff;
-  }
-</style>
+<link rel="stylesheet" href="../css/ruleta.css">
 </head>
 <body>
 
