@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Carreras</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+  .track { display: flex; flex-direction: column; gap: 10px; margin: 22px 0; }
+  .lane {
+    position: relative; height: 46px; background: rgba(0,0,0,.22);
+    border-radius: 4px; border: 1px solid rgba(201,162,39,.2);
+    display: flex; align-items: center; padding: 0 10px;
+  }
+  .lane .flag { position: absolute; right: 8px; opacity: .5; }
+  .lane .horse {
+    position: absolute; left: 4px; font-size: 1.6rem; transition: left 2.4s cubic-bezier(.2,.7,.3,1);
+  }
+  .lane .lbl { position: absolute; left: 8px; top: -18px; font-size: .7rem; opacity: .6; }
+  .horse-pick { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .horse-pick button {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 10px 14px; border-radius: 6px; border: 1px solid rgba(201,162,39,.35);
+    background: rgba(0,0,0,.15); color: var(--cream-050); cursor: pointer; font-size: .78rem;
+  }
+  .horse-pick button.selected { border-color: var(--gold-400); background: rgba(201,162,39,.2); }
+  .horse-pick .emoji { font-size: 1.5rem; }
+  .odds { opacity: .6; font-size: .7rem; }
+</style>
+</head>
+<body>
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+  <h1 style="text-align:center">🏇 Carrera virtual</h1>
+  <p style="text-align:center; opacity:.7">Elige tu caballo antes de la salida.</p>
+
+  <section class="rc-panel" style="max-width:640px; margin:0 auto;">
+    <div class="horse-pick" id="horsePick"></div>
+
+    <div class="track" id="track"></div>
+
+    <div class="rc-bet-row" style="justify-content:center;">
+      <label for="bet">Apuesta</label>
+      <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
+      <button class="rc-chip-btn" data-add="100">+100</button>
+      <button class="rc-chip-btn" data-add="500">+500</button>
+    </div>
+
+    <div style="text-align:center; margin-top:16px;">
+      <button class="rc-btn rc-btn-gold" id="startBtn" style="padding:14px 40px; font-size:1.05rem;">¡A CORRER!</button>
+    </div>
+
+    <div style="text-align:center; margin-top:14px; font-family:var(--font-display); color:var(--gold-400); font-size:1.15rem;" id="raceMsg"></div>
+  </section>
+</main>
+
+<script src="shared/app.js"></script>
+<script>
+RC.initHeader();
+
+const HORSES = [
+  { emoji: '🐎', name: 'Relámpago', odds: 3 },
+  { emoji: '🐴', name: 'Trueno', odds: 4 },
+  { emoji: '🦄', name: 'Estrella', odds: 6 },
+  { emoji: '🐎', name: 'Fantasma', odds: 5 },
+  { emoji: '🐴', name: 'Corsario', odds: 8 },
+];
+
+let selected = 0;
+
+const horsePick = document.getElementById('horsePick');
+HORSES.forEach((h, i) => {
+  const b = document.createElement('button');
+  b.innerHTML = `<span class="emoji">${h.emoji}</span><span>${h.name}</span><span class="odds">×${h.odds}</span>`;
+  if (i === 0) b.classList.add('selected');
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.horse-pick button').forEach(x => x.classList.remove('selected'));
+    b.classList.add('selected');
+    selected = i;
+  });
+  horsePick.appendChild(b);
+});
+
+const track = document.getElementById('track');
+function buildTrack() {
+  track.innerHTML = '';
+  HORSES.forEach((h, i) => {
+    const lane = document.createElement('div');
+    lane.className = 'lane';
+    lane.innerHTML = `<span class="lbl">${h.name}</span><span class="horse" id="horse${i}" style="left:4px;">${h.emoji}</span><span class="flag">🏁</span>`;
+    track.appendChild(lane);
+  });
+}
+buildTrack();
+
+const betInput = document.getElementById('bet');
+document.querySelectorAll('.rc-chip-btn[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    betInput.value = Number(betInput.value || 0) + Number(btn.dataset.add);
+  });
+});
+
+const startBtn = document.getElementById('startBtn');
+const raceMsg = document.getElementById('raceMsg');
+
+startBtn.addEventListener('click', () => {
+  const bet = Math.max(10, Math.floor(Number(betInput.value) || 0));
+  const user = RC.getUser();
+  if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+  betInput.value = bet;
+  RC.addCoins(-bet);
+  startBtn.disabled = true;
+  raceMsg.textContent = 'Corriendo...';
+  buildTrack();
+
+  // pesos inversos a las cuotas: caballos con menor cuota son más rápidos en promedio
+  const finishTimes = HORSES.map(h => (2.4 + Math.random() * 1.6) * (h.odds / 3));
+  let winnerIndex = 0;
+  finishTimes.forEach((t, i) => { if (t < finishTimes[winnerIndex]) winnerIndex = i; });
+
+  requestAnimationFrame(() => {
+    HORSES.forEach((h, i) => {
+      const el = document.getElementById('horse' + i);
+      const maxLeft = 'calc(100% - 40px)';
+      el.style.transitionDuration = finishTimes[i].toFixed(2) + 's';
+      el.style.left = maxLeft;
+    });
+  });
+
+  const maxTime = Math.max(...finishTimes) * 1000 + 300;
+  setTimeout(() => {
+    const won = winnerIndex === selected;
+    const payout = won ? bet * HORSES[selected].odds : 0;
+    if (payout > 0) RC.addCoins(payout);
+    const text = won
+      ? `¡${HORSES[winnerIndex].name} gana! Acertaste. +${RC.formatNumber(payout)} monedas.`
+      : `Gana ${HORSES[winnerIndex].name}. Tu caballo no llegó primero.`;
+    raceMsg.textContent = text;
+    RC.toast(won ? 'win' : 'lose', text);
+    RC.registerGameResult('Carreras', won, bet, payout);
+    startBtn.disabled = false;
+  }, maxTime);
+});
+</script>
+</body>
+</html>

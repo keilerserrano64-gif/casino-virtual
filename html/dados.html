@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Dados</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+  .dice-zone { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .dice-pair { display: flex; gap: 16px; }
+  .die {
+    width: 76px; height: 76px; border-radius: 12px; background: var(--cream-050);
+    display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr);
+    padding: 10px; box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  }
+  .die.rolling { animation: die-shake .1s linear infinite; }
+  @keyframes die-shake { 0%{transform:rotate(0)} 50%{transform:rotate(8deg)} 100%{transform:rotate(-8deg)} }
+  .pip { width: 12px; height: 12px; border-radius: 50%; background: var(--ink-900); align-self: center; justify-self: center; opacity: 0; }
+  .sum-display { font-family: var(--font-display); font-size: 2rem; color: var(--gold-400); }
+  .modes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .modes button.active { border-color: var(--gold-400); background: rgba(201,162,39,.25); }
+</style>
+</head>
+<body>
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+  <div class="dice-zone">
+    <h1>🎲 Dados</h1>
+    <div class="dice-pair">
+      <div class="die" id="die1"></div>
+      <div class="die" id="die2"></div>
+    </div>
+    <div class="sum-display" id="sumDisplay">Suma: —</div>
+    <div id="diceMsg" style="min-height:1.4em; color:var(--gold-300); font-weight:600;"></div>
+  </div>
+
+  <section class="rc-panel" style="max-width:480px; margin:26px auto 0;">
+    <h2 style="font-size:1rem">Elige tu modo</h2>
+    <div class="modes" id="modes">
+      <button class="rc-btn rc-btn-ghost active" data-mode="mayor">Suma &gt; 7 · ×2</button>
+      <button class="rc-btn rc-btn-ghost" data-mode="menor">Suma &lt; 7 · ×2</button>
+      <button class="rc-btn rc-btn-ghost" data-mode="igual7">Suma = 7 · ×5</button>
+      <button class="rc-btn rc-btn-ghost" data-mode="doble">Dobles · ×8</button>
+    </div>
+
+    <div class="rc-bet-row" style="justify-content:center; margin-top:18px;">
+      <label for="bet">Apuesta</label>
+      <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
+      <button class="rc-chip-btn" data-add="100">+100</button>
+      <button class="rc-chip-btn" data-add="500">+500</button>
+    </div>
+
+    <div style="text-align:center; margin-top:18px;">
+      <button class="rc-btn rc-btn-gold" id="rollBtn" style="padding:14px 40px; font-size:1.05rem;">LANZAR DADOS</button>
+    </div>
+  </section>
+</main>
+
+<script src="shared/app.js"></script>
+<script>
+RC.initHeader();
+
+const PIP_LAYOUTS = {
+  1: [4],
+  2: [0,8],
+  3: [0,4,8],
+  4: [0,2,6,8],
+  5: [0,2,4,6,8],
+  6: [0,2,3,5,6,8],
+};
+
+function buildDieFace(dieEl, value) {
+  dieEl.innerHTML = '';
+  for (let i = 0; i < 9; i++) {
+    const pip = document.createElement('div');
+    pip.className = 'pip';
+    if (PIP_LAYOUTS[value].includes(i)) pip.style.opacity = '1';
+    dieEl.appendChild(pip);
+  }
+}
+
+const die1 = document.getElementById('die1');
+const die2 = document.getElementById('die2');
+buildDieFace(die1, 1);
+buildDieFace(die2, 1);
+
+let currentMode = 'mayor';
+document.querySelectorAll('#modes button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#modes button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+  });
+});
+
+const betInput = document.getElementById('bet');
+document.querySelectorAll('.rc-chip-btn[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    betInput.value = Number(betInput.value || 0) + Number(btn.dataset.add);
+  });
+});
+
+const rollBtn = document.getElementById('rollBtn');
+const sumDisplay = document.getElementById('sumDisplay');
+const diceMsg = document.getElementById('diceMsg');
+
+rollBtn.addEventListener('click', () => {
+  const bet = Math.max(10, Math.floor(Number(betInput.value) || 0));
+  const user = RC.getUser();
+  if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+  betInput.value = bet;
+  rollBtn.disabled = true;
+  RC.addCoins(-bet);
+
+  die1.classList.add('rolling');
+  die2.classList.add('rolling');
+  diceMsg.textContent = '';
+
+  let ticks = 0;
+  const interval = setInterval(() => {
+    buildDieFace(die1, 1 + Math.floor(Math.random()*6));
+    buildDieFace(die2, 1 + Math.floor(Math.random()*6));
+    ticks++;
+    if (ticks > 12) {
+      clearInterval(interval);
+      const v1 = 1 + Math.floor(Math.random()*6);
+      const v2 = 1 + Math.floor(Math.random()*6);
+      buildDieFace(die1, v1);
+      buildDieFace(die2, v2);
+      die1.classList.remove('rolling');
+      die2.classList.remove('rolling');
+      resolveRoll(v1, v2, bet);
+    }
+  }, 80);
+});
+
+function resolveRoll(v1, v2, bet) {
+  const sum = v1 + v2;
+  sumDisplay.textContent = `Suma: ${sum}`;
+
+  let won = false, mult = 0;
+  if (currentMode === 'mayor' && sum > 7) { won = true; mult = 2; }
+  if (currentMode === 'menor' && sum < 7) { won = true; mult = 2; }
+  if (currentMode === 'igual7' && sum === 7) { won = true; mult = 5; }
+  if (currentMode === 'doble' && v1 === v2) { won = true; mult = 8; }
+
+  const payout = won ? bet * mult : 0;
+  if (payout > 0) RC.addCoins(payout);
+  const text = won ? `¡Ganaste! +${RC.formatNumber(payout)} monedas` : `Sin premio. Salió ${v1} y ${v2}.`;
+  diceMsg.textContent = text;
+  RC.toast(won ? 'win' : 'lose', text);
+  RC.registerGameResult('Dados', won, bet, payout);
+  rollBtn.disabled = false;
+}
+</script>
+</body>
+</html>

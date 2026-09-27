@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Tragamonedas</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+  .slot-wrap { text-align: center; }
+  .reels {
+    display: flex; justify-content: center; gap: 14px;
+    margin: 28px auto; padding: 22px;
+    background: rgba(0,0,0,.3);
+    border: 2px solid var(--gold-500);
+    border-radius: 8px;
+    max-width: 420px;
+  }
+  .reel {
+    width: 90px; height: 100px;
+    background: var(--cream-050);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    box-shadow: inset 0 0 12px rgba(0,0,0,.3);
+    overflow: hidden;
+  }
+  .reel.spinning { animation: reel-spin .12s linear infinite; }
+  @keyframes reel-spin {
+    0% { transform: translateY(0); filter: blur(0); }
+    50% { transform: translateY(6px); filter: blur(2px); }
+    100% { transform: translateY(0); filter: blur(0); }
+  }
+  .paytable td:last-child, .paytable th:last-child { text-align: right; }
+  .payout-line { font-size: 1.6rem; font-weight: 700; color: var(--gold-400); min-height: 1.4em; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+  <div class="slot-wrap">
+    <h1>🎰 Tragamonedas Royal</h1>
+    <p style="opacity:.7">Iguala tres símbolos en la línea central para ganar.</p>
+
+    <div class="reels">
+      <div class="reel" id="reel0">🍒</div>
+      <div class="reel" id="reel1">🍋</div>
+      <div class="reel" id="reel2">⭐</div>
+    </div>
+
+    <div class="payout-line" id="payoutLine">&nbsp;</div>
+
+    <div class="rc-bet-row" style="justify-content:center; margin-bottom:18px;">
+      <label for="bet">Apuesta</label>
+      <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
+      <button class="rc-chip-btn" data-add="100">+100</button>
+      <button class="rc-chip-btn" data-add="500">+500</button>
+      <button class="rc-chip-btn" data-max>MAX</button>
+    </div>
+
+    <button class="rc-btn rc-btn-gold" id="spinBtn" style="font-size:1.05rem; padding:14px 40px;">GIRAR</button>
+  </div>
+
+  <section class="rc-panel" style="max-width:480px; margin:32px auto 0;">
+    <h2 style="font-size:1rem">Tabla de pagos</h2>
+    <table class="rc-table paytable">
+      <thead><tr><th>Combinación</th><th>Pago</th></tr></thead>
+      <tbody>
+        <tr><td>7️⃣ 7️⃣ 7️⃣</td><td>×20</td></tr>
+        <tr><td>💎 💎 💎</td><td>×12</td></tr>
+        <tr><td>⭐ ⭐ ⭐</td><td>×8</td></tr>
+        <tr><td>🍊 🍊 🍊</td><td>×5</td></tr>
+        <tr><td>🍋 🍋 🍋</td><td>×4</td></tr>
+        <tr><td>🍒 🍒 🍒</td><td>×3</td></tr>
+        <tr><td>Dos símbolos iguales</td><td>×1 (recuperas apuesta)</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<script src="shared/app.js"></script>
+<script>
+RC.initHeader();
+
+const SYMBOLS = ['🍒', '🍋', '🍊', '⭐', '💎', '7️⃣'];
+const PAYOUTS = { '7️⃣': 20, '💎': 12, '⭐': 8, '🍊': 5, '🍋': 4, '🍒': 3 };
+
+const betInput = document.getElementById('bet');
+const spinBtn = document.getElementById('spinBtn');
+const payoutLine = document.getElementById('payoutLine');
+const reels = [document.getElementById('reel0'), document.getElementById('reel1'), document.getElementById('reel2')];
+
+document.querySelectorAll('.rc-chip-btn[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    betInput.value = Number(betInput.value || 0) + Number(btn.dataset.add);
+  });
+});
+document.querySelector('[data-max]').addEventListener('click', () => {
+  betInput.value = RC.getUser().coins;
+});
+
+function randomSymbol() {
+  return SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+}
+
+spinBtn.addEventListener('click', () => {
+  const bet = Math.max(10, Math.floor(Number(betInput.value) || 0));
+  const user = RC.getUser();
+  if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+
+  betInput.value = bet;
+  spinBtn.disabled = true;
+  payoutLine.textContent = '\u00A0';
+  RC.addCoins(-bet);
+  reels.forEach(r => r.classList.add('spinning'));
+
+  const finalSymbols = [randomSymbol(), randomSymbol(), randomSymbol()];
+  let ticks = 0;
+  const spinInterval = setInterval(() => {
+    reels.forEach(r => r.textContent = randomSymbol());
+    ticks++;
+    if (ticks > 14) {
+      clearInterval(spinInterval);
+      reels.forEach((r, i) => {
+        r.classList.remove('spinning');
+        r.textContent = finalSymbols[i];
+      });
+      resolveSpin(finalSymbols, bet);
+    }
+  }, 90);
+});
+
+function resolveSpin(symbols, bet) {
+  let payout = 0;
+  let won = false;
+
+  if (symbols[0] === symbols[1] && symbols[1] === symbols[2]) {
+    const mult = PAYOUTS[symbols[0]];
+    payout = bet * mult;
+    won = true;
+    payoutLine.textContent = `¡Triple ${symbols[0]}! Ganas ${RC.formatNumber(payout)} monedas (×${mult})`;
+  } else if (symbols[0] === symbols[1] || symbols[1] === symbols[2] || symbols[0] === symbols[2]) {
+    payout = bet;
+    won = true;
+    payoutLine.textContent = `Dos símbolos iguales. Recuperas tu apuesta.`;
+  } else {
+    payoutLine.textContent = 'Sin premio esta vez.';
+  }
+
+  if (payout > 0) RC.addCoins(payout);
+  RC.toast(won ? 'win' : 'lose', won ? `+${RC.formatNumber(payout)} monedas` : 'Sin premio');
+  RC.registerGameResult('Tragamonedas', won && payout > bet, bet, payout);
+  spinBtn.disabled = false;
+}
+</script>
+</body>
+</html>

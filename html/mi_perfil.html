@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Mi perfil</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+  .profile-head { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .profile-avatar {
+    width: 84px; height: 84px; border-radius: 50%; border: 3px solid var(--gold-500);
+    display: flex; align-items: center; justify-content: center; font-size: 2.4rem;
+    background: var(--felt-800);
+  }
+  .profile-name { font-family: var(--font-display); font-size: 1.5rem; color: var(--cream-050); }
+  .profile-title { color: var(--gold-400); font-size: .85rem; font-weight: 600; }
+  .edit-row { display: flex; gap: 8px; margin-top: 10px; }
+  .edit-row input {
+    padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(201,162,39,.4);
+    background: rgba(0,0,0,.25); color: var(--cream-050); font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+
+  <section class="rc-panel">
+    <div class="profile-head">
+      <div class="profile-avatar">👤</div>
+      <div>
+        <div class="profile-name" id="pName">Jugador</div>
+        <div class="profile-title" id="pTitle">—</div>
+        <div class="edit-row">
+          <input type="text" id="nameInput" placeholder="Cambiar tu nombre" maxlength="18">
+          <button class="rc-btn rc-btn-ghost" id="saveNameBtn">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div style="display:flex; justify-content:space-between; font-size:.78rem; opacity:.7; margin-bottom:6px;">
+        <span>Nivel <span id="pLevel">1</span></span>
+        <span id="pXpText">0 / 500 XP</span>
+      </div>
+      <div class="rc-xp-bar"><div class="rc-xp-fill" id="pXpBar" style="width:0%"></div></div>
+    </div>
+
+    <div class="rc-stat-row">
+      <div class="rc-stat"><div class="num" id="pCoins">—</div><div class="lbl">Monedas</div></div>
+      <div class="rc-stat"><div class="num" id="pWins">—</div><div class="lbl">Victorias</div></div>
+      <div class="rc-stat"><div class="num" id="pLosses">—</div><div class="lbl">Derrotas</div></div>
+      <div class="rc-stat"><div class="num" id="pGames">—</div><div class="lbl">Partidas</div></div>
+      <div class="rc-stat"><div class="num" id="pWinRate">—</div><div class="lbl">% victorias</div></div>
+      <div class="rc-stat"><div class="num" id="pStreak">—</div><div class="lbl">Racha diaria</div></div>
+    </div>
+  </section>
+
+  <section class="rc-panel" style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
+    <a href="historial.html" class="rc-btn rc-btn-ghost">Ver historial</a>
+    <a href="bonificasiones.html" class="rc-btn rc-btn-ghost">Ver logros y bonificaciones</a>
+  </section>
+</main>
+
+<script src="shared/app.js"></script>
+<script>
+RC.initHeader();
+
+function render() {
+  const u = RC.getUser();
+  const info = RC.levelInfo(u.level);
+  document.getElementById('pName').textContent = u.name || 'Jugador';
+  document.getElementById('pTitle').textContent = `${info.icon} ${info.name}`;
+  document.getElementById('pLevel').textContent = u.level;
+  document.getElementById('pXpText').textContent = `${u.xp} / ${RC.xpForLevel(u.level)} XP`;
+  document.getElementById('pXpBar').style.width = Math.min(100, (u.xp / RC.xpForLevel(u.level)) * 100) + '%';
+  document.getElementById('pCoins').textContent = RC.formatNumber(u.coins);
+  document.getElementById('pWins').textContent = u.wins;
+  document.getElementById('pLosses').textContent = u.losses;
+  document.getElementById('pGames').textContent = u.gamesPlayed;
+  document.getElementById('pWinRate').textContent = u.gamesPlayed ? Math.round((u.wins / u.gamesPlayed) * 100) + '%' : '0%';
+  document.getElementById('pStreak').textContent = u.streak || 0;
+  document.getElementById('nameInput').value = u.name || '';
+}
+
+document.getElementById('saveNameBtn').addEventListener('click', () => {
+  const val = document.getElementById('nameInput').value.trim();
+  if (!val) return;
+  const u = RC.getUser();
+  u.name = val;
+  RC.saveUser(u);
+  RC.toast('info', 'Nombre actualizado');
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

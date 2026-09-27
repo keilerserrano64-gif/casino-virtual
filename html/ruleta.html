@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Ruleta</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+  .wheel-zone { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .wheel {
+    width: 160px; height: 160px; border-radius: 50%;
+    background: conic-gradient(from 0deg,
+      #7a1f2b 0deg 20deg, #151210 20deg 40deg, #7a1f2b 40deg 60deg, #151210 60deg 80deg,
+      #7a1f2b 80deg 100deg, #151210 100deg 120deg, #7a1f2b 120deg 140deg, #151210 140deg 160deg,
+      #7a1f2b 160deg 180deg, #151210 180deg 200deg, #7a1f2b 200deg 220deg, #151210 220deg 240deg,
+      #7a1f2b 240deg 260deg, #151210 260deg 280deg, #7a1f2b 280deg 300deg, #151210 300deg 320deg,
+      #7a1f2b 320deg 340deg, #151210 340deg 360deg);
+    border: 4px solid var(--gold-500);
+    position: relative;
+    transition: transform 2.2s cubic-bezier(.17,.67,.24,1);
+  }
+  .wheel::after {
+    content: ''; position: absolute; inset: 30%; border-radius: 50%;
+    background: var(--felt-900); border: 2px solid var(--gold-400);
+  }
+  .result-number {
+    width: 74px; height: 74px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: 800; font-family: var(--font-display);
+    border: 3px solid var(--gold-400); color: #fff;
+    background: var(--ink-900);
+  }
+  .result-number.red { background: var(--burgundy-600); }
+  .result-number.black { background: #1b1613; }
+  .result-number.green { background: var(--win-green); }
+
+  .bet-modes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .bet-modes button.active { border-color: var(--gold-400); background: rgba(201,162,39,.25); }
+
+  .number-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+    max-width: 420px; margin: 0 auto;
+  }
+  .num-btn {
+    padding: 8px 0; border-radius: 4px; border: 1px solid rgba(255,255,255,.15);
+    color: #fff; font-weight: 700; cursor: pointer; font-size: .82rem;
+  }
+  .num-btn.red { background: var(--burgundy-600); }
+  .num-btn.black { background: #1b1613; }
+  .num-btn.green { background: var(--win-green); grid-column: span 6; }
+  .num-btn.selected { outline: 3px solid var(--gold-400); }
+
+  .history-strip { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+  .history-strip span {
+    width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: .74rem; font-weight: 700; color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+  <div class="wheel-zone">
+    <h1>🎡 Ruleta europea</h1>
+    <div class="wheel" id="wheel"></div>
+    <div class="result-number" id="resultNumber">—</div>
+    <div class="history-strip" id="historyStrip"></div>
+  </div>
+
+  <section class="rc-panel" style="max-width:520px; margin:26px auto 0;">
+    <h2 style="font-size:1rem">Elige tu apuesta</h2>
+    <div class="bet-modes" id="betModes">
+      <button class="rc-btn rc-btn-ghost active" data-mode="color" data-value="rojo">Rojo ×2</button>
+      <button class="rc-btn rc-btn-ghost" data-mode="color" data-value="negro">Negro ×2</button>
+      <button class="rc-btn rc-btn-ghost" data-mode="parity" data-value="par">Par ×2</button>
+      <button class="rc-btn rc-btn-ghost" data-mode="parity" data-value="impar">Impar ×2</button>
+      <button class="rc-btn rc-btn-ghost" data-mode="number" data-value="">Número ×35</button>
+    </div>
+
+    <div id="numberGrid" class="number-grid" style="display:none; margin-top:14px;"></div>
+
+    <div class="rc-bet-row" style="justify-content:center; margin-top:18px;">
+      <label for="bet">Apuesta</label>
+      <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
+      <button class="rc-chip-btn" data-add="100">+100</button>
+      <button class="rc-chip-btn" data-add="500">+500</button>
+    </div>
+
+    <div style="text-align:center; margin-top:18px;">
+      <button class="rc-btn rc-btn-gold" id="spinBtn" style="padding:14px 40px; font-size:1.05rem;">LANZAR</button>
+    </div>
+  </section>
+</main>
+
+<script src="shared/app.js"></script>
+<script>
+RC.initHeader();
+
+const RED_NUMBERS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+function colorOf(n) {
+  if (n === 0) return 'green';
+  return RED_NUMBERS.has(n) ? 'red' : 'black';
+}
+
+let currentMode = 'color';
+let currentValue = 'rojo';
+let selectedNumber = null;
+
+const numberGrid = document.getElementById('numberGrid');
+for (let n = 0; n <= 36; n++) {
+  const b = document.createElement('button');
+  b.className = 'num-btn ' + colorOf(n);
+  b.textContent = n;
+  b.dataset.num = n;
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.num-btn').forEach(x => x.classList.remove('selected'));
+    b.classList.add('selected');
+    selectedNumber = n;
+  });
+  numberGrid.appendChild(b);
+}
+
+document.querySelectorAll('#betModes button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#betModes button').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    currentValue = btn.dataset.value;
+    numberGrid.style.display = currentMode === 'number' ? 'grid' : 'none';
+  });
+});
+
+const betInput = document.getElementById('bet');
+document.querySelectorAll('.rc-chip-btn[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    betInput.value = Number(betInput.value || 0) + Number(btn.dataset.add);
+  });
+});
+
+const wheel = document.getElementById('wheel');
+const resultNumber = document.getElementById('resultNumber');
+const spinBtn = document.getElementById('spinBtn');
+const historyStrip = document.getElementById('historyStrip');
+let wheelRotation = 0;
+let history = [];
+
+spinBtn.addEventListener('click', () => {
+  const bet = Math.max(10, Math.floor(Number(betInput.value) || 0));
+  const user = RC.getUser();
+  if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+  if (currentMode === 'number' && selectedNumber === null) { RC.toast('info', 'Elige un número primero.'); return; }
+
+  betInput.value = bet;
+  spinBtn.disabled = true;
+  RC.addCoins(-bet);
+
+  const landing = Math.floor(Math.random() * 37);
+  wheelRotation += 1440 + landing * (360 / 37);
+  wheel.style.transform = `rotate(${wheelRotation}deg)`;
+
+  setTimeout(() => {
+    const c = colorOf(landing);
+    resultNumber.textContent = landing;
+    resultNumber.className = 'result-number ' + c;
+
+    let won = false, mult = 0;
+    if (currentMode === 'color' && c === currentValue) { won = true; mult = 2; }
+    if (currentMode === 'parity') {
+      const isEven = landing !== 0 && landing % 2 === 0;
+      if ((currentValue === 'par' && isEven) || (currentValue === 'impar' && !isEven)) { won = true; mult = 2; }
+    }
+    if (currentMode === 'number' && selectedNumber === landing) { won = true; mult = 35; }
+
+    const payout = won ? bet * mult : 0;
+    if (payout > 0) RC.addCoins(payout);
+    RC.toast(won ? 'win' : 'lose', won ? `¡Acertaste! +${RC.formatNumber(payout)} monedas` : `Salió ${landing}. Sin premio.`);
+    RC.registerGameResult('Ruleta', won, bet, payout);
+
+    history.unshift(landing);
+    history = history.slice(0, 10);
+    historyStrip.innerHTML = history.map(n => `<span class="result-number ${colorOf(n)}" style="width:30px;height:30px;font-size:.74rem;">${n}</span>`).join('');
+
+    spinBtn.disabled = false;
+  }, 2250);
+});
+</script>
+</body>
+</html>

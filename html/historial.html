@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Historial</title>
+<link rel="stylesheet" href="shared/style.css">
+</head>
+<body>
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+  <h1>📊 Historial de partidas</h1>
+  <p style="opacity:.7">Tus últimas partidas, de la más reciente a la más antigua.</p>
+
+  <section class="rc-panel" style="margin-top:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <span style="font-size:.82rem; opacity:.7" id="countLabel">0 partidas registradas</span>
+      <button class="rc-btn rc-btn-ghost" id="clearBtn">Borrar historial</button>
+    </div>
+    <div id="tableWrap"></div>
+  </section>
+</main>
+
+<script src="shared/app.js"></script>
+<script>
+RC.initHeader();
+
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }) + ' ' +
+         d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+}
+
+function render() {
+  const history = RC.getHistory();
+  document.getElementById('countLabel').textContent = `${history.length} partidas registradas`;
+  const wrap = document.getElementById('tableWrap');
+
+  if (history.length === 0) {
+    wrap.innerHTML = '<div class="rc-empty">Todavía no has jugado ninguna partida. Ve a los juegos y empieza a apostar.</div>';
+    return;
+  }
+
+  wrap.innerHTML = `
+    <table class="rc-table">
+      <thead><tr><th>Fecha</th><th>Juego</th><th>Resultado</th><th>Apuesta</th><th>Ganancia</th><th>Saldo</th></tr></thead>
+      <tbody>
+        ${history.map(h => `
+          <tr>
+            <td>${fmtDate(h.date)}</td>
+            <td>${h.game}</td>
+            <td><span class="rc-badge ${h.result}">${h.result === 'win' ? 'Ganada' : 'Perdida'}</span></td>
+            <td>${RC.formatNumber(h.wager)}</td>
+            <td>${h.payout > 0 ? '+' + RC.formatNumber(h.payout) : '—'}</td>
+            <td>${RC.formatNumber(h.balance)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  localStorage.setItem('royalCasinoHistory', '[]');
+  render();
+  RC.toast('info', 'Historial borrado');
+});
+
+render();
+</script>
+</body>
+</html>

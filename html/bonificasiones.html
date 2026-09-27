@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Bonificaciones</title>
+<link rel="stylesheet" href="shared/style.css">
+<style>
+  .bonus-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .bonus-card { flex: 1 1 240px; text-align: center; }
+  .bonus-card .big { font-size: 2.4rem; margin-bottom: 6px; }
+  .mission-progress { margin: 14px 0; }
+  .mission-progress .bar-label { display: flex; justify-content: space-between; font-size: .78rem; opacity: .7; margin-bottom: 6px; }
+  .achv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; margin-top: 14px; }
+  .achv {
+    padding: 14px; border-radius: 6px; border: 1px solid rgba(201,162,39,.22);
+    background: rgba(0,0,0,.15); text-align: center; font-size: .8rem;
+  }
+  .achv.locked { opacity: .35; }
+  .achv .ic { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+  <h1>🎁 Bonificaciones</h1>
+
+  <div class="bonus-row">
+    <div class="rc-panel bonus-card">
+      <div class="big">🎁</div>
+      <h3 style="font-size:1rem">Bono diario</h3>
+      <p style="opacity:.7; font-size:.82rem" id="bonusDesc">—</p>
+      <button class="rc-btn rc-btn-gold" id="claimBonusBtn" style="margin-top:10px;">Reclamar</button>
+    </div>
+
+    <div class="rc-panel bonus-card">
+      <div class="big">🔥</div>
+      <h3 style="font-size:1rem">Racha de días</h3>
+      <p style="font-family:var(--font-display); font-size:1.6rem; color:var(--gold-400)" id="streakNum">0</p>
+      <p style="opacity:.7; font-size:.78rem">días consecutivos</p>
+    </div>
+  </div>
+
+  <section class="rc-panel" style="margin-top:20px;">
+    <h2 style="font-size:1rem">🎯 Misión del día — Juega 3 partidas</h2>
+    <div class="mission-progress">
+      <div class="bar-label"><span id="missionText">0/3</span><span>+500 monedas · +100 XP</span></div>
+      <div class="rc-xp-bar"><div class="rc-xp-fill" id="missionBar" style="width:0%"></div></div>
+    </div>
+    <button class="rc-btn rc-btn-burgundy" id="claimMissionBtn" disabled>Reclamar recompensa</button>
+  </section>
+
+  <section class="rc-panel" style="margin-top:20px;">
+    <h2 style="font-size:1rem">⭐ Logros</h2>
+    <div class="achv-grid" id="achvGrid"></div>
+  </section>
+</main>
+
+<script src="shared/app.js"></script>
+<script>
+RC.initHeader();
+
+const claimBonusBtn = document.getElementById('claimBonusBtn');
+const bonusDesc = document.getElementById('bonusDesc');
+const streakNum = document.getElementById('streakNum');
+const missionText = document.getElementById('missionText');
+const missionBar = document.getElementById('missionBar');
+const claimMissionBtn = document.getElementById('claimMissionBtn');
+
+function yesterdayKey() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return d.toISOString().slice(0, 10);
+}
+
+function refreshBonusUI() {
+  const user = RC.getUser();
+  const today = RC.todayKey();
+  streakNum.textContent = user.streak || 0;
+
+  if (user.lastDailyBonus === today) {
+    claimBonusBtn.disabled = true;
+    bonusDesc.textContent = 'Ya reclamaste tu bono de hoy. Vuelve mañana.';
+    claimBonusBtn.textContent = 'Reclamado ✓';
+  } else {
+    const nextStreak = user.lastDailyBonus === yesterdayKey() ? (user.streak || 0) + 1 : 1;
+    const reward = 300 + nextStreak * 100;
+    claimBonusBtn.disabled = false;
+    claimBonusBtn.textContent = `Reclamar +${RC.formatNumber(reward)}`;
+    bonusDesc.textContent = `Racha día ${nextStreak}: gana ${RC.formatNumber(reward)} monedas.`;
+  }
+
+  if (user.missionDate === today) {
+    const count = Math.min(user.missionCount, 3);
+    missionText.textContent = `${count}/3`;
+    missionBar.style.width = (count / 3 * 100) + '%';
+    claimMissionBtn.disabled = !(count >= 3 && !user.missionClaimed);
+    claimMissionBtn.textContent = user.missionClaimed ? 'Recompensa reclamada ✓' : 'Reclamar recompensa';
+  } else {
+    missionText.textContent = '0/3';
+    missionBar.style.width = '0%';
+    claimMissionBtn.disabled = true;
+    claimMissionBtn.textContent = 'Reclamar recompensa';
+  }
+
+  renderAchievements(user);
+}
+
+claimBonusBtn.addEventListener('click', () => {
+  const user = RC.getUser();
+  const today = RC.todayKey();
+  if (user.lastDailyBonus === today) return;
+  const nextStreak = user.lastDailyBonus === yesterdayKey() ? (user.streak || 0) + 1 : 1;
+  const reward = 300 + nextStreak * 100;
+  user.streak = nextStreak;
+  user.lastDailyBonus = today;
+  RC.saveUser(user);
+  RC.addCoins(reward);
+  RC.addXP(50);
+  RC.toast('win', `Bono diario reclamado: +${RC.formatNumber(reward)} monedas`);
+  refreshBonusUI();
+});
+
+claimMissionBtn.addEventListener('click', () => {
+  const user = RC.getUser();
+  const today = RC.todayKey();
+  if (user.missionDate !== today || user.missionCount < 3 || user.missionClaimed) return;
+  user.missionClaimed = true;
+  RC.saveUser(user);
+  RC.addCoins(500);
+  RC.addXP(100);
+  RC.toast('win', 'Misión completada: +500 monedas, +100 XP');
+  refreshBonusUI();
+});
+
+const ACHIEVEMENTS = [
+  { icon: '🎮', name: '10 partidas', test: u => u.gamesPlayed >= 10 },
+  { icon: '🏅', name: '10 victorias', test: u => u.wins >= 10 },
+  { icon: '💰', name: '20.000 monedas', test: u => u.coins >= 20000 },
+  { icon: '🥈', name: 'Nivel 5', test: u => u.level >= 5 },
+  { icon: '🥇', name: 'Nivel 10', test: u => u.level >= 10 },
+  { icon: '🔥', name: 'Racha de 3 días', test: u => (u.streak || 0) >= 3 },
+];
+
+function renderAchievements(user) {
+  const grid = document.getElementById('achvGrid');
+  grid.innerHTML = ACHIEVEMENTS.map(a => {
+    const unlocked = a.test(user);
+    return `<div class="achv ${unlocked ? '' : 'locked'}"><span class="ic">${a.icon}</span>${a.name}</div>`;
+  }).join('');
+}
+
+refreshBonusUI();
+</script>
+</body>
+</html>
