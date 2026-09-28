@@ -6,46 +6,71 @@
 <title>Royal Casino — Poker</title>
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/juegos.css">
+<link rel="stylesheet" href="../css/Blackjack.css">
 <link rel="stylesheet" href="../css/poker.css">
 </head>
-<body>
+<body class="bj-page">
 
+<div class="bj-ambient" aria-hidden="true"><div class="beam b1"></div><div class="beam b2"></div></div>
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-  <h1 class="game-title">♠️ Poker — Texas Hold'em</h1>
-  <p class="subtitle">Versión simplificada 1 contra 1 frente a la banca. Apuesta en cada ronda o retírate.</p>
+  <h1 class="game-title">♠ Poker ♦</h1>
+  <p class="bj-tagline">Texas Hold'em · Mesa privada contra la banca</p>
 
-  <div class="zone">
-    <div>
-      <div class="stage-label">BANCA</div>
+  <div class="bj-table pk-table" id="pkTable">
+    <div class="bj-bulbs" aria-hidden="true"></div>
+    <div class="bj-shoe-visual" id="shoeVisual" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="bj-fx" id="bjFx" aria-hidden="true"></div>
+    <div class="bj-banner" id="bjBanner" aria-hidden="true"></div>
+
+    <div class="zone">
+      <div class="pk-stages" id="stages" aria-label="Fase de la mano"></div>
+
+      <div class="pk-seat" id="botSeat">
+        <div class="pk-avatar" id="botFace">😏</div>
+        <div class="pk-info"><b>La Banca</b><small id="botHandName">—</small></div>
+        <div class="pk-bubble" id="botBubble"></div>
+      </div>
       <div class="cards" id="botCards"></div>
-    </div>
 
-    <div>
-      <div class="stage-label">MESA</div>
-      <div class="cards" id="community"></div>
-    </div>
+      <div class="pk-board cards" id="community" aria-label="Cartas de la mesa"></div>
 
-    <div class="pot-line" id="potLine">Bote: 0</div>
-    <div class="game-msg" id="pokerMsg" aria-live="polite">Fija tu apuesta inicial y reparte.</div>
+      <div class="bj-chips" id="potChips" aria-label="Bote"></div>
+      <div class="game-msg" id="pokerMsg" aria-live="polite">Fija tu apuesta inicial y reparte.</div>
 
-    <div>
-      <div class="stage-label">TU MANO</div>
       <div class="cards" id="playerCards"></div>
-    </div>
+      <div class="pk-seat" id="playerSeat">
+        <div class="pk-avatar">🤠</div>
+        <div class="pk-info"><b>Tú</b><small><span id="playerCoins">0</span> monedas</small></div>
+        <span class="pk-badge" id="playerHandName"></span>
+      </div>
 
-    <div class="rc-bet-row" id="betRow">
-      <label for="bet">Apuesta inicial</label>
-      <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
-    </div>
+      <div class="rc-bet-row" id="betRow">
+        <label for="bet">Apuesta inicial</label>
+        <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
+        <button class="rc-chip-btn" data-add="100">+100</button>
+        <button class="rc-chip-btn" data-add="500">+500</button>
+        <button class="rc-chip-btn" id="betClear">Borrar</button>
+      </div>
 
-    <div class="controls">
-      <button class="rc-btn rc-btn-gold" id="dealBtn">Repartir</button>
-      <button class="rc-btn rc-btn-burgundy" id="betBtn" disabled>Apostar</button>
-      <button class="rc-btn rc-btn-ghost" id="foldBtn" disabled>Retirarse</button>
+      <div class="controls">
+        <button class="rc-btn rc-btn-gold" id="dealBtn">Repartir</button>
+        <button class="rc-btn rc-btn-burgundy" id="betBtn" disabled>Apostar</button>
+        <button class="rc-btn rc-btn-ghost" id="foldBtn" disabled>Retirarse</button>
+      </div>
+      <p class="bj-keys">Atajos: <kbd>Enter</kbd> repartir · <kbd>A</kbd> apostar · <kbd>R</kbd> retirarse</p>
     </div>
   </div>
+
+  <section class="rc-panel bj-rules">
+    <h3>Reglas de la mesa</h3>
+    <ul>
+      <li>Cada jugador pone la apuesta inicial. En Preflop, Flop y Turn decides: apostar (igualas y la banca también) o retirarte.</li>
+      <li>Tras el River llega el showdown: gana la mejor mano de 5 cartas entre tus 2 y las 5 de la mesa.</li>
+      <li>Las cartas que forman la mano ganadora se iluminan. Si empatas, recuperas lo que apostaste.</li>
+    </ul>
+  </section>
 </main>
 
 <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>

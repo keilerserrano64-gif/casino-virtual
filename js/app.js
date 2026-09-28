@@ -20,7 +20,7 @@ const RC = (() => {
     Ruleta: { href: 'ruleta.html', icon: '🎡', desc: 'Ruleta europea.' },
     Blackjack: { href: 'Blackjack.html', icon: '🃏', desc: 'Pide o plántate.' },
     Poker: { href: 'poker.html', icon: '♠️', desc: "Texas Hold'em simplificado." },
-    Dados: { href: 'dados.html', icon: '🎲', desc: 'Predice la tirada.' },
+    Dados: { href: 'dados.html', icon: '🎲', desc: 'Craps con mesa completa.' },
     Carreras: { href: 'carreras.html', icon: '🏇', desc: 'Elige tu caballo.' },
     Bingo: { href: 'bingo.html', icon: '🎱', desc: 'Completa líneas y gana.' },
     Torneo: { href: 'torneos.html', icon: '🏆', desc: 'Compite contra otros jugadores.' },

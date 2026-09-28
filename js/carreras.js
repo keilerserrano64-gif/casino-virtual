@@ -1,87 +1,107 @@
-// carreras.js — lógica de carreras.html (usa RC de app.js)
-
+// carreras.js — lógica de carreras.html (usa RC de app.js y RaceEngine de carreras_engine.js)
 RC.initHeader();
+const RE = RaceEngine;
+const $ = id => document.getElementById(id);
+const K = RE.KINDS;
 
-const HORSES = [
-  { emoji: '🐎', name: 'Relámpago', odds: 3 },
-  { emoji: '🐴', name: 'Trueno', odds: 4 },
-  { emoji: '🦄', name: 'Estrella', odds: 6 },
-  { emoji: '🐎', name: 'Fantasma', odds: 5 },
-  { emoji: '🐴', name: 'Corsario', odds: 8 },
-];
+let race = RE.newRace(), selected = 0, busy = false;
+const horsePick = $('horsePick'), track = $('track'), betInput = $('bet');
+const startBtn = $('startBtn'), raceMsg = $('raceMsg'), kindSel = $('betKind');
+const SILKS = ['#d63a3a', '#2f6fd6', '#8b4fc7', '#e8a41c', '#1fa88a'];   // casacas por caballo
+const pct = p => (p * 100).toFixed(1).replace('.', ',') + ' %';
+const money = n => RC.formatNumber(n);
 
-let selected = 0;
+Object.entries(K).forEach(([k, v]) => kindSel.add(new Option(v.label, k)));
 
-const horsePick = document.getElementById('horsePick');
-HORSES.forEach((h, i) => {
-  const b = document.createElement('button');
-  b.innerHTML = `<span class="emoji">${h.emoji}</span><span>${h.name}</span><span class="odds">×${h.odds}</span>`;
-  if (i === 0) b.classList.add('selected');
-  b.addEventListener('click', () => {
-    document.querySelectorAll('.horse-pick button').forEach(x => x.classList.remove('selected'));
-    b.classList.add('selected');
-    selected = i;
+function renderPicks() {
+  const kind = kindSel.value;
+  horsePick.innerHTML = '';
+  race.horses.forEach((h, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.style.setProperty('--silk', SILKS[i]);
+    b.title = `Velocidad ${h.speed} · Resistencia ${h.stamina} · Forma ${h.form} · Condición hoy ${Math.round((race.conds[i] - 1) * 100)} %`;
+    b.innerHTML = `<span class="emoji">${h.emoji}</span><span>${h.name}</span><span class="odds">×${h.odds[kind].toFixed(1)} · ${pct(h.prob[kind])}</span>`;
+    b.classList.toggle('selected', i === selected);
+    b.disabled = busy;
+    b.addEventListener('click', () => { selected = i; renderPicks(); });
+    horsePick.appendChild(b);
   });
-  horsePick.appendChild(b);
-});
-
-const track = document.getElementById('track');
+}
 function buildTrack() {
   track.innerHTML = '';
-  HORSES.forEach((h, i) => {
+  race.horses.forEach((h, i) => {
     const lane = document.createElement('div');
-    lane.className = 'lane';
-    lane.innerHTML = `<span class="lbl">${h.name}</span><span class="horse" id="horse${i}" style="left:4px;">${h.emoji}</span><span class="flag">🏁</span>`;
+    lane.className = 'lane' + (i === selected ? ' mine' : '');
+    lane.style.setProperty('--silk', SILKS[i]);
+    lane.innerHTML = `<span class="num">${i + 1}</span><span class="lbl">${h.name}</span><span class="horse" id="horse${i}" style="left:4px;">${h.emoji}</span><span class="flag">🏁</span>`;
     track.appendChild(lane);
   });
 }
-buildTrack();
-
-const betInput = document.getElementById('bet');
-document.querySelectorAll('.rc-chip-btn[data-add]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    betInput.value = Number(betInput.value || 0) + Number(btn.dataset.add);
+function nextRace() { race = RE.newRace(); renderPicks(); }   // la pista conserva el resultado hasta la próxima carrera
+function markResult(order) {                // medallas 1.º-3.º y carril ganador (solo visual)
+  track.classList.remove('racing');
+  order.slice(0, 3).forEach((h, k) => {
+    const lane = track.children[h]; if (!lane) return;
+    lane.classList.add('pos' + (k + 1));
+    const m = document.createElement('span'); m.className = 'rank'; m.textContent = k + 1; lane.appendChild(m);
   });
-});
+}
+kindSel.addEventListener('change', () => { if (!busy) renderPicks(); });
 
-const startBtn = document.getElementById('startBtn');
-const raceMsg = document.getElementById('raceMsg');
+document.querySelectorAll('.rc-chip-btn[data-add]').forEach(btn =>
+  btn.addEventListener('click', () => { betInput.value = RE.normalizeBet(betInput.value) + Number(btn.dataset.add); }));
+
+/* Giro pendiente: el resultado se decide y se guarda ANTES de animar; si se cierra la página a mitad de
+   carrera, el premio se acredita al volver. Al leerlo se reconstruye y valida todo con el motor. */
+const pendKey = () => `rc_racepend_${String(RC.currentUser()).toLowerCase()}`;
+const savePending = p => { try { localStorage.setItem(pendKey(), JSON.stringify(p)); } catch (e) {} };
+const clearPending = () => { try { localStorage.removeItem(pendKey()); } catch (e) {} };
+function loadPending() {
+  try {
+    const p = JSON.parse(localStorage.getItem(pendKey()));
+    if (!p || !RE.validConds(p.conds) || !RE.isOrder(p.order, RE.HORSES.length) || !K[p.kind] ||
+        !Number.isInteger(p.pick) || p.pick < 0 || p.pick >= RE.HORSES.length || !Number.isInteger(p.bet) || p.bet < RE.MIN_BET) return null;
+    return { ...p, race: RE.buildRace(p.conds) };
+  } catch (e) { return null; }
+}
+function finish(p) {                       // paga una sola vez: primero se borra el pendiente
+  clearPending(); markResult(p.order);
+  const r = RE.settle(p.race, p.order, p.pick, p.kind, p.bet), h = p.race.horses;
+  if (r.payout > 0) RC.addCoins(r.payout);
+  const text = r.won
+    ? `¡${h[p.pick].name} llegó ${r.rank}.º! ${K[p.kind].label} a ×${r.odds.toFixed(1)}: +${money(r.payout)} monedas.`
+    : `Ganó ${h[p.order[0]].name}. ${h[p.pick].name} llegó ${r.rank}.º y no cumple ${K[p.kind].label}.`;
+  raceMsg.textContent = text;
+  RC.toast(r.won ? 'win' : 'lose', text);
+  RC.registerGameResult('Carreras', r.won, p.bet, r.payout);
+}
 
 startBtn.addEventListener('click', () => {
-  const bet = Math.max(10, Math.floor(Number(betInput.value) || 0));
-  const user = RC.getUser();
-  if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
-  betInput.value = bet;
+  if (busy) return;
+  const bet = Number(betInput.value);
+  if (!Number.isInteger(bet) || bet < RE.MIN_BET) { RC.toast('lose', `La apuesta mínima es ${RE.MIN_BET} monedas (número entero).`); betInput.value = RE.normalizeBet(betInput.value); return; }
+  if (bet > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+  busy = true; startBtn.disabled = true; kindSel.disabled = true; renderPicks();
   RC.addCoins(-bet);
-  startBtn.disabled = true;
+  const order = RE.drawOrder(race);
+  const p = { conds: race.conds, order, pick: selected, kind: kindSel.value, bet };
+  savePending(p);
   raceMsg.textContent = 'Corriendo...';
-  buildTrack();
-
-  // pesos inversos a las cuotas: caballos con menor cuota son más rápidos en promedio
-  const finishTimes = HORSES.map(h => (2.4 + Math.random() * 1.6) * (h.odds / 3));
-  let winnerIndex = 0;
-  finishTimes.forEach((t, i) => { if (t < finishTimes[winnerIndex]) winnerIndex = i; });
-
-  requestAnimationFrame(() => {
-    HORSES.forEach((h, i) => {
-      const el = document.getElementById('horse' + i);
-      const maxLeft = 'calc(100% - 40px)';
-      el.style.transitionDuration = finishTimes[i].toFixed(2) + 's';
-      el.style.left = maxLeft;
-    });
-  });
-
-  const maxTime = Math.max(...finishTimes) * 1000 + 300;
+  buildTrack(); track.classList.add('racing');
+  const t = RE.times(order);
+  requestAnimationFrame(() => race.horses.forEach((h, i) => {
+    const el = $('horse' + i);
+    el.style.transitionDuration = t[i].toFixed(2) + 's';
+    el.style.left = 'calc(100% - 40px)';
+  }));
   setTimeout(() => {
-    const won = winnerIndex === selected;
-    const payout = won ? bet * HORSES[selected].odds : 0;
-    if (payout > 0) RC.addCoins(payout);
-    const text = won
-      ? `¡${HORSES[winnerIndex].name} gana! Acertaste. +${RC.formatNumber(payout)} monedas.`
-      : `Gana ${HORSES[winnerIndex].name}. Tu caballo no llegó primero.`;
-    raceMsg.textContent = text;
-    RC.toast(won ? 'win' : 'lose', text);
-    RC.registerGameResult('Carreras', won, bet, payout);
-    startBtn.disabled = false;
-  }, maxTime);
+    finish({ ...p, race });
+    busy = false; startBtn.disabled = false; kindSel.disabled = false;
+    nextRace();
+  }, Math.max(...t) * 1000 + 300);
 });
+
+// recuperar una carrera interrumpida
+const pend = loadPending();
+renderPicks(); buildTrack();
+if (pend) finish(pend);

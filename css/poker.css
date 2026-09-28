@@ -1,53 +1,95 @@
-/* === BASE COMÚN (variables y componentes rc-*) — repetida en cada CSS para que funcione sin archivos extra === */
-:root {
-  --gold-300: #e6cf7a; --gold-400: #d6b64a; --gold-500: #c9a227;
-  --cream-050: #fbf6e9; --cream-100: #efe6cc; --ink-900: #14110f;
-  --burgundy-600: #7a1f2b; --felt-700: #16523a; --felt-800: #104030; --felt-900: #0b2e22;
-  --win-green: #1f7a4a;
-  --font-display: Georgia, 'Times New Roman', serif;
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+/* poker.css — extras de poker.html. La base (ambiente, mesa, luces, cartas, fichas, banner, botones)
+   viene de Blackjack.css (.bj-page). Aquí solo lo propio de Poker. */
+
+.pk-table { max-width: 940px; }
+.pk-table .zone { gap: 16px; }
+
+/* ---- Fases de la mano ---- */
+.pk-stages { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.pk-stages span { padding: 3px 12px; border-radius: 999px; font-size: .66rem; letter-spacing: .14em; text-transform: uppercase;
+  border: 1px solid rgba(214,182,74,.3); color: rgba(239,230,204,.45); transition: all .4s; }
+.pk-stages span.done { color: var(--gold-300); border-color: var(--gold-400); background: rgba(214,182,74,.12); }
+.pk-stages span.on { color: #2b1a00; border-color: transparent; background: linear-gradient(180deg, #fff3b0, #d6b64a);
+  box-shadow: 0 0 16px rgba(255,212,90,.8); animation: bj-pop .5s cubic-bezier(.3,1.6,.5,1); }
+
+/* ---- Jugadores ---- */
+.pk-seat { position: relative; display: flex; align-items: center; gap: 12px; padding: 6px 20px 6px 6px; border-radius: 999px;
+  background: rgba(0,0,0,.45); border: 1px solid rgba(214,182,74,.55); box-shadow: inset 0 0 14px rgba(0,0,0,.5); transition: box-shadow .4s, border-color .4s; }
+.pk-avatar { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; font-size: 1.8rem;
+  background: radial-gradient(circle at 35% 30%, #3a1119, #12080a); border: 3px solid var(--gold-400); box-shadow: 0 0 14px rgba(214,182,74,.5); }
+.pk-avatar.swap { animation: bj-pop .45s cubic-bezier(.3,1.6,.5,1); }
+.pk-info { display: flex; flex-direction: column; line-height: 1.2; font-family: var(--font-display); }
+.pk-info small { font-family: var(--font-body); font-size: .74rem; opacity: .75; }
+.pk-seat.thinking .pk-avatar { animation: pk-think .7s ease-in-out infinite alternate; }
+@keyframes pk-think { to { transform: translateY(-5px) rotate(-6deg); box-shadow: 0 0 26px rgba(255,212,90,.9); } }
+.pk-seat.win { border-color: #4fd68b; animation: bj-win 1.3s ease-in-out infinite; }
+.pk-seat.lose { border-color: #b3283b; box-shadow: 0 0 22px rgba(217,74,92,.55); }
+
+.pk-badge { padding: 3px 14px; border-radius: 999px; font-size: .78rem; font-weight: 800; letter-spacing: .06em; color: var(--gold-300);
+  background: rgba(0,0,0,.5); border: 1px solid rgba(214,182,74,.6); }
+.pk-badge:empty { display: none; }
+.pk-badge.pop { animation: bj-pop .45s cubic-bezier(.3,1.6,.5,1); }
+.pk-badge.strong { color: #2b1a00; background: linear-gradient(180deg, #fff3b0, #d6b64a); box-shadow: 0 0 16px rgba(255,212,90,.8); }
+
+.pk-bubble { position: absolute; left: calc(100% + 12px); top: 50%; z-index: 20; padding: 6px 14px; border-radius: 14px; white-space: nowrap; font-size: .8rem;
+  color: #2b1a00; background: linear-gradient(180deg, #fffdf6, #efe4c6); box-shadow: 0 6px 14px rgba(0,0,0,.5);
+  opacity: 0; transform: translateY(-50%) scale(.6); transform-origin: left center; transition: opacity .25s, transform .3s cubic-bezier(.3,1.6,.5,1); pointer-events: none; }
+.pk-bubble::before { content: ''; position: absolute; left: -6px; top: 50%; width: 12px; height: 12px; background: inherit; transform: translateY(-50%) rotate(45deg); }
+.pk-bubble.show { opacity: 1; transform: translateY(-50%) scale(1); }
+.pk-bubble i { display: inline-block; width: 7px; height: 7px; margin: 0 2px; border-radius: 50%; background: #7a1f2b; animation: pk-dot .7s ease-in-out infinite alternate; }
+.pk-bubble i:nth-child(2) { animation-delay: .15s; } .pk-bubble i:nth-child(3) { animation-delay: .3s; }
+@keyframes pk-dot { to { transform: translateY(-6px); opacity: .4; } }
+
+.pk-dbtn { position: absolute; right: -6px; top: -8px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; z-index: 3;
+  font-size: .76rem; font-weight: 900; color: #222; background: radial-gradient(circle at 35% 30%, #fff, #d8d2c0); border: 2px solid var(--gold-500);
+  box-shadow: 0 2px 6px rgba(0,0,0,.6); animation: pk-dpop .7s cubic-bezier(.3,1.6,.5,1); }
+@keyframes pk-dpop { from { transform: scale(0) rotate(-360deg); } }
+
+/* ---- Cartas de mano abiertas en abanico ---- */
+.bj-page #playerCards.cards .card + .card, .bj-page #botCards.cards .card + .card { margin-left: 8px; }
+#playerCards .card .c-br, #botCards .card .c-br { display: flex !important; }
+#playerCards .card:first-child { transform: rotate(-4deg); } #playerCards .card:last-child { transform: rotate(4deg); }
+#botCards .card:first-child { transform: rotate(4deg); } #botCards .card:last-child { transform: rotate(-4deg); }
+
+/* ---- Mesa (cartas comunitarias) ---- */
+.pk-board { padding: 16px 26px; border-radius: 999px; min-height: 140px; align-items: center;
+  background: radial-gradient(ellipse, rgba(0,0,0,.3), rgba(0,0,0,.04)); border: 2px dashed rgba(214,182,74,.35); }
+.bj-page .pk-board.cards .card + .card { margin-left: 10px; }
+.pk-board .card .c-br { display: flex !important; }
+.bj-page .card.slot { visibility: visible; background: rgba(0,0,0,.18); border: 2px dashed rgba(214,182,74,.4); box-shadow: none; pointer-events: none; }
+.bj-page .card.slot::after { content: '♠'; position: absolute; inset: 0; display: grid; place-items: center; font-size: 1.6rem; color: rgba(214,182,74,.18); }
+
+.card.reveal { animation: pk-reveal .75s cubic-bezier(.2,.9,.3,1.2) backwards; }
+@keyframes pk-reveal {
+  0% { opacity: 0; transform: translateY(-80px) perspective(500px) rotateY(100deg) scale(1.3); }
+  60% { opacity: 1; box-shadow: 0 0 34px 8px rgba(255,220,120,.95); }
+  100% { opacity: 1; transform: none; } }
+
+/* Mano ganadora */
+.bj-page .card.hl { transform: translateY(-14px); z-index: 6; animation: pk-hl 1.1s ease-in-out infinite;
+  box-shadow: 0 0 0 2px #ffd45a, 0 0 26px 6px rgba(255,212,90,.85); }
+@keyframes pk-hl { 50% { box-shadow: 0 0 0 2px #fff3b0, 0 0 42px 12px rgba(255,212,90,1); } }
+.bj-page .card.dim { filter: brightness(.5) saturate(.6); transition: filter .5s; }
+
+/* Texto flotante (+bote) */
+.pk-float { position: absolute; left: 50%; top: 50%; z-index: 28; pointer-events: none; font-family: var(--font-display); font-weight: 900;
+  font-size: 1.8rem; text-shadow: 0 0 12px currentColor; animation: pk-float 1.5s ease-out both; }
+.pk-f-gold { color: #ffd45a; } .pk-f-red { color: #ff8593; } .pk-f-green { color: #7fe5a6; }
+@keyframes pk-float { 0% { opacity: 0; transform: translate(-50%, 0) scale(.6); } 20% { opacity: 1; transform: translate(-50%, -20px) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -120px) scale(1); } }
+
+/* Confeti de fichas al ganar con jugada grande */
+.pk-table.jackpot { animation: pk-jackpot 1.2s ease-in-out 2; }
+@keyframes pk-jackpot { 50% { filter: brightness(1.25) saturate(1.3); } }
+
+@media (max-width: 640px) {
+  .pk-board { padding: 12px 10px; border-radius: 40px; min-height: 100px; }
+  .bj-page .pk-board.cards .card + .card { margin-left: 4px; }
+  .pk-bubble { left: 50%; top: calc(100% + 10px); transform: translate(-50%, 0) scale(.6); transform-origin: top center; }
+  .pk-bubble.show { transform: translate(-50%, 0) scale(1); }
+  .pk-bubble::before { left: 50%; top: -6px; transform: translateX(-50%) rotate(45deg); }
 }
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--felt-900); color: var(--cream-050); font-family: var(--font-body); line-height: 1.5; }
-h1, h2, h3 { font-family: var(--font-display); color: var(--gold-400); margin: 0 0 .5em; }
-a { color: inherit; text-decoration: none; }
-.rc-main { max-width: 980px; margin: 0 auto; padding: 24px 16px 60px; }
-.rc-panel { background: rgba(0,0,0,.22); border: 1px solid rgba(201,162,39,.25); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-.rc-btn { display: inline-block; padding: 10px 22px; border-radius: 6px; border: 1px solid transparent; font-weight: 700; font-size: .9rem; cursor: pointer; text-align: center; }
-.rc-btn:disabled { opacity: .45; cursor: not-allowed; }
-.rc-btn-gold { background: linear-gradient(180deg, var(--gold-300), var(--gold-500)); color: var(--ink-900); }
-.rc-btn-burgundy { background: var(--burgundy-600); color: var(--cream-050); border-color: var(--gold-500); }
-.rc-btn-ghost { background: transparent; color: var(--cream-050); border-color: rgba(201,162,39,.4); }
-.rc-bet-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.rc-bet-row label { font-weight: 600; font-size: .85rem; }
-.rc-bet-input { width: 110px; padding: 8px 10px; border-radius: 4px; border: 1px solid rgba(201,162,39,.4); background: rgba(0,0,0,.3); color: var(--cream-050); font-weight: 700; }
-.rc-chip-btn { padding: 7px 12px; border-radius: 999px; border: 1px solid var(--gold-500); background: rgba(201,162,39,.12); color: var(--gold-300); font-weight: 700; font-size: .78rem; cursor: pointer; }
-.rc-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
-.rc-table th, .rc-table td { padding: 9px 10px; text-align: left; border-bottom: 1px solid rgba(201,162,39,.15); }
-.rc-table th { color: var(--gold-400); font-size: .74rem; letter-spacing: .05em; text-transform: uppercase; }
-.rc-stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-top: 16px; }
-.rc-stat { padding: 14px; text-align: center; border: 1px solid rgba(201,162,39,.25); border-radius: 8px; background: rgba(0,0,0,.18); }
-.rc-stat .num { font-family: var(--font-display); font-size: 1.5rem; color: var(--gold-400); }
-.rc-stat .lbl { font-size: .74rem; opacity: .65; }
-.rc-xp-bar { height: 10px; border-radius: 999px; background: rgba(0,0,0,.35); overflow: hidden; }
-.rc-xp-fill { height: 100%; background: linear-gradient(90deg, var(--gold-500), var(--gold-300)); transition: width .4s ease; }
-.rc-hero { text-align: center; padding: 56px 16px 44px; }
-.rc-hero p { opacity: .8; max-width: 520px; margin: 0 auto 22px; }
-.rc-game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 14px; }
-.rc-game-card { display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 8px; border: 1px solid rgba(201,162,39,.25); background: rgba(0,0,0,.18); }
-.rc-game-card .icon { font-size: 2rem; }
-.rc-game-card .name { font-family: var(--font-display); color: var(--gold-400); font-weight: 700; }
-.rc-game-card .desc { font-size: .8rem; opacity: .7; }
-.rc-badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .72rem; font-weight: 700; }
-.rc-badge.win { background: rgba(31,122,74,.35); color: #7fd39a; }
-.rc-badge.lose { background: rgba(122,31,43,.45); color: #f0a0a8; }
-.rc-empty { padding: 30px 10px; text-align: center; opacity: .65; }
-/* === FIN BASE === */
-
-/* poker.css — estilos específicos de poker.html (cartas y zona en juegos.css) */
-
-.pot-line { font-family: var(--font-display); color: var(--gold-400); font-size: 1.1rem; }
-.stage-label { font-size: .74rem; letter-spacing: .05em; opacity: .6; text-align: center; }
-
-
-/* Cartas, mesa y controles: ver juegos.css */
+@media (prefers-reduced-motion: reduce) {
+  .pk-seat.thinking .pk-avatar, .pk-seat.win, .bj-page .card.hl, .pk-table.jackpot, .pk-bubble i { animation: none !important; }
+  .card.reveal, .pk-float, .pk-stages span.on, .pk-dbtn { animation-duration: .01s !important; animation-delay: 0s !important; }
+}

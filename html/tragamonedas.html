@@ -7,32 +7,55 @@
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/tragamonedas.css">
 </head>
-<body>
+<body class="slot-page">
+
+<div class="slot-ambient" aria-hidden="true"><div class="beam b1"></div><div class="beam b2"></div></div>
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
   <div class="slot-wrap">
-    <h1>🎰 Tragamonedas Royal</h1>
+    <h1 class="slot-title">🎰 Tragamonedas Royal</h1>
     <p style="opacity:.7">Iguala tres símbolos en la línea central para ganar.</p>
 
-    <div class="reels">
-      <div class="reel" id="reel0">🍒</div>
-      <div class="reel" id="reel1">🍋</div>
-      <div class="reel" id="reel2">⭐</div>
+    <div class="slot-machine" id="slotMachine" data-state="idle">
+      <div class="lights" id="lightsTop" aria-hidden="true"></div>
+
+      <div class="slot-hud">
+        <div class="hud-cell"><span class="hud-lbl">Saldo</span><span class="hud-val" id="hudCoins">0</span></div>
+        <div class="hud-cell"><span class="hud-lbl">Apuesta</span><span class="hud-val" id="hudBet">100</span></div>
+        <div class="hud-cell"><span class="hud-lbl">Último premio</span><span class="hud-val" id="hudWin">0</span></div>
+        <button type="button" class="hud-sound" id="soundBtn" aria-pressed="true" aria-label="Activar o desactivar el sonido" title="Sonido">🔊</button>
+      </div>
+
+      <div class="reels" id="reelsBox">
+        <span class="payline-arrow left" aria-hidden="true">▶</span>
+        <div class="reel" id="reel0">🍒</div>
+        <div class="reel" id="reel1">🍋</div>
+        <div class="reel" id="reel2">⭐</div>
+        <div class="payline" aria-hidden="true"></div>
+        <span class="payline-arrow right" aria-hidden="true">◀</span>
+      </div>
+
+      <div class="payout-line" id="payoutLine" aria-live="polite">&nbsp;</div>
+
+      <div class="rc-bet-row" style="justify-content:center; margin-bottom:18px;">
+        <label for="bet">Apuesta</label>
+        <button type="button" class="rc-chip-btn" data-step="-1" aria-label="Bajar apuesta">−</button>
+        <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
+        <button type="button" class="rc-chip-btn" data-step="1" aria-label="Subir apuesta">+</button>
+        <button class="rc-chip-btn" data-add="100">+100</button>
+        <button class="rc-chip-btn" data-add="500">+500</button>
+        <button class="rc-chip-btn" data-max>MAX</button>
+      </div>
+
+      <div class="slot-actions">
+        <button class="rc-btn rc-btn-gold" id="spinBtn" style="font-size:1.05rem; padding:14px 40px;">GIRAR</button>
+        <button type="button" class="rc-chip-btn auto-btn" id="autoBtn" aria-pressed="false" title="Giros automáticos (se detienen con JACKPOT o sin saldo)">AUTO</button>
+      </div>
+
+      <div class="lights" id="lightsBottom" aria-hidden="true"></div>
     </div>
-
-    <div class="payout-line" id="payoutLine">&nbsp;</div>
-
-    <div class="rc-bet-row" style="justify-content:center; margin-bottom:18px;">
-      <label for="bet">Apuesta</label>
-      <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
-      <button class="rc-chip-btn" data-add="100">+100</button>
-      <button class="rc-chip-btn" data-add="500">+500</button>
-      <button class="rc-chip-btn" data-max>MAX</button>
-    </div>
-
-    <button class="rc-btn rc-btn-gold" id="spinBtn" style="font-size:1.05rem; padding:14px 40px;">GIRAR</button>
   </div>
 
   <section class="rc-panel" style="max-width:480px; margin:32px auto 0;">
@@ -40,22 +63,34 @@
     <table class="rc-table paytable">
       <thead><tr><th>Combinación</th><th>Pago</th></tr></thead>
       <tbody>
-        <tr><td>7️⃣ 7️⃣ 7️⃣</td><td>×20</td></tr>
-        <tr><td>💎 💎 💎</td><td>×12</td></tr>
-        <tr><td>⭐ ⭐ ⭐</td><td>×8</td></tr>
-        <tr><td>🍊 🍊 🍊</td><td>×5</td></tr>
-        <tr><td>🍋 🍋 🍋</td><td>×4</td></tr>
-        <tr><td>🍒 🍒 🍒</td><td>×3</td></tr>
+        <tr><td>7️⃣ 7️⃣ 7️⃣</td><td>×100</td></tr>
+        <tr><td>💎 💎 💎</td><td>×30</td></tr>
+        <tr><td>⭐ ⭐ ⭐</td><td>×15</td></tr>
+        <tr><td>🍊 🍊 🍊</td><td>×10</td></tr>
+        <tr><td>🍋 🍋 🍋</td><td>×6</td></tr>
+        <tr><td>🍒 🍒 🍒</td><td>×4</td></tr>
         <tr><td>Dos símbolos iguales</td><td>×1 (recuperas apuesta)</td></tr>
       </tbody>
     </table>
   </section>
 </main>
 
+<div class="bigwin" id="bigWin" hidden role="status" aria-live="assertive">
+  <div class="coin-rain" id="coinRain" aria-hidden="true"></div>
+  <div class="bigwin-card">
+    <div class="bigwin-title" id="bigWinTitle">BIG WIN</div>
+    <div class="bigwin-amount"><span id="bigWinAmount">0</span> <small>monedas</small></div>
+    <div class="bigwin-mult" id="bigWinMult">×10</div>
+    <div class="bigwin-hint">Toca para continuar</div>
+  </div>
+</div>
+
 <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
 
 <script src="../js/app.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/tragamonedas_engine.js"></script>
+<script src="../js/tragamonedas_fx.js"></script>
 <script src="../js/tragamonedas.js"></script>
 </body>
 </html>
