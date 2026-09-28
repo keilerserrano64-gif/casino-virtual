@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Poker</title>
+<link rel="stylesheet" href="../css/juegos.css">
 <link rel="stylesheet" href="../css/poker.css">
 </head>
 <body>
@@ -11,26 +12,26 @@
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-  <h1 style="text-align:center">♠️ Poker — Texas Hold'em</h1>
-  <p style="text-align:center; opacity:.7; max-width:480px; margin:0 auto 20px;">Versión simplificada 1 contra 1 frente a la banca. Apuesta en cada ronda o retírate.</p>
+  <h1 class="game-title">♠️ Poker — Texas Hold'em</h1>
+  <p class="subtitle">Versión simplificada 1 contra 1 frente a la banca. Apuesta en cada ronda o retírate.</p>
 
-  <div class="poker-zone">
+  <div class="zone">
     <div>
-      <div class="stage-label" style="text-align:center">BANCA</div>
-      <div class="hand-row" id="botCards"></div>
+      <div class="stage-label">BANCA</div>
+      <div class="cards" id="botCards"></div>
     </div>
 
     <div>
-      <div class="stage-label" style="text-align:center">MESA</div>
-      <div class="community" id="community"></div>
+      <div class="stage-label">MESA</div>
+      <div class="cards" id="community"></div>
     </div>
 
     <div class="pot-line" id="potLine">Bote: 0</div>
-    <div class="poker-msg" id="pokerMsg">Fija tu apuesta inicial y reparte.</div>
+    <div class="game-msg" id="pokerMsg" aria-live="polite">Fija tu apuesta inicial y reparte.</div>
 
     <div>
-      <div class="stage-label" style="text-align:center">TU MANO</div>
-      <div class="hand-row" id="playerCards"></div>
+      <div class="stage-label">TU MANO</div>
+      <div class="cards" id="playerCards"></div>
     </div>
 
     <div class="rc-bet-row" id="betRow">
@@ -38,7 +39,7 @@
       <input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10">
     </div>
 
-    <div class="bj-controls" style="display:flex; gap:10px;">
+    <div class="controls">
       <button class="rc-btn rc-btn-gold" id="dealBtn">Repartir</button>
       <button class="rc-btn rc-btn-burgundy" id="betBtn" disabled>Apostar</button>
       <button class="rc-btn rc-btn-ghost" id="foldBtn" disabled>Retirarse</button>

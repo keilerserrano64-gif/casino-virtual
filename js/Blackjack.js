@@ -1,5 +1,4 @@
 // Blackjack.js — lógica de Blackjack.html (usa RC de app.js)
-
 RC.initHeader();
 
 const SUITS = [{s:'♠',c:'black'},{s:'♣',c:'black'},{s:'♥',c:'red'},{s:'♦',c:'red'}];
@@ -16,6 +15,7 @@ const dealBtn = document.getElementById('dealBtn');
 const hitBtn = document.getElementById('hitBtn');
 const standBtn = document.getElementById('standBtn');
 const betInput = document.getElementById('bet');
+const betRow = document.getElementById('betRow');
 
 document.querySelectorAll('.rc-chip-btn[data-add]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -58,15 +58,13 @@ function renderTable(hideDealerHole) {
   dealerHand.forEach((c, i) => dealerCardsEl.appendChild(renderCard(c, hideDealerHole && i === 1)));
   playerCardsEl.innerHTML = '';
   playerHand.forEach(c => playerCardsEl.appendChild(renderCard(c, false)));
-
   playerScoreEl.textContent = handScore(playerHand);
   dealerScoreEl.textContent = hideDealerHole ? cardValue(dealerHand[0]) + ' + ?' : handScore(dealerHand);
 }
 
 dealBtn.addEventListener('click', () => {
   const b = Math.max(10, Math.floor(Number(betInput.value) || 0));
-  const user = RC.getUser();
-  if (b > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+  if (b > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
   bet = b;
   betInput.value = bet;
   RC.addCoins(-bet);
@@ -76,29 +74,31 @@ dealBtn.addEventListener('click', () => {
   dealerHand = [deck.pop(), deck.pop()];
   roundOver = false;
   msgEl.textContent = 'Pide una carta o plántate.';
-
   renderTable(true);
 
   dealBtn.disabled = true;
-  document.getElementById('betRow').style.opacity = '.5';
+  betRow.style.opacity = '.5';
   hitBtn.disabled = false;
   standBtn.disabled = false;
 
-  if (handScore(playerHand) === 21) {
-    finishRound('blackjack');
-  }
+  // blackjack natural: se comprueba también el de la banca
+  const pBJ = handScore(playerHand) === 21, dBJ = handScore(dealerHand) === 21;
+  if (pBJ && dBJ) finishRound('push-bj');
+  else if (pBJ) finishRound('blackjack');
+  else if (dBJ) finishRound('dealer-bj');
 });
 
 hitBtn.addEventListener('click', () => {
   if (roundOver) return;
   playerHand.push(deck.pop());
   renderTable(true);
-  if (handScore(playerHand) > 21) finishRound('bust');
+  const s = handScore(playerHand);
+  if (s > 21) finishRound('bust');
+  else if (s === 21) dealerPlay(); // 21 → planta automática
 });
 
 standBtn.addEventListener('click', () => {
-  if (roundOver) return;
-  dealerPlay();
+  if (!roundOver) dealerPlay();
 });
 
 function dealerPlay() {
@@ -111,27 +111,31 @@ function finishRound(reason) {
   hitBtn.disabled = true;
   standBtn.disabled = true;
   dealBtn.disabled = false;
-  document.getElementById('betRow').style.opacity = '1';
-
+  betRow.style.opacity = '1';
   renderTable(false);
 
   const pScore = handScore(playerHand);
   const dScore = handScore(dealerHand);
-  let won = false, payout = 0, text = '';
+  let outcome = 'lose', payout = 0, text = '';
 
   if (reason === 'bust') {
     text = `Te pasaste con ${pScore}. Pierdes ${RC.formatNumber(bet)} monedas.`;
+  } else if (reason === 'dealer-bj') {
+    text = `El repartidor tiene Blackjack. Pierdes ${RC.formatNumber(bet)} monedas.`;
+  } else if (reason === 'push-bj') {
+    outcome = 'push'; payout = bet;
+    text = 'Blackjack para ambos. Recuperas tu apuesta.';
   } else if (reason === 'blackjack') {
-    won = true; payout = Math.round(bet * 2.5);
+    outcome = 'win'; payout = Math.round(bet * 2.5);
     text = `¡Blackjack! Ganas ${RC.formatNumber(payout)} monedas.`;
   } else if (dScore > 21) {
-    won = true; payout = bet * 2;
+    outcome = 'win'; payout = bet * 2;
     text = `El repartidor se pasa con ${dScore}. Ganas ${RC.formatNumber(payout)} monedas.`;
   } else if (pScore > dScore) {
-    won = true; payout = bet * 2;
+    outcome = 'win'; payout = bet * 2;
     text = `Ganas ${pScore} contra ${dScore}. +${RC.formatNumber(payout)} monedas.`;
   } else if (pScore === dScore) {
-    won = true; payout = bet;
+    outcome = 'push'; payout = bet;
     text = `Empate en ${pScore}. Recuperas tu apuesta.`;
   } else {
     text = `El repartidor gana con ${dScore} contra ${pScore}.`;
@@ -139,6 +143,6 @@ function finishRound(reason) {
 
   if (payout > 0) RC.addCoins(payout);
   msgEl.textContent = text;
-  RC.toast(won ? 'win' : 'lose', text);
-  RC.registerGameResult('Blackjack', won && payout > bet, bet, payout);
+  RC.toast(outcome === 'win' ? 'win' : (outcome === 'push' ? 'info' : 'lose'), text);
+  RC.registerGameResult('Blackjack', outcome === 'win', bet, payout);
 }

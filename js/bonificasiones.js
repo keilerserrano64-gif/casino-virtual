@@ -1,5 +1,4 @@
 // bonificasiones.js — lógica de bonificasiones.html (usa RC de app.js)
-
 RC.initHeader();
 
 const claimBonusBtn = document.getElementById('claimBonusBtn');
@@ -9,10 +8,46 @@ const missionText = document.getElementById('missionText');
 const missionBar = document.getElementById('missionBar');
 const claimMissionBtn = document.getElementById('claimMissionBtn');
 
-function yesterdayKey() {
-  const d = new Date();
-  d.setDate(d.getDate() - 1);
-  return d.toISOString().slice(0, 10);
+// "ayer" se calcula a partir de RC.todayKey() para que ambos usen siempre el mismo formato/huso
+function prevKey(key) {
+  const [y, m, d] = key.split('-').map(Number);
+  const dt = new Date(y, m - 1, d - 1);
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+}
+
+function nextStreakOf(user, today) {
+  return user.lastDailyBonus === prevKey(today) ? (user.streak || 0) + 1 : 1;
+}
+const rewardFor = streak => 300 + Math.min(streak, 10) * 100; // tope: 1.300
+
+const ACHIEVEMENTS = [
+  { icon: '🎮', name: '10 partidas', test: u => u.gamesPlayed >= 10 },
+  { icon: '🏅', name: '10 victorias', test: u => u.wins >= 10 },
+  { icon: '💰', name: '20.000 monedas', test: u => u.coins >= 20000 },
+  { icon: '🥈', name: 'Nivel 5', test: u => u.level >= 5 },
+  { icon: '🥇', name: 'Nivel 10', test: u => u.level >= 10 },
+  { icon: '🔥', name: 'Racha de 3 días', test: u => (u.streak || 0) >= 3 },
+];
+
+// Los logros se guardan: una vez desbloqueados no se vuelven a bloquear
+function syncAchievements(user) {
+  user.achievements = user.achievements || [];
+  let changed = false;
+  ACHIEVEMENTS.forEach(a => {
+    if (!user.achievements.includes(a.name) && a.test(user)) {
+      user.achievements.push(a.name);
+      changed = true;
+      RC.toast('win', `Logro desbloqueado: ${a.name}`);
+    }
+  });
+  if (changed) RC.saveUser(user);
+}
+
+function renderAchievements(user) {
+  document.getElementById('achvGrid').innerHTML = ACHIEVEMENTS.map(a => {
+    const unlocked = user.achievements.includes(a.name);
+    return `<div class="achv ${unlocked ? 'unlocked' : 'locked'}"><span class="ic">${a.icon}</span>${a.name}</div>`;
+  }).join('');
 }
 
 function refreshBonusUI() {
@@ -25,15 +60,15 @@ function refreshBonusUI() {
     bonusDesc.textContent = 'Ya reclamaste tu bono de hoy. Vuelve mañana.';
     claimBonusBtn.textContent = 'Reclamado ✓';
   } else {
-    const nextStreak = user.lastDailyBonus === yesterdayKey() ? (user.streak || 0) + 1 : 1;
-    const reward = 300 + nextStreak * 100;
+    const next = nextStreakOf(user, today);
+    const reward = rewardFor(next);
     claimBonusBtn.disabled = false;
     claimBonusBtn.textContent = `Reclamar +${RC.formatNumber(reward)}`;
-    bonusDesc.textContent = `Racha día ${nextStreak}: gana ${RC.formatNumber(reward)} monedas.`;
+    bonusDesc.textContent = `Racha día ${next}: gana ${RC.formatNumber(reward)} monedas.`;
   }
 
   if (user.missionDate === today) {
-    const count = Math.min(user.missionCount, 3);
+    const count = Math.min(user.missionCount || 0, 3);
     missionText.textContent = `${count}/3`;
     missionBar.style.width = (count / 3 * 100) + '%';
     claimMissionBtn.disabled = !(count >= 3 && !user.missionClaimed);
@@ -45,6 +80,7 @@ function refreshBonusUI() {
     claimMissionBtn.textContent = 'Reclamar recompensa';
   }
 
+  syncAchievements(user);
   renderAchievements(user);
 }
 
@@ -52,9 +88,9 @@ claimBonusBtn.addEventListener('click', () => {
   const user = RC.getUser();
   const today = RC.todayKey();
   if (user.lastDailyBonus === today) return;
-  const nextStreak = user.lastDailyBonus === yesterdayKey() ? (user.streak || 0) + 1 : 1;
-  const reward = 300 + nextStreak * 100;
-  user.streak = nextStreak;
+  const next = nextStreakOf(user, today);
+  const reward = rewardFor(next);
+  user.streak = next;
   user.lastDailyBonus = today;
   RC.saveUser(user);
   RC.addCoins(reward);
@@ -65,8 +101,7 @@ claimBonusBtn.addEventListener('click', () => {
 
 claimMissionBtn.addEventListener('click', () => {
   const user = RC.getUser();
-  const today = RC.todayKey();
-  if (user.missionDate !== today || user.missionCount < 3 || user.missionClaimed) return;
+  if (user.missionDate !== RC.todayKey() || (user.missionCount || 0) < 3 || user.missionClaimed) return;
   user.missionClaimed = true;
   RC.saveUser(user);
   RC.addCoins(500);
@@ -74,22 +109,5 @@ claimMissionBtn.addEventListener('click', () => {
   RC.toast('win', 'Misión completada: +500 monedas, +100 XP');
   refreshBonusUI();
 });
-
-const ACHIEVEMENTS = [
-  { icon: '🎮', name: '10 partidas', test: u => u.gamesPlayed >= 10 },
-  { icon: '🏅', name: '10 victorias', test: u => u.wins >= 10 },
-  { icon: '💰', name: '20.000 monedas', test: u => u.coins >= 20000 },
-  { icon: '🥈', name: 'Nivel 5', test: u => u.level >= 5 },
-  { icon: '🥇', name: 'Nivel 10', test: u => u.level >= 10 },
-  { icon: '🔥', name: 'Racha de 3 días', test: u => (u.streak || 0) >= 3 },
-];
-
-function renderAchievements(user) {
-  const grid = document.getElementById('achvGrid');
-  grid.innerHTML = ACHIEVEMENTS.map(a => {
-    const unlocked = a.test(user);
-    return `<div class="achv ${unlocked ? '' : 'locked'}"><span class="ic">${a.icon}</span>${a.name}</div>`;
-  }).join('');
-}
 
 refreshBonusUI();

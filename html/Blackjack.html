@@ -4,24 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Blackjack</title>
+<link rel="stylesheet" href="../css/juegos.css">
 <link rel="stylesheet" href="../css/Blackjack.css">
-
 </head>
 <body>
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-  <h1 style="text-align:center">🃏 Blackjack</h1>
+  <h1 class="game-title">🃏 Blackjack</h1>
 
-  <div class="table-zone">
-
+  <div class="zone">
     <div class="hand-block">
       <div class="hand-title"><span>Repartidor</span><span class="score" id="dealerScore">—</span></div>
       <div class="cards" id="dealerCards"></div>
     </div>
 
-    <div class="bj-msg" id="bjMsg">Coloca tu apuesta y reparte.</div>
+    <div class="game-msg" id="bjMsg" aria-live="polite">Coloca tu apuesta y reparte.</div>
 
     <div class="hand-block">
       <div class="hand-title"><span>Tú</span><span class="score" id="playerScore">—</span></div>
@@ -35,7 +34,7 @@
       <button class="rc-chip-btn" data-add="500">+500</button>
     </div>
 
-    <div class="bj-controls">
+    <div class="controls">
       <button class="rc-btn rc-btn-gold" id="dealBtn">Repartir</button>
       <button class="rc-btn rc-btn-burgundy" id="hitBtn" disabled>Pedir</button>
       <button class="rc-btn rc-btn-ghost" id="standBtn" disabled>Plantarse</button>
