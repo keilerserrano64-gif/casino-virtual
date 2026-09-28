@@ -1,4 +1,0 @@
-/* estadisticas.css */
-.rc-stat .num { font-size: 1.3rem; word-break: break-word; }
-#chartGames .bar-row, #chartResults .bar-row { grid-template-columns: 130px 1fr 60px; }
-.rc-panel h2 { font-size: 1.05rem; }

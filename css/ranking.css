@@ -1,7 +1,0 @@
-/* ranking.css */
-.tabs .rc-btn { min-width: 110px; }
-#rankBody tr:nth-child(1) td:first-child { color: #ffd76a; font-weight: 800; }
-#rankBody tr:nth-child(2) td:first-child { color: #d4d8de; font-weight: 800; }
-#rankBody tr:nth-child(3) td:first-child { color: #d9955a; font-weight: 800; }
-#rankBody tr.me { background: rgba(201,162,39,.16); font-weight: 700; }
-#rankMe { text-align: center; margin-top: 4px; }
