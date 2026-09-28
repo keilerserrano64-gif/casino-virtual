@@ -250,33 +250,94 @@ a {
 
 /* ruleta.css — estilos específicos de ruleta.html (colores de números en juegos.css) */
 
-.wheel {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  position: relative;
-  background: repeating-conic-gradient(var(--burgundy-600) 0 20deg, #1b1613 20deg 40deg);
-  border: 4px solid var(--gold-500);
-  transition: transform 2.2s cubic-bezier(.17, .67, .24, 1);
+/* --- disposición: ruleta grande + panel de apuestas --- */
+.roulette-main {
+  max-width: 1280px;
 }
 
-.wheel::after {
-  content: '';
-  position: absolute;
-  inset: 30%;
-  border-radius: 50%;
-  background: var(--felt-900);
-  border: 2px solid var(--gold-400);
+.roulette-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.wheel-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.wheel-zone h1 {
+  margin-bottom: 0;
+}
+
+.roulette-panel {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1000px) {
+  .roulette-layout {
+    grid-template-columns: minmax(0, 1fr) 400px;
+  }
+
+  .roulette-panel {
+    margin: 60px 0 0;
+    position: sticky;
+    top: 16px;
+  }
+}
+
+/* --- ruleta (SVG generado en ruleta.js) --- */
+.wheel {
+  width: min(100%, 760px, max(340px, calc(100vh - 210px)));
+  aspect-ratio: 1 / 1;
+  filter: drop-shadow(0 20px 34px rgba(0, 0, 0, .55));
+}
+
+.wheel svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wheel .pk.red { fill: #a91e2c; }
+.wheel .pk.black { fill: #17120f; }
+.wheel .pk.green { fill: var(--win-green); }
+
+.wheel .fret {
+  stroke: #d9bd5a;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.wheel .pn {
+  fill: #fff;
+  font: 700 30px Georgia, 'Times New Roman', serif;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.wheel .win-hi {
+  fill: rgba(255, 236, 150, .30);
+  stroke: #fff2b0;
+  stroke-width: 5;
+  stroke-linejoin: round;
 }
 
 .result-number {
-  width: 74px;
-  height: 74px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 800;
   font-family: var(--font-display);
   border: 3px solid var(--gold-400);
@@ -286,6 +347,10 @@ a {
 
 .history-strip {
   min-height: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
 }
 
 .number-grid {
