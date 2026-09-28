@@ -1,0 +1,5 @@
+/* notificaciones.css */
+.notif-list li { transition: background .2s; }
+.notif-list li:hover { background: rgba(201,162,39,.12); }
+.notif-list .ic { font-size: 1.3rem; }
+.notif-list:empty::after { content: 'No tienes notificaciones.'; display: block; padding: 24px; text-align: center; opacity: .6; }

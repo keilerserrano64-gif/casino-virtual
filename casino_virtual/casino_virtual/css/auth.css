@@ -1,0 +1,10 @@
+/* auth.css — login, registro y recuperar contraseña */
+body { min-height: 100vh; background: radial-gradient(ellipse at top, var(--felt-700, #16523a), var(--felt-900, #0b2e22) 70%); }
+.rc-main { display: grid; place-items: center; min-height: 80vh; }
+.auth-box { width: 100%; max-width: 420px; padding: 28px 26px; border-color: rgba(201,162,39,.5); box-shadow: 0 14px 40px rgba(0,0,0,.45); }
+.auth-box .rc-brand { display: block; text-align: center; margin-bottom: 14px; font-size: 1.3rem; }
+.auth-box h1 { text-align: center; font-size: 1.5rem; margin-bottom: 4px; }
+.auth-box .subtitle { text-align: center; margin-bottom: 20px; }
+.auth-box .rc-btn { width: 100%; margin-top: 4px; }
+.auth-links { margin: 18px 0 0; text-align: center; font-size: .82rem; opacity: .85; }
+.rc-footer { border-top: 0; }

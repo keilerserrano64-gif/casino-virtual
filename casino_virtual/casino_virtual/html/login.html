@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Iniciar sesión</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/auth.css">
+</head>
+<body data-public>
+
+
+<main class="rc-main">
+<div class="auth-box rc-panel">
+  <a class="rc-brand" href="inicio.html"><span class="crown">👑</span> ROYAL CASINO</a>
+  <h1>Iniciar sesión</h1>
+  <p class="subtitle">Entra con tu usuario o correo.</p>
+  <form data-form="login" novalidate>
+<label class="rc-field" for="identificador">Usuario o correo<input type="text" id="identificador" name="identificador" required autocomplete="username"></label><label class="rc-field" for="password">Contraseña<input type="password" id="password" name="password" required autocomplete="current-password"></label><label class="rc-check"><input type="checkbox" id="recordarme"> Recordarme</label><button class="rc-btn rc-btn-gold" type="submit">Entrar</button>
+    <p class="form-error" id="formError" role="alert"></p>
+  </form>
+  <p class="auth-links"><a href="recuperar.html">¿Olvidaste tu contraseña?</a> · <a href="registro.html">Crear cuenta</a></p>
+</div>
+</main>
+
+<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+
+<script src="../js/app.js"></script>
+<script src="../js/auth.js"></script>
+</body>
+</html>

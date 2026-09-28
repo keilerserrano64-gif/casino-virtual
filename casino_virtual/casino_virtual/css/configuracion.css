@@ -1,0 +1,5 @@
+/* configuracion.css */
+.rc-panel form { max-width: 420px; }
+.pref-list { display: flex; flex-direction: column; gap: 6px; max-width: 320px; }
+.pref-list .rc-field { margin-bottom: 8px; }
+#logoutBtn { margin-right: 8px; }
