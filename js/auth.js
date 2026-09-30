@@ -10,7 +10,7 @@
   /* ---- Protección de rutas ---- */
   if (document.body.hasAttribute('data-public')) {
     if (RC.isLoggedIn() && page !== 'recuperar.html') return go('inicio.html');
-  } else if (!RC.isLoggedIn()) {
+  } else if (!RC.isLoggedIn() && page !== 'inicio.html') {   // el inicio es público
     return go('login.html');
   } else if (document.body.hasAttribute('data-admin') && !RC.isAdmin()) {
     return go('inicio.html');

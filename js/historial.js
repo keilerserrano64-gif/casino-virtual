@@ -15,6 +15,11 @@ function render() {
     (gameSel.value === 'todos' || h.game.split(' · ')[0] === gameSel.value) &&
     (resultSel.value === 'todos' || h.result === resultSel.value));
   document.getElementById('countLabel').textContent = `${history.length} de ${all.length} partidas`;
+  const wins = history.filter(h => h.result === 'win').length;
+  document.getElementById('hsGames').textContent = RC.formatNumber(history.length);
+  document.getElementById('hsWins').textContent = RC.formatNumber(wins);
+  document.getElementById('hsLosses').textContent = RC.formatNumber(history.length - wins);
+  document.getElementById('hsRate').textContent = history.length ? Math.round(wins / history.length * 100) + '%' : '0%';
   const wrap = document.getElementById('tableWrap');
 
   if (history.length === 0) {

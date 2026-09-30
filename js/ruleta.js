@@ -66,8 +66,8 @@ function buildWheelSVG() {
 <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" focusable="false">
   <defs>
     <linearGradient id="gWood" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#8a5230"/><stop offset=".35" stop-color="#4a2510"/>
-      <stop offset=".65" stop-color="#2a1408"/><stop offset="1" stop-color="#6a3a1c"/>
+      <stop offset="0" stop-color="#5a1f8a"/><stop offset=".35" stop-color="#1d1450"/>
+      <stop offset=".65" stop-color="#0a0720"/><stop offset="1" stop-color="#3a1a70"/>
     </linearGradient>
     <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#f7e39b"/><stop offset=".5" stop-color="#c9a227"/><stop offset="1" stop-color="#7a5d10"/>
@@ -81,11 +81,11 @@ function buildWheelSVG() {
       <stop offset="1" stop-color="rgba(0,0,0,.40)"/>
     </radialGradient>
     <radialGradient id="gCone" gradientUnits="userSpaceOnUse" cx="${C}" cy="${C}" r="${R_NUM_IN}">
-      <stop offset="0" stop-color="#2b1609"/><stop offset=".45" stop-color="#5a2f14"/>
-      <stop offset=".8" stop-color="#7d4622"/><stop offset="1" stop-color="#2f170a"/>
+      <stop offset="0" stop-color="#1a0a3a"/><stop offset=".45" stop-color="#3a1a70"/>
+      <stop offset=".8" stop-color="#5a2a9a"/><stop offset="1" stop-color="#1a0a3a"/>
     </radialGradient>
     <radialGradient id="gHubDark" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#3a2410"/><stop offset="1" stop-color="#120a04"/>
+      <stop offset="0" stop-color="#2a1a60"/><stop offset="1" stop-color="#07050d"/>
     </radialGradient>
     <linearGradient id="gShine" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="rgba(255,255,255,.20)"/><stop offset=".45" stop-color="rgba(255,255,255,0)"/>

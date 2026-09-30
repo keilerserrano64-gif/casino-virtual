@@ -1,12 +1,71 @@
-/* bingo.css (usa también juegos.css) */
-.bingo-ball { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-size: 2.4rem; font-weight: 800; color: var(--ink-900); background: radial-gradient(circle at 30% 30%, #fff, var(--gold-300) 60%, var(--gold-500)); box-shadow: 0 6px 16px rgba(0,0,0,.45); }
-.bingo-ball.pop { animation: bingo-pop .35s ease; }
-@keyframes bingo-pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-#calledBalls { min-height: 44px; }
-#calledBalls > * { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; font-weight: 700; background: rgba(201,162,39,.2); border: 1px solid var(--gold-500); }
-.bingo-card { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 12px; border-radius: 10px; background: rgba(0,0,0,.28); border: 1px solid var(--gold-500); }
-.bingo-card > * { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 8px; font-weight: 800; font-size: 1.05rem; cursor: pointer; color: var(--cream-050); background: rgba(255,255,255,.08); border: 1px solid rgba(201,162,39,.3); transition: transform .12s, background .15s; }
-.bingo-card > *:hover { transform: scale(1.06); }
-.bingo-card > .marked { background: linear-gradient(180deg, var(--gold-300), var(--gold-500)); color: var(--ink-900); }
-.bingo-card > .free { background: var(--burgundy-600); font-size: .7rem; }
-@media (max-width: 420px) { .bingo-card > * { width: 44px; height: 44px; } }
+/* bingo.css — sala de bingo, tema Las Vegas (se carga después de vegas.css) */
+body.bingo-page { --b0:#2b8cff; --b1:#ff2b4a; --b2:#f3ecdc; --b3:#0fbf6a; --b4:#ffb320; --b5:#ff2bd6; --b6:#2bd4ff; --b7:#9a6bff; --b8:#ff7a2b; --paper:#fbf3dc; --ink:#2a1a06; }
+body.bingo-page .bingo-hall { gap: 20px; }
+body.bingo-page .game-title { font-size: clamp(2.6rem, 7vw, 4.2rem); text-align: center; }
+body.bingo-page .rc-main > .subtitle { text-align: center; max-width: 620px; margin: 0 auto 18px; font-size: .9rem; }
+
+/* sala + bote: letrero de bombillas */
+body.bingo-page .bingo-hall > .rc-bet-row { justify-content: center; }
+body.bingo-page .jackpot-sign { position: relative; width: 100%; max-width: 620px; display: flex; flex-direction: column; align-items: center; padding: 30px 20px 26px; border: 2px solid var(--vg-gold); border-radius: 14px; background: radial-gradient(420px 140px at 50% 50%, rgba(245,197,66,.2), transparent 70%), linear-gradient(#14163a, #0a0720); box-shadow: 0 0 26px rgba(245,197,66,.3), inset 0 0 30px rgba(0,0,0,.5); }
+body.bingo-page .jackpot-sign::before, body.bingo-page .jackpot-sign::after { content: ''; position: absolute; left: 0; right: 0; height: 12px; background: radial-gradient(circle, #fff3b0 0 2.5px, var(--vg-gold) 3px 4px, transparent 4.5px) 0 50% / 26px 12px repeat-x; filter: drop-shadow(0 0 4px var(--vg-gold)); animation: vgbulbs 1s steps(1) infinite; }
+body.bingo-page .jackpot-sign::before { top: 6px; } body.bingo-page .jackpot-sign::after { bottom: 6px; animation-delay: .5s; }
+.jp-lbl { font-family: var(--vg-marq); font-size: 1.25rem; letter-spacing: .14em; color: var(--vg-gold); }
+.jp-num { font-family: var(--vg-marq); font-size: clamp(3rem, 10vw, 4.8rem); line-height: 1; color: #fff; text-shadow: 0 0 8px var(--vg-gold), 0 0 28px rgba(245,197,66,.8); font-variant-numeric: tabular-nums; }
+.jp-note { font-size: .8rem; color: var(--vg-dim); margin-top: 4px; }
+body.bingo-page .bonus-chip { max-width: 620px; text-align: center; font-size: .82rem; color: #7dffb0; padding: 6px 16px; border-radius: 999px; border: 1px solid rgba(15,191,106,.5); background: rgba(15,191,106,.12); }
+body.bingo-page .bonus-chip:empty { display: none; }
+
+/* bola actual + cantadas */
+.draw-stage { width: 100%; max-width: 760px; display: flex; align-items: center; gap: 26px; padding: 22px 24px; border-radius: 16px; border: 1px solid var(--vg-line); background: linear-gradient(#14163a, #0a0720); box-shadow: 0 0 18px rgba(0,0,0,.45), inset 0 0 30px rgba(0,0,0,.35); }
+.ball-well { flex: none; display: grid; place-items: center; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle at 50% 60%, #05030c 55%, #1a1740 100%); box-shadow: inset 0 8px 18px rgba(0,0,0,.8), 0 0 0 3px var(--vg-gold2), 0 0 18px rgba(245,197,66,.35); }
+body.bingo-page .bingo-ball { --c: var(--b2); position: relative; width: 116px; height: 116px; flex-direction: column; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #1b1206; font-family: var(--vg-marq); font-weight: 400; background: radial-gradient(circle at 32% 26%, rgba(255,255,255,.95) 0 8%, transparent 26%), radial-gradient(circle at 50% 50%, #fff 0 46%, transparent 47%) , radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c) 70%, #fff), var(--c) 55%, color-mix(in srgb, var(--c) 60%, #000)); box-shadow: 0 8px 18px rgba(0,0,0,.6); }
+body.bingo-page .bingo-ball:not([data-g]) { --c: #3a3a5c; background: radial-gradient(circle at 35% 30%, #4a4a78, #23233f 70%); color: var(--vg-dim); font-size: 2.4rem; }
+body.bingo-page .bingo-ball small { font-size: 1.35rem; line-height: .9; letter-spacing: .05em; color: var(--c); filter: brightness(.78); }
+body.bingo-page .bingo-ball b { font-size: 3.1rem; line-height: 1; font-weight: 400; }
+body.bingo-page .bingo-ball.pop { animation: bingo-drop .5s cubic-bezier(.3,1.5,.5,1); }
+@keyframes bingo-drop { from { transform: translateY(-46px) scale(.5); opacity: 0; } to { transform: none; opacity: 1; } }
+[data-g="0"] { --c: var(--b0); } [data-g="1"] { --c: var(--b1); } [data-g="2"] { --c: var(--b2); } [data-g="3"] { --c: var(--b3); } [data-g="4"] { --c: var(--b4); }
+[data-g="5"] { --c: var(--b5); } [data-g="6"] { --c: var(--b6); } [data-g="7"] { --c: var(--b7); } [data-g="8"] { --c: var(--b8); }
+.draw-side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.draw-side .stage-label { text-align: left; font-family: var(--vg-marq); font-size: 1.2rem; letter-spacing: .08em; opacity: 1; color: var(--vg-gold); }
+#calledBalls { justify-content: flex-start; gap: 6px; min-height: 84px; max-height: 128px; overflow-y: auto; align-content: flex-start; }
+#calledBalls > * { width: 32px; height: 32px; font-size: .82rem; font-weight: 800; color: #1b1206; background: radial-gradient(circle at 35% 28%, color-mix(in srgb, var(--c) 60%, #fff), var(--c) 70%); border: 0; box-shadow: 0 2px 5px rgba(0,0,0,.5); }
+#calledBalls > .latest { outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 12px var(--c); }
+#calledBalls:empty::before { content: 'Aún no ha salido ninguna bola.'; color: var(--vg-dim); font-size: .85rem; }
+
+/* mensaje de la mesa */
+body.bingo-page .call-board { width: 100%; max-width: 760px; padding: 12px 18px; border-radius: 12px; border: 1px solid var(--vg-line); background: rgba(0,0,0,.4); font-family: var(--vg-marq); font-size: 1.45rem; letter-spacing: .04em; font-weight: 400; color: #ffe27a; text-shadow: 0 0 10px rgba(245,197,66,.5); }
+body.bingo-page .bingo-hall > .stage-label { font-family: var(--vg-marq); font-size: 1.3rem; letter-spacing: .1em; opacity: 1; color: var(--vg-gold); }
+
+/* cartones: papel crema con sello rosa */
+#bingoCard { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; width: 100%; }
+#bingoCard:empty::before { content: 'Compra tus cartones para empezar.'; color: var(--vg-dim); }
+#bingoCard > .stage-label { flex-basis: 100%; margin-bottom: -14px; font-family: var(--vg-marq); font-size: 1.15rem; letter-spacing: .1em; opacity: 1; color: var(--vg-dim); }
+.bingo-card { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; padding: 12px; border-radius: 14px; background: var(--paper); border: 3px solid var(--vg-gold); box-shadow: 0 0 22px rgba(245,197,66,.3), 0 10px 20px rgba(0,0,0,.5); }
+.bingo-card.wide { grid-template-columns: repeat(9, 1fr); gap: 4px; width: min(100%, 600px); }
+.bingo-card .hd { display: grid; place-items: center; height: 42px; border-radius: 8px; font-family: var(--vg-marq); font-size: 1.7rem; color: #fff; background: var(--c); text-shadow: 0 1px 2px rgba(0,0,0,.55); }
+.bingo-card .hd.g2 { color: #1b1206; text-shadow: none; }
+.bingo-card > :not(.hd) { position: relative; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 8px; font-family: var(--vg-marq); font-size: 1.75rem; font-weight: 400; color: var(--ink); cursor: pointer; background: #fff; border: 1px solid #d8c9a0; transition: transform .12s; }
+.bingo-card.wide > :not(.hd) { width: auto; min-width: 0; height: 52px; font-size: 1.5rem; }
+.bingo-card > .blank { background: repeating-linear-gradient(45deg, #efe3c2 0 6px, #e6d7ad 6px 12px); border-color: #e0cf9f; cursor: default; }
+.bingo-card > :not(.hd):not(.blank):hover { transform: scale(1.07); }
+.bingo-card > .marked { color: #fff; border-color: transparent; background: radial-gradient(circle at 35% 30%, #ff7be8, var(--vg-pink) 55%, #b3009a); box-shadow: inset 0 -3px 5px rgba(0,0,0,.25), 0 0 10px rgba(255,43,214,.55); border-radius: 50%; animation: dauber .28s cubic-bezier(.3,1.6,.5,1); }
+.bingo-card > .free { font-size: 1.5rem; }
+@keyframes dauber { from { transform: scale(1.5); opacity: .3; } to { transform: scale(1); opacity: 1; } }
+.bingo-card .hd:nth-child(1) { --c: var(--b0); } .bingo-card .hd:nth-child(2) { --c: var(--b1); } .bingo-card .hd:nth-child(3) { --c: var(--b2); } .bingo-card .hd:nth-child(4) { --c: var(--b3); } .bingo-card .hd:nth-child(5) { --c: var(--b4); }
+
+/* compra y chat */
+body.bingo-page .buy-panel { width: 100%; max-width: 620px; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 22px; margin: 0; }
+body.bingo-page .buy-panel .controls { flex-basis: 100%; }
+body.bingo-page .rc-check { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--vg-dim); }
+body.bingo-page #chatLog { padding: 4px 2px; font-size: .88rem; }
+body.bingo-page #chatLog strong { color: var(--vg-gold); }
+body.bingo-page #chatLog > div { padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+
+@media (max-width: 640px) {
+  .draw-stage { flex-direction: column; padding: 18px 14px; }
+  .draw-side .stage-label { text-align: center; } #calledBalls { justify-content: center; }
+  .bingo-card > :not(.hd) { width: 46px; height: 46px; font-size: 1.5rem; }
+  .bingo-card.wide { padding: 8px; gap: 3px; } .bingo-card.wide > :not(.hd) { height: 40px; font-size: 1.15rem; }
+}
+@media (prefers-reduced-motion: reduce) { body.bingo-page .jackpot-sign::before, body.bingo-page .jackpot-sign::after, .bingo-ball.pop, .bingo-card > .marked { animation: none !important; } }

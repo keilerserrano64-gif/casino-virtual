@@ -1,0 +1,24 @@
+/* lobby.css — página de juegos con buscador (tema Las Vegas) */
+body.lobby-page .rc-main { max-width: 1080px; }
+.lb-search { display: flex; align-items: center; gap: 10px; max-width: 560px; margin: 0 0 22px; padding: 12px 18px; border-radius: 12px; border: 2px solid var(--vg-gold); background: rgba(0,0,0,.5); box-shadow: 0 0 16px rgba(245,197,66,.25); }
+.lb-search:focus-within { box-shadow: 0 0 24px rgba(245,197,66,.6); }
+.lb-search input { flex: 1; min-width: 0; border: 0; outline: 0 !important; background: transparent; color: var(--vg-tx); font: 600 1.05rem system-ui, sans-serif; }
+.lb-search input::placeholder { color: var(--vg-dim); }
+.lb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.lb-tile { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 230px; padding: 16px; border-radius: 14px; overflow: hidden; border: 2px solid var(--vg-line); background: var(--bg); transition: transform .18s, border-color .18s, box-shadow .18s; }
+.lb-tile:hover, .lb-tile:focus-visible { transform: translateY(-6px) scale(1.02); border-color: var(--vg-gold); box-shadow: 0 0 26px rgba(245,197,66,.5); }
+.lb-tile .ico { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); font-size: 5rem; filter: drop-shadow(0 12px 12px rgba(0,0,0,.6)); transition: transform .25s; }
+.lb-tile:hover .ico { transform: translateX(-50%) scale(1.15) rotate(-6deg); }
+.lb-tile b { font-family: var(--vg-marq); font-size: 1.8rem; font-weight: 400; letter-spacing: .06em; text-shadow: 0 2px 8px #000; }
+.lb-tile span { font-size: .78rem; color: #e9e2ff; }
+.lb-tile .go { margin-top: 8px; align-self: flex-start; padding: 4px 14px; border-radius: 999px; background: var(--vg-gold); color: #3a2400; font: 800 .74rem system-ui; }
+.lb-more { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; margin-top: 14px; }
+.lb-more a { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; background: linear-gradient(#14163a, #0a0720); border: 1px solid var(--vg-line); transition: border-color .15s, background .15s; }
+.lb-more a:hover { border-color: var(--vg-gold); background: #1b1a45; }
+.lb-more i { font-style: normal; font-size: 1.8rem; }
+.lb-more b { display: block; font-family: var(--vg-marq); font-size: 1.3rem; font-weight: 400; color: var(--vg-gold); letter-spacing: .05em; }
+.lb-more small { color: var(--vg-dim); font-size: .74rem; }
+.lb-empty { color: var(--vg-dim); }
+@media (max-width: 1000px) { .lb-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 420px) { .lb-grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .lb-tile, .lb-tile .ico { transition: none; } }

@@ -4,27 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Historial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
 <link rel="stylesheet" href="../css/base.css">
-<link rel="stylesheet" href="../css/inicio.css">
+<link rel="stylesheet" href="../css/historial.css">
+<link rel="stylesheet" href="../css/vegas.css">
 </head>
-<body>
+<body class="vg">
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-  <h1>📊 Historial de partidas</h1>
-  <p style="opacity:.7">Tus últimas partidas, de la más reciente a la más antigua.</p>
+  <section class="rc-panel vg-bulbed vg-hero">
+    <p class="vg-kicker">Tus últimas partidas</p>
+    <h1><span class="vg-neon-red">HISTORIAL DE</span> <span class="vg-gold-txt">PARTIDAS</span></h1>
+    <p class="vg-sub">De la más reciente a la más antigua.</p>
+    <div class="vg-hero-art" aria-hidden="true">📜</div>
+  </section>
 
-  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px;">
-    <select id="filterGame" class="rc-select" aria-label="Filtrar por juego"><option value="todos">Todos los juegos</option></select>
-    <select id="filterResult" class="rc-select" aria-label="Filtrar por resultado"><option value="todos">Todos los resultados</option><option value="win">Ganadas</option><option value="lose">Perdidas</option></select>
-    <a href="billetera.html" class="rc-btn rc-btn-ghost">Ver billetera</a>
+  <div class="rc-stat-row hs-stats">
+    <div class="rc-stat"><div class="num" id="hsGames">0</div><div class="lbl">Partidas</div></div>
+    <div class="rc-stat"><div class="num" id="hsWins">0</div><div class="lbl">Ganadas</div></div>
+    <div class="rc-stat"><div class="num" id="hsLosses">0</div><div class="lbl">Perdidas</div></div>
+    <div class="rc-stat"><div class="num" id="hsRate">0%</div><div class="lbl">% victorias</div></div>
   </div>
 
-  <section class="rc-panel" style="margin-top:16px;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-      <span style="font-size:.82rem; opacity:.7" id="countLabel">0 partidas registradas</span>
-      <button class="rc-btn rc-btn-ghost" id="clearBtn">Borrar historial</button>
+  <section class="rc-panel hs-filters">
+    <select id="filterGame" class="rc-select" aria-label="Filtrar por juego"><option value="todos">Todos los juegos</option></select>
+    <select id="filterResult" class="rc-select" aria-label="Filtrar por resultado"><option value="todos">Todos los resultados</option><option value="win">Ganadas</option><option value="lose">Perdidas</option></select>
+    <a href="billetera.html" class="rc-btn rc-btn-ghost">💰 Ver billetera</a>
+  </section>
+
+  <section class="rc-panel">
+    <div class="history-bar">
+      <span id="countLabel">0 partidas registradas</span>
+      <button class="rc-btn rc-btn-ghost" id="clearBtn">🗑️ Borrar historial</button>
     </div>
     <div id="tableWrap"></div>
   </section>

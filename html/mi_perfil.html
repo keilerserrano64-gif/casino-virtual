@@ -4,16 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Mi perfil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/mi_perfil.css">
+<link rel="stylesheet" href="../css/vegas.css">
 </head>
-<body>
+<body class="vg">
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
 
-  <section class="rc-panel">
+  <section class="rc-panel vg-bulbed pf-card">
     <div class="profile-head">
       <div class="profile-avatar">👤</div>
       <div>
@@ -21,13 +24,13 @@
         <div class="profile-title" id="pTitle">—</div>
         <div class="edit-row">
           <input type="text" id="nameInput" placeholder="Cambiar tu nombre" maxlength="18">
-          <button class="rc-btn rc-btn-ghost" id="saveNameBtn">Guardar</button>
+          <button class="rc-btn rc-btn-gold" id="saveNameBtn">Guardar</button>
         </div>
       </div>
     </div>
 
-    <div style="margin-top:20px;">
-      <div style="display:flex; justify-content:space-between; font-size:.78rem; opacity:.7; margin-bottom:6px;">
+    <div class="xp-block">
+      <div class="xp-meta">
         <span>Nivel <span id="pLevel">1</span></span>
         <span id="pXpText">0 / 500 XP</span>
       </div>
@@ -44,13 +47,13 @@
     </div>
   </section>
 
-  <section class="rc-panel" style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
-    <a href="configuracion.html" class="rc-btn rc-btn-ghost">Editar perfil</a>
-    <a href="historial.html" class="rc-btn rc-btn-ghost">Historial</a>
-    <a href="logros.html" class="rc-btn rc-btn-ghost">Logros</a>
-    <a href="billetera.html" class="rc-btn rc-btn-ghost">Billetera</a>
-    <a href="estadisticas.html" class="rc-btn rc-btn-ghost">Estadísticas</a>
-    <a href="configuracion.html" class="rc-btn rc-btn-ghost">Configuración</a>
+  <section class="rc-panel profile-actions">
+    <a href="configuracion.html" class="rc-btn rc-btn-ghost">✏️ Editar perfil</a>
+    <a href="historial.html" class="rc-btn rc-btn-ghost">📜 Historial</a>
+    <a href="logros.html" class="rc-btn rc-btn-ghost">⭐ Logros</a>
+    <a href="billetera.html" class="rc-btn rc-btn-ghost">💰 Billetera</a>
+    <a href="estadisticas.html" class="rc-btn rc-btn-ghost">📊 Estadísticas</a>
+    <a href="configuracion.html" class="rc-btn rc-btn-ghost">⚙️ Configuración</a>
   </section>
 </main>
 

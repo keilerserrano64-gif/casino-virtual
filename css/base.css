@@ -147,3 +147,24 @@ html[data-theme="light"] .card.hidden { background: linear-gradient(135deg, #165
 html[data-anim="off"] *, html[data-anim="off"] *::before { animation: none !important; transition: none !important; }
 @media (prefers-reduced-motion: reduce) { *, *::before { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 @media (max-width: 640px) { .rc-header { padding: 10px 12px; } .bar-row { grid-template-columns: 80px 1fr 44px; } }
+
+/* Botón Administración (solo sesión admin), junto a las notificaciones */
+.rc-admin-btn { white-space: nowrap; }
+.rc-admin-btn.active { box-shadow: 0 0 0 2px var(--gold-300); }
+
+/* Barra superior en una sola fila: marca + Casino + menú + usuario */
+.rc-header { flex-wrap: nowrap; justify-content: flex-start; gap: 16px; position: sticky; top: 0; z-index: 50; }
+.rc-header .rc-brand { flex: none; display: flex; align-items: baseline; gap: 8px; }
+.rc-header .rc-nav { flex: 1; min-width: 0; padding: 0; background: none; border: 0; align-items: center; }
+.rc-header .rc-user { flex: none; margin-left: auto; }
+.rc-nav .rc-casino-btn { opacity: 1; margin-right: 6px; color: var(--ink-900, #14110f); background: linear-gradient(180deg, var(--gold-300, #e6cf7a), var(--gold-500, #c9a227)); }
+@media (max-width: 900px) { .rc-header { flex-wrap: wrap; } .rc-header .rc-nav { order: 3; flex-basis: 100%; } }
+
+.rc-nav .rc-home-btn { margin-right: 6px; }
+
+/* flecha para volver al lobby de juegos */
+.rc-back-games { position: fixed; top: 100px; left: 24px; z-index: 5; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; font: 400 1.15rem/1 var(--vg-marq, 'Bebas Neue', system-ui, sans-serif); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; color: #f5c542; background: rgba(0,0,0,.55); border: 2px solid #f5c542; box-shadow: 0 0 12px rgba(245,197,66,.3); transition: transform .15s, background .15s, box-shadow .15s; }
+.rc-back-games span { font-size: 1.4rem; line-height: .8; transition: transform .15s; }
+.rc-back-games:hover, .rc-back-games:focus-visible { background: rgba(245,197,66,.2); box-shadow: 0 0 20px rgba(245,197,66,.6); }
+.rc-back-games:hover span { transform: translateX(-4px); }
+@media (max-width: 1199px) { .rc-back-games { position: static; margin: 0 0 12px; } }

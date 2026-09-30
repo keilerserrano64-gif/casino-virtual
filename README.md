@@ -43,3 +43,15 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 - `js/carreras_engine.js`: caballos con velocidad, resistencia y forma; condición del día (±15 %) sorteada en cada carrera; probabilidades exactas (modelo Plackett-Luce); cuotas = 92 % ÷ probabilidad, redondeadas hacia abajo (ventaja de la casa ≥ 8 %); RNG `crypto.getRandomValues` con rechazo. Sin DOM; se prueba con `node tests/carreras_engine.test.js`.
 - El orden de llegada completo se decide y se guarda **antes** de animar (sin empates); si se cierra la página, el premio se acredita al volver. La animación solo muestra el resultado.
 - La cuota se fija al pulsar «¡A CORRER!». Apuesta: entero ≥ 10 y ≤ saldo.
+
+## Bingo
+`html/bingo.html` — dos salas: **Bingo 75** (cartón 5x5, centro libre) y **Bingo 90** (cartón 3x9 con 15 números).
+- `js/bingo_engine.js`: RNG, cartones, evaluación y premios. Sin DOM; se prueba en Node (`node tests/bingo_engine.test.js`).
+- **RNG**: `crypto.getRandomValues` con rechazo (sin sesgo de módulo) y barajado Fisher-Yates. **No está certificado por iTech Labs ni GLI**; una certificación real requiere una auditoría externa del sistema en producción.
+- **Cartones únicos**: hasta 6 por partida, sin duplicados entre sí. Cada cartón 90 cumple 5 números por fila y 1-3 por columna.
+- **Marcado automático** (opción) y cómputo instantáneo: tras cada bola se evalúan todos los cartones y el sistema canta **Línea** (una vez por cartón) y **Bingo** (termina la partida) sin pulsar nada. El marcado manual sigue disponible.
+- **Premios** (sobre el precio del cartón que gana): 75 bolas → línea ×0,5 · bingo ×15 (66 bolas). 90 bolas → línea ×0,5 · bingo ×4,5 (78 bolas). RTP simulado sin bote ≈ 86 % (75) y ≈ 82-85 % (90); con el 5 % de cada compra que alimenta el bote, ≈ 90 %.
+- **Bote acumulado** por sala: bingo en ≤ 60 bolas (75) o ≤ 63 bolas (90). Se guarda en `localStorage` (por navegador) y vuelve a 1.000 al ganarse.
+- **Bonos**: 3 cartones gratis de bienvenida y 1 cartón gratis cada 10 partidas de bingo (lealtad). No existe un sistema de depósitos en el proyecto, así que no hay bono por depósito.
+- **Voz y sonidos**: voz del navegador (`speechSynthesis`) que canta las bolas y "Línea"/"Bingo", y tonos con WebAudio. Respeta Configuración → Sonido.
+- **Chat de sala**: local, sin servidor (se comparte entre pestañas del mismo navegador). Moderación: bloquea insultos, enlaces, floods y limita la frecuencia. Incluye emojis, stickers y minijuegos rápidos (dado y moneda, sin monedas en juego).

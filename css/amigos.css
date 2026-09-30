@@ -1,0 +1,14 @@
+/* amigos.css — lista de amigos y búsqueda (usa los componentes rc-* de base.css) */
+.fr-search { width: 100%; max-width: 360px; }
+.fr-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.fr-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(201,162,39,.2); background: rgba(0,0,0,.18); flex-wrap: wrap; }
+.fr-dot { width: 10px; height: 10px; border-radius: 50%; background: #6b6b6b; flex: none; }
+.fr-dot.on { background: #3ddc84; box-shadow: 0 0 8px #3ddc84; }
+.fr-info { flex: 1; min-width: 150px; }
+.fr-info b { display: block; color: var(--gold-300, #e6cf7a); }
+.fr-info small { opacity: .7; font-size: .76rem; }
+.fr-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.fr-empty { opacity: .65; padding: 12px 4px; font-size: .86rem; }
+.fr-note { text-align: left !important; margin: 4px 0 0 !important; max-width: none !important; font-size: .8rem; }
+.rc-panel h2 { display: flex; align-items: center; gap: 10px; }
+[hidden] { display: none !important; }

@@ -4,29 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Bingo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/juegos.css">
+<link rel="stylesheet" href="../css/vegas.css">
 <link rel="stylesheet" href="../css/bingo.css">
 </head>
-<body>
+<body class="vg bingo-page">
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
 <h1 class="game-title">🎱 Bingo</h1>
-<p class="subtitle">Marca los números que van saliendo. Completa una línea o el cartón para ganar.</p>
-<div class="zone">
-  <div class="stage-label">ÚLTIMA BOLA</div>
-  <div class="bingo-ball" id="currentBall">—</div>
-  <div class="cards" id="calledBalls"></div>
-  <div class="game-msg" id="bingoMsg" aria-live="polite">Compra tu cartón y empieza.</div>
-  <div class="stage-label">TU CARTÓN</div>
-  <div class="bingo-card" id="bingoCard"></div>
+<p class="subtitle" id="rulesInfo">Marca los números que van saliendo. Completa una línea o el cartón para ganar.</p>
+<div class="zone bingo-hall">
+  <div class="rc-bet-row"><label for="mode">Sala</label><select id="mode" class="rc-select"><option value="75">Bingo 75 bolas</option><option value="90">Bingo 90 bolas</option></select></div>
+  <div class="pot-line jackpot-sign" id="jackpot" aria-live="polite"></div>
+  <div class="bonus-chip" id="bonusInfo"></div>
+  <section class="draw-stage">
+    <div class="ball-well"><div class="bingo-ball" id="currentBall">—</div></div>
+    <div class="draw-side">
+      <div class="stage-label">Bolas cantadas</div>
+      <div class="cards" id="calledBalls"></div>
+    </div>
+  </section>
+  <div class="game-msg call-board" id="bingoMsg" aria-live="polite">Compra tus cartones y empieza.</div>
+  <div class="stage-label">Tus cartones</div>
+  <div id="bingoCard"></div>
+  <div class="buy-panel rc-panel">
   <div class="rc-bet-row" id="betRow"><label for="bet">Precio del cartón</label><input type="number" id="bet" class="rc-bet-input" value="100" min="10" step="10"></div>
+  <div class="rc-bet-row" id="countRow"><label for="cardCount">Cartones (1-6)</label><input type="number" id="cardCount" class="rc-bet-input" value="1" min="1" max="6" step="1"></div>
+  <label class="rc-check"><input type="checkbox" id="autoDaub" checked> Marcado automático</label>
+  <label class="rc-check"><input type="checkbox" id="voiceOn" checked> Voz y sonidos</label>
   <div class="controls">
-    <button class="rc-btn rc-btn-gold" id="buyBtn">Comprar cartón</button>
+    <button class="rc-btn rc-btn-gold" id="buyBtn">Comprar cartones</button>
     <button class="rc-btn rc-btn-burgundy" id="drawBtn" disabled>Sacar bola</button>
-    <button class="rc-btn rc-btn-ghost" id="bingoBtn" disabled>¡BINGO!</button>
+  </div>
+  </div>
+
+  <div class="stage-label">Chat de la sala</div>
+  <div class="rc-panel" style="width:100%;max-width:520px">
+    <div id="chatLog" aria-live="polite" style="max-height:180px;overflow:auto"></div>
+    <div class="controls">
+      <input type="text" id="chatInput" class="rc-bet-input" maxlength="140" placeholder="Escribe un mensaje" aria-label="Mensaje del chat">
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" id="chatSend">Enviar</button>
+    </div>
+    <div class="controls" id="chatEmojis">
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" data-emoji="😀">😀</button>
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" data-emoji="😂">😂</button>
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" data-emoji="🎉">🎉</button>
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" data-emoji="🍀">🍀</button>
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" data-emoji="🔥">🔥</button>
+    </div>
+    <div class="controls" id="chatStickers">
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" data-sticker="🎱 ¡Bingo!">🎱 ¡Bingo!</button>
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" data-sticker="🍀 ¡Suerte!">🍀 ¡Suerte!</button>
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" data-sticker="🎉 ¡Vamos!">🎉 ¡Vamos!</button>
+    </div>
+    <div class="controls">
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" id="chatDice">🎲 Dado</button>
+      <button class="rc-btn rc-btn-ghost rc-btn-sm" id="chatCoin">🪙 Moneda</button>
+    </div>
   </div>
 </div>
 </main>
@@ -35,6 +74,7 @@
 
 <script src="../js/app.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/bingo_engine.js"></script>
 <script src="../js/bingo.js"></script>
 </body>
 </html>

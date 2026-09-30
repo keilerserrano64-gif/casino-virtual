@@ -27,14 +27,9 @@ const RC = (() => {
   };
 
   const NAV_ITEMS = [
-    { href: 'inicio.html', label: 'Inicio' }, { href: 'tragamonedas.html', label: 'Tragamonedas' },
-    { href: 'ruleta.html', label: 'Ruleta' }, { href: 'Blackjack.html', label: 'Blackjack' },
-    { href: 'poker.html', label: 'Poker' }, { href: 'dados.html', label: 'Dados' },
-    { href: 'carreras.html', label: 'Carreras' }, { href: 'bingo.html', label: 'Bingo' },
-    { href: 'torneos.html', label: 'Torneos' }, { href: 'ranking.html', label: 'Ranking' },
+    { href: 'torneos.html', label: 'Torneos' }, { href: 'ranking.html', label: 'Ranking' }, { href: 'amigos.html', label: 'Amigos' },
     { href: 'billetera.html', label: 'Billetera' }, { href: 'bonificasiones.html', label: 'Bonificaciones' },
-    { href: 'noticias.html', label: 'Noticias' }, { href: 'mi_perfil.html', label: 'Mi perfil' },
-    { href: 'historial.html', label: 'Historial' },
+    { href: 'noticias.html', label: 'Noticias' }, { href: 'historial.html', label: 'Historial' },
   ];
 
   const LEVEL_TITLES = [
@@ -151,7 +146,7 @@ const RC = (() => {
     if (newUser && newUser !== me.username) {
       if (!/^[a-zA-Z0-9_]{3,18}$/.test(newUser)) return { ok: false, error: 'Usuario no válido (3-18 caracteres: letras, números o _).' };
       if (findAccount(newUser)) return { ok: false, error: 'Ese usuario ya existe.' };
-      ['u', 'h', 'n', 'm', 's', 'l'].forEach(t => { const v = localStorage.getItem(dk(t, me.username)); if (v !== null) localStorage.setItem(dk(t, newUser), v); localStorage.removeItem(dk(t, me.username)); });
+      ['u', 'h', 'n', 'm', 's', 'l', 'p', 'f'].forEach(t => { const v = localStorage.getItem(dk(t, me.username)); if (v !== null) localStorage.setItem(dk(t, newUser), v); localStorage.removeItem(dk(t, me.username)); });
       const tk = getTickets(); tk.forEach(t => { if (t.user === me.username) t.user = newUser; }); write(K.TICKETS, tk);
       const remember = !!localStorage.getItem(K.SESSION);
       me.username = newUser; setSession(newUser, remember);
@@ -251,8 +246,104 @@ const RC = (() => {
     saveUser(user);
     addXP(won ? 25 : 8);
     logHistory(game, won, wager, payout);
+    if (net > 0) pushLiveWin(gname, payout);
+    touchPresence();
     if (newChest) { toast('info', '📦 ¡Ganaste un cofre virtual!'); notify('Ganaste un cofre virtual. Ábrelo en Bonificaciones.', '📦'); }
     checkAchievements();
+  }
+
+  /* ---------- Jugadores activos y ganadores en tiempo real (compartido entre pestañas del mismo navegador) ---------- */
+
+  const PAGE_GAME = { 'tragamonedas.html': 'Tragamonedas', 'ruleta.html': 'Ruleta', 'Blackjack.html': 'Blackjack', 'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo', 'torneos.html': 'Torneo' };
+  const ACTIVE_MS = 2 * 60 * 1000;
+  let presenceTimer = null;
+
+  function touchPresence() {
+    const u = cu(); if (!u) return;
+    const page = pageFile();
+    write(dk('p', u), { game: PAGE_GAME[page] || null, ts: Date.now() });
+    write(dk('l', u), Date.now());
+  }
+  function startPresence() {
+    touchPresence();
+    if (presenceTimer) return;
+    presenceTimer = setInterval(() => { if (!document.hidden) touchPresence(); }, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) touchPresence(); });
+  }
+  function playersNow() {
+    return getAccounts().filter(a => a.role !== 'admin' && !a.banned).map(a => ({ name: a.username, ...read(dk('p', a.username), { game: null, ts: 0 }) }))
+      .filter(p => Date.now() - p.ts < ACTIVE_MS).sort((a, b) => b.ts - a.ts);
+  }
+  function pushLiveWin(game, amount) {
+    const u = cu(); if (!u || !(amount > 0)) return;
+    const l = read('rc_live_wins', []); l.unshift({ user: u, game, amount, ts: Date.now() });
+    write('rc_live_wins', l.slice(0, 40));
+  }
+  // ganadores recientes (última hora) de jugadores que siguen activos ahora
+  function liveWins(limit = 8) {
+    const active = new Set(playersNow().map(p => p.name));
+    return read('rc_live_wins', []).filter(w => active.has(w.user) && Date.now() - w.ts < 3600000).slice(0, limit);
+  }
+
+  /* ---------- Amigos: buscar, agregar y ver quién está conectado (datos del mismo navegador) ---------- */
+
+  const isPlayer = a => a && a.role !== 'admin' && !a.banned;
+  const findPlayer = id => { const a = findAccount(id); return isPlayer(a) ? a : null; };
+  function getSocial(u = cu()) {
+    const raw = read(dk('f', u || ''), {});
+    const ok = n => isPlayer(findAccount(n));                       // descarta cuentas borradas o bloqueadas
+    return { friends: (raw.friends || []).filter(ok), incoming: (raw.incoming || []).filter(ok), outgoing: (raw.outgoing || []).filter(ok) };
+  }
+  const saveSocial = (soc, u = cu()) => write(dk('f', u), soc);
+  const addTo = (list, n) => { if (!list.includes(n)) list.push(n); };
+  const without = (list, n) => list.filter(x => x !== n);
+
+  function relation(name) {                                          // 'friend' | 'incoming' | 'outgoing' | 'none'
+    const s = getSocial();
+    return s.friends.includes(name) ? 'friend' : s.incoming.includes(name) ? 'incoming' : s.outgoing.includes(name) ? 'outgoing' : 'none';
+  }
+  function makeFriends(a, b) {
+    [[a, b], [b, a]].forEach(([x, y]) => { const s = getSocial(x); s.friends = [...new Set([...s.friends, y])]; s.incoming = without(s.incoming, y); s.outgoing = without(s.outgoing, y); saveSocial(s, x); });
+  }
+  function sendFriendRequest(name) {
+    const me = cu(); const t = findPlayer(name);
+    if (!me) return { ok: false, error: 'Inicia sesión para agregar amigos.' };
+    if (!t) return { ok: false, error: 'Ese jugador no existe.' };
+    if (t.username === me) return { ok: false, error: 'No puedes agregarte a ti mismo.' };
+    const mine = getSocial();
+    if (mine.friends.includes(t.username)) return { ok: false, error: 'Ya son amigos.' };
+    if (mine.outgoing.includes(t.username)) return { ok: false, error: 'Ya enviaste una solicitud.' };
+    if (mine.incoming.includes(t.username)) { makeFriends(me, t.username); notify(`${me} aceptó tu solicitud de amistad.`, '🤝', t.username); return { ok: true, status: 'friends', username: t.username }; }
+    addTo(mine.outgoing, t.username); saveSocial(mine);
+    const theirs = getSocial(t.username); addTo(theirs.incoming, me); saveSocial(theirs, t.username);
+    notify(`${me} quiere ser tu amigo. Respóndele en Amigos.`, '👥', t.username);
+    return { ok: true, status: 'sent', username: t.username };
+  }
+  function acceptFriend(name) {
+    const me = cu(); if (!me || !getSocial().incoming.includes(name)) return { ok: false, error: 'No hay solicitud de ese jugador.' };
+    makeFriends(me, name); notify(`${me} aceptó tu solicitud de amistad.`, '🤝', name); return { ok: true };
+  }
+  function dropRequest(name) {                                       // rechazar o cancelar: limpia ambos lados
+    const me = cu(); if (!me) return;
+    const a = getSocial(); a.incoming = without(a.incoming, name); a.outgoing = without(a.outgoing, name); saveSocial(a);
+    const b = getSocial(name); b.incoming = without(b.incoming, me); b.outgoing = without(b.outgoing, me); saveSocial(b, name);
+  }
+  function removeFriend(name) {
+    const me = cu(); if (!me) return;
+    const a = getSocial(); a.friends = without(a.friends, name); saveSocial(a);
+    const b = getSocial(name); b.friends = without(b.friends, me); saveSocial(b, name);
+  }
+  function presenceOf(name) {
+    const p = read(dk('p', name), null); const ts = p ? p.ts : read(dk('l', name), 0);
+    const online = Date.now() - ts < ACTIVE_MS;
+    return { name, online, game: online && p ? p.game : null, ts };
+  }
+  const friendsStatus = () => getSocial().friends.map(presenceOf).sort((a, b) => (b.online - a.online) || (b.ts - a.ts));
+  function searchPlayers(q) {
+    const me = cu(), x = String(q || '').trim().toLowerCase();
+    return getAccounts().filter(a => isPlayer(a) && a.username !== me && (!x || a.username.toLowerCase().includes(x) || String(a.name || '').toLowerCase().includes(x)))
+      .map(a => ({ username: a.username, name: a.name, level: getUser(a.username).level, rel: relation(a.username), ...presenceOf(a.username) }))
+      .sort((a, b) => (b.online - a.online) || a.username.localeCompare(b.username));
   }
 
   function registerMissionPlay(user) {
@@ -398,32 +489,43 @@ const RC = (() => {
 
   function initHeader(rootId) {
     applySettings();
+    startPresence();
     const root = document.getElementById(rootId || 'rc-header-root');
     if (!root) return;
-    const u = cu(); if (u) write(dk('l', u), Date.now());
+    const u = cu();
     const user = getUser(); const info = levelInfo(user.level); const current = pageFile();
-    const items = [...NAV_ITEMS];
-    if (isAdmin()) items.push({ href: 'admin/admin.html', label: '👨‍💼 Admin', admin: true });
-    const href = i => i.admin ? (inAdmin ? 'admin.html' : i.href) : BASE + i.href;
+    const adm = isAdmin();
+    // El administrador usa el botón Administración de la barra superior (sin perfil de jugador)
+    const items = NAV_ITEMS;
+    const href = i => BASE + i.href;
+    const adminBtn = `<a class="rc-btn rc-btn-gold rc-btn-sm rc-admin-btn${inAdmin ? ' active' : ''}" href="${inAdmin ? 'admin.html' : 'admin/admin.html'}" title="Panel de administración">Administración</a>`;
+    const profileBtn = `<a class="rc-avatar-link" href="${BASE}mi_perfil.html" title="Mi perfil (${esc(u || '')})">👤</a>`;
 
     root.innerHTML = `
       <header class="rc-header">
-        <a class="rc-brand" href="${BASE}inicio.html"><span class="crown">👑</span> ROYAL CASINO</a>
+        <a class="rc-brand" href="${BASE}inicio.html"><span class="crown">♛</span><span class="rc-b1">ROYAL</span><span class="rc-b2">CASINO</span></a>
+        <nav class="rc-nav">
+          <a class="rc-home-btn${current === 'inicio.html' ? ' active' : ''}" href="${BASE}inicio.html" title="Volver al inicio">🏠 Inicio</a>
+          <a class="rc-casino-btn${current === 'juegos.html' ? ' active' : ''}" href="${BASE}juegos.html" title="Ver todos los juegos">🎰 Casino</a>
+          ${items.map(i => `<a href="${href(i)}" class="${i.href === current ? 'active' : ''}">${esc(i.label)}</a>`).join('')}
+        </nav>
         <div class="rc-user">
           <span class="rc-level-pill">${info.icon} Nv. ${user.level}</span>
           <a class="rc-coins" href="${BASE}billetera.html" title="Billetera">💰 <span id="rc-coin-display">${formatNumber(user.coins)}</span></a>
           <a class="rc-avatar-link" href="${BASE}notificaciones.html" title="Notificaciones" style="position:relative">🔔<span id="rc-bell" style="display:none;position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#c0392b;color:#fff;font-size:.65rem;font-weight:700;align-items:center;justify-content:center"></span></a>
-          <a class="rc-avatar-link" href="${BASE}mi_perfil.html" title="Mi perfil (${esc(u || '')})">👤</a>
+          ${adm ? adminBtn : profileBtn}
           <button class="rc-btn rc-btn-ghost rc-btn-sm" id="rc-logout" type="button">Salir</button>
         </div>
       </header>
-      <nav class="rc-nav">
-        ${items.map(i => `<a href="${href(i)}" class="${i.href === current || (inAdmin && i.admin) ? 'active' : ''}">${esc(i.label)}</a>`).join('')}
-      </nav>
       <div class="rc-toast-wrap" id="rc-toast-wrap"></div>
     `;
     root.querySelector('#rc-logout').addEventListener('click', () => { if (confirm('¿Cerrar sesión?')) logout(); });
     refreshBell();
+    // Flecha para volver al lobby de juegos (solo en las páginas de cada juego)
+    if (['tragamonedas.html', 'ruleta.html', 'Blackjack.html', 'poker.html', 'dados.html', 'carreras.html', 'bingo.html'].includes(current)) {
+      const main = document.querySelector('.rc-main');
+      if (main && !main.querySelector('.rc-back-games')) main.insertAdjacentHTML('afterbegin', `<a class="rc-back-games" href="${BASE}juegos.html" title="Volver a los juegos" aria-label="Volver a los juegos"><span aria-hidden="true">←</span> Juegos</a>`);
+    }
   }
 
   function refreshHeaderDisplay(user) {
@@ -470,6 +572,8 @@ const RC = (() => {
     isGameEnabled, setGameEnabled, notify, getNotifications, unreadCount, markAllRead, clearNotifications,
     getSettings, saveSettings, applySettings,
     // interfaz
+    playersNow, liveWins, touchPresence,
+    getSocial, sendFriendRequest, acceptFriend, dropRequest, removeFriend, friendsStatus, searchPlayers,
     initHeader, toast, barChart, formatNumber, signed, esc, fmtDate,
     levelInfo, xpForLevel, levelReward, totalXp, todayKey, isWeekend, START_COINS,
   };

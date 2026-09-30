@@ -4,34 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Bonificaciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/bonificasiones.css">
+<link rel="stylesheet" href="../css/vegas.css">
 </head>
-<body>
+<body class="vg">
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-  <h1>🎁 Bonificaciones</h1>
+  <section class="rc-panel vg-bulbed vg-hero">
+    <p class="vg-kicker">Rachas y recompensas</p>
+    <h1><span class="vg-neon-red">BONOS Y</span> <span class="vg-gold-txt">RECOMPENSAS</span></h1>
+    <p class="vg-sub">Reclama cada día, completa misiones y abre cofres.</p>
+    <div class="vg-hero-art" aria-hidden="true">🎁</div>
+  </section>
 
   <div class="bonus-row">
-    <div class="rc-panel bonus-card">
+    <div class="rc-panel bonus-card bn-daily">
       <div class="big">🎁</div>
-      <h3 style="font-size:1rem">Bono diario</h3>
-      <p style="opacity:.7; font-size:.82rem" id="bonusDesc">—</p>
-      <button class="rc-btn rc-btn-gold" id="claimBonusBtn" style="margin-top:10px;">Reclamar</button>
+      <h3>Bono diario</h3>
+      <p class="desc" id="bonusDesc">—</p>
+      <button class="rc-btn rc-btn-gold" id="claimBonusBtn">Reclamar</button>
     </div>
-
-    <div class="rc-panel bonus-card">
+    <div class="rc-panel bonus-card bn-streak">
       <div class="big">🔥</div>
-      <h3 style="font-size:1rem">Racha de días</h3>
-      <p style="font-family:var(--font-display); font-size:1.6rem; color:var(--gold-400)" id="streakNum">0</p>
-      <p style="opacity:.7; font-size:.78rem">días consecutivos</p>
+      <h3>Racha de días</h3>
+      <p class="streak-num" id="streakNum">0</p>
+      <p class="desc">días consecutivos</p>
     </div>
   </div>
 
-  <section class="rc-panel" style="margin-top:20px;">
-    <h2 style="font-size:1rem">🎯 Misión del día — Juega 3 partidas</h2>
+  <section class="rc-panel">
+    <h2>🎯 Misión del día — Juega 3 partidas</h2>
     <div class="mission-progress">
       <div class="bar-label"><span id="missionText">0/3</span><span>+500 monedas · +100 XP</span></div>
       <div class="rc-xp-bar"><div class="rc-xp-fill" id="missionBar" style="width:0%"></div></div>
@@ -39,27 +46,27 @@
     <button class="rc-btn rc-btn-burgundy" id="claimMissionBtn" disabled>Reclamar recompensa</button>
   </section>
 
-  <section class="rc-panel" style="margin-top:20px;">
-    <h2 style="font-size:1rem">⭐ Logros</h2>
+  <section class="rc-panel">
+    <h2>⭐ Logros</h2>
     <div class="achv-grid" id="achvGrid"></div>
   </section>
 
-  <section class="rc-panel" style="margin-top:20px;">
-    <h2 style="font-size:1rem">📦 Cofres virtuales</h2>
-    <p style="opacity:.7; font-size:.82rem">Ábrelos para ganar monedas o XP. Consigues uno cada 5 partidas jugadas.</p>
+  <section class="rc-panel">
+    <h2>📦 Cofres virtuales</h2>
+    <p class="desc">Ábrelos para ganar monedas o XP. Consigues uno cada 5 partidas jugadas.</p>
     <div class="bonus-row" id="chestGrid"></div>
     <p id="chestMsg" class="game-msg" aria-live="polite"></p>
   </section>
 
-  <section class="rc-panel" style="margin-top:20px;">
-    <h2 style="font-size:1rem">🎉 Eventos especiales</h2>
+  <section class="rc-panel">
+    <h2>🎉 Eventos especiales</h2>
     <ul id="eventList" class="notif-list"></ul>
   </section>
 
-  <section class="rc-panel" style="margin-top:20px;">
-    <h2 style="font-size:1rem">🏅 Recompensas por nivel</h2>
+  <section class="rc-panel">
+    <h2>🏅 Recompensas por nivel</h2>
     <div id="levelRewardGrid" class="achv-grid"></div>
-    <a href="logros.html" class="rc-btn rc-btn-ghost" style="margin-top:12px;">Ver todos los logros</a>
+    <a href="logros.html" class="rc-btn rc-btn-ghost" style="margin-top:14px;">Ver todos los logros</a>
   </section>
 </main>
 

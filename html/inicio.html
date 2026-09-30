@@ -4,63 +4,132 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Inicio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/inicio.css">
 </head>
-<body>
+<body class="lv">
+<div id="lv-legacy"></div>
 
-<div id="rc-header-root"></div>
-
-<main class="rc-main">
-
-  <section class="rc-hero">
-    <h1>Bienvenido a Royal Casino</h1>
-    <p>Monedas virtuales, sin dinero real. Juega, sube de nivel y desbloquea bonificaciones.</p>
-    <a href="tragamonedas.html" class="rc-btn rc-btn-gold">Entrar a jugar</a>
-    <a href="bonificasiones.html" class="rc-btn rc-btn-ghost">Reclamar bono</a>
-  </section>
-
-  <section class="rc-panel"><h2>Estadísticas generales</h2>
-    <div class="rc-stat-row">
-      <div class="rc-stat"><div class="num" id="g-users">—</div><div class="lbl">Jugadores</div></div>
-      <div class="rc-stat"><div class="num" id="g-games">—</div><div class="lbl">Partidas jugadas</div></div>
-      <div class="rc-stat"><div class="num" id="g-online">—</div><div class="lbl">En línea</div></div>
-      <div class="rc-stat"><div class="num" id="g-prizes">—</div><div class="lbl">Monedas repartidas</div></div>
+<!-- ===== Barra superior ===== -->
+<header class="lv-top">
+  <a class="lv-sign" href="inicio.html" aria-label="Royal Casino"><span class="crown">♛</span><span class="neon">ROYAL</span><span class="gold">CASINO</span></a>
+  <nav class="lv-nav" aria-label="Principal">
+    <a class="lv-casino-btn" href="juegos.html" id="btnCasino">🎰 Casino</a>
+    <a href="torneos.html">Torneos</a><a href="ranking.html">Ranking</a><a href="amigos.html">Amigos</a><a href="billetera.html">Billetera</a><a href="bonificasiones.html">Bonificaciones</a><a href="noticias.html">Noticias</a><a href="historial.html">Historial</a>
+  </nav>
+  <div class="lv-top-right">
+    <button class="lv-sound" id="lvSound" type="button" aria-pressed="true" title="Sonido">🔊</button>
+    <div class="lv-user" id="lvUser" hidden>
+      <a class="lv-pill" href="billetera.html" title="Billetera">💰 <span id="rc-coin-display">—</span></a>
+      <span class="lv-pill rc-level-pill">Nv. —</span>
+      <a class="lv-pill" href="notificaciones.html" title="Notificaciones">🔔<b id="lvBell" hidden></b></a>
+      <a class="lv-pill" href="amigos.html" title="Amigos">👥<b id="lvFrBadge" hidden></b></a>
+      <a class="lv-mini" href="mi_perfil.html">Mi perfil</a>
+      <button class="lv-mini" id="lvLogout" type="button">Salir</button>
     </div>
-  </section>
-
-  <section class="rc-panel"><h2>Tu cuenta</h2>
-    <div class="rc-stat-row">
-      <div class="rc-stat"><div class="num" id="st-coins">—</div><div class="lbl">Monedas</div></div>
-      <div class="rc-stat"><div class="num" id="st-level">—</div><div class="lbl">Nivel</div></div>
-      <div class="rc-stat"><div class="num" id="st-wins">—</div><div class="lbl">Victorias</div></div>
-      <div class="rc-stat"><div class="num" id="st-games">—</div><div class="lbl">Partidas</div></div>
+    <div class="lv-guest" id="lvGuest" hidden>
+      <a class="lv-slotbtn lv-green" href="registro.html"><span>Registrarse</span></a>
+      <a class="lv-slotbtn lv-gold" href="login.html"><span>Iniciar sesión</span></a>
     </div>
+  </div>
+</header>
+
+<!-- ===== Marquesina de ganadores (cinta) ===== -->
+<div class="lv-ticker" aria-label="Ganadores recientes"><div class="lv-ticker-track" id="lvTicker"></div></div>
+
+<div class="lv-wrap">
+<main class="lv-main">
+
+  <!-- ===== Hero ===== -->
+  <section class="lv-hero" aria-roledescription="carrusel" aria-label="Promociones">
+    <div class="lv-bulbs top"></div><div class="lv-bulbs bottom"></div>
+    <div class="lv-slide is-on">
+      <div class="lv-copy">
+        <p class="lv-kicker">¡Bienvenido a la Franja!</p>
+        <h1><span class="lv-neon-red">BONO DE</span> <span class="lv-gold-txt">BIENVENIDA</span></h1>
+        <p class="lv-big">10.000 <small>monedas virtuales gratis</small></p>
+        <div class="lv-ctas">
+          <a class="lv-slotbtn lv-green lv-xl" href="registro.html" data-guest><span>Registrarse</span></a>
+          <a class="lv-slotbtn lv-gold lv-xl" href="tragamonedas.html"><span>Jugar ahora</span></a>
+        </div>
+      </div>
+      <div class="lv-art" aria-hidden="true">
+        <div class="lv-reels"><i>7</i><i>7</i><i>7</i></div>
+        <div class="lv-chip c1"></div><div class="lv-chip c2"></div><div class="lv-chip c3"></div>
+        <div class="lv-pcard p1">A<em>♠</em></div><div class="lv-pcard p2">K<em>♥</em></div>
+      </div>
+    </div>
+    <div class="lv-slide">
+      <div class="lv-copy">
+        <p class="lv-kicker">Nuevo en el casino</p>
+        <h1><span class="lv-neon-blue">BINGO</span> <span class="lv-gold-txt">75 Y 90</span></h1>
+        <p class="lv-big">Bote acumulado <small>3 cartones gratis al registrarte</small></p>
+        <div class="lv-ctas"><a class="lv-slotbtn lv-gold lv-xl" href="bingo.html"><span>Jugar Bingo</span></a></div>
+      </div>
+      <div class="lv-art lv-art-bingo" aria-hidden="true"><div class="lv-ball b1">7</div><div class="lv-ball b2">33</div><div class="lv-ball b3">58</div><div class="lv-ball b4">12</div></div>
+    </div>
+    <div class="lv-slide">
+      <div class="lv-copy">
+        <p class="lv-kicker">Rachas y recompensas</p>
+        <h1><span class="lv-neon-red">BONO</span> <span class="lv-gold-txt">DIARIO</span></h1>
+        <p class="lv-big">Cada día seguido <small>aumenta tu bono</small></p>
+        <div class="lv-ctas"><a class="lv-slotbtn lv-green lv-xl" href="bonificasiones.html"><span>Reclamar bono</span></a></div>
+      </div>
+      <div class="lv-art" aria-hidden="true"><div class="lv-chest">🎁</div></div>
+    </div>
+    <button class="lv-arrow lv-prev" type="button" aria-label="Anterior">‹</button>
+    <button class="lv-arrow lv-next" type="button" aria-label="Siguiente">›</button>
+    <div class="lv-dots" id="lvDots"></div>
   </section>
 
-  <section class="rc-panel panel-featured"><h2>Juegos destacados</h2>
-    <div class="rc-game-grid"><a class="rc-game-card" href="tragamonedas.html"><span class="icon">🎰</span><span class="name">Tragamonedas</span><span class="desc">3 carretes y multiplicadores.</span></a><a class="rc-game-card" href="ruleta.html"><span class="icon">🎡</span><span class="name">Ruleta</span><span class="desc">Ruleta europea.</span></a><a class="rc-game-card" href="Blackjack.html"><span class="icon">🃏</span><span class="name">Blackjack</span><span class="desc">Pide o plántate.</span></a><a class="rc-game-card" href="poker.html"><span class="icon">♠️</span><span class="name">Poker</span><span class="desc">Texas Hold'em simplificado.</span></a><a class="rc-game-card" href="dados.html"><span class="icon">🎲</span><span class="name">Dados</span><span class="desc">Craps con mesa completa.</span></a><a class="rc-game-card" href="carreras.html"><span class="icon">🏇</span><span class="name">Carreras</span><span class="desc">Elige tu caballo.</span></a></div>
+  <!-- ===== Jackpots ===== -->
+  <section class="lv-sec" aria-label="Jackpots">
+    <div class="lv-jack-grid" id="lvJackpots"></div>
+    <p class="lv-fine">Jackpots en monedas virtuales (simulación visual).</p>
   </section>
 
-  <section class="rc-panel"><h2>🆕 Juegos nuevos</h2>
-    <div class="rc-game-grid"><a class="rc-game-card" href="bingo.html"><span class="icon">🎱</span><span class="name">Bingo</span><span class="desc">Completa líneas y gana. ¡Nuevo!</span></a></div>
+  <!-- ===== Casino en vivo ===== -->
+  <section class="lv-sec" id="vivo">
+    <h2 class="lv-h2">Casino en vivo <span class="lv-live"><i></i>EN VIVO</span></h2>
+    <div class="lv-vip-grid" id="lvVip"></div>
+    <p class="lv-fine">Mesas VIP con crupier virtual: sin transmisión de personas reales ni dinero real.</p>
   </section>
-
-  <section class="rc-panel"><h2>🔥 Juegos populares</h2>
-    <div id="popularGames"><div class="rc-game-grid"><a class="rc-game-card" href="tragamonedas.html"><span class="icon">🎰</span><span class="name">Tragamonedas</span><span class="desc">3 carretes y multiplicadores.</span></a><a class="rc-game-card" href="ruleta.html"><span class="icon">🎡</span><span class="name">Ruleta</span><span class="desc">Ruleta europea.</span></a><a class="rc-game-card" href="Blackjack.html"><span class="icon">🃏</span><span class="name">Blackjack</span><span class="desc">Pide o plántate.</span></a></div></div>
-  </section>
-
-  <section class="rc-panel"><h2>🎁 Promociones</h2>
-    <div class="promo-row"><div class="rc-panel promo"><h3>🎁 Bono de bienvenida</h3><p>10.000 monedas virtuales al crear tu cuenta.</p></div><div class="rc-panel promo"><h3>🔥 Racha diaria</h3><p>Cada día seguido aumenta tu bono.</p></div><div class="rc-panel promo"><h3>⚡ Fin de semana XP x2</h3><p>Doble experiencia sábados y domingos.</p></div></div>
-  </section>
-
-  <section class="rc-panel panel-more"><h2>Explora más</h2>
-    <div class="rc-game-grid"><a class="rc-game-card" href="torneos.html"><span class="icon">🏆</span><span class="name">Torneos</span><span class="desc">Compite contra otros jugadores.</span></a><a class="rc-game-card" href="ranking.html"><span class="icon">🥇</span><span class="name">Ranking</span><span class="desc">Los mejores del casino.</span></a><a class="rc-game-card" href="billetera.html"><span class="icon">💰</span><span class="name">Billetera</span><span class="desc">Saldo y movimientos.</span></a><a class="rc-game-card" href="noticias.html"><span class="icon">📰</span><span class="name">Noticias</span><span class="desc">Novedades y eventos.</span></a><a class="rc-game-card" href="mi_perfil.html"><span class="icon">👤</span><span class="name">Mi perfil</span><span class="desc">Estadísticas y nivel.</span></a><a class="rc-game-card" href="historial.html"><span class="icon">📊</span><span class="name">Historial</span><span class="desc">Tus partidas recientes.</span></a></div>
-  </section>
-
 </main>
 
-<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+<!-- ===== Ganadores en tiempo real ===== -->
+<aside class="lv-winners" aria-label="Jugadores activos y ganadores en tiempo real">
+  <h3><span class="lv-live"><i></i></span> Jugando ahora <span class="lv-count" id="lvNowCount">0</span></h3>
+  <div class="lv-now-list" id="lvNowList"></div>
+  <div id="lvFriendsBox" hidden>
+    <h3 class="lv-h3b">👥 Amigos <span class="lv-count" id="lvFrCount">0</span></h3>
+    <div class="lv-now-list" id="lvFriends"></div>
+    <a class="lv-frlink" href="amigos.html">Buscar y agregar amigos</a>
+  </div>
+  <h3 class="lv-h3b"><span class="lv-live"><i></i></span> Ganadores en vivo</h3>
+  <div class="lv-win-list" id="lvWinList" aria-live="polite"></div>
+</aside>
+</div>
+
+<!-- ===== Footer ===== -->
+<footer class="lv-footer">
+  <div class="lv-foot-row">
+    <div><h4>Juego responsable</h4>
+      <div class="lv-seals"><span class="seal r18">18+</span><span class="seal">Juega con responsabilidad</span><span class="seal">Autoexclusión</span><span class="seal">Límites de juego</span></div>
+      <p>Este casino usa <b>monedas virtuales sin valor real</b>. Si el juego deja de ser diversión, busca ayuda profesional.</p>
+    </div>
+    <div><h4>Métodos de pago</h4>
+      <div class="lv-pay"><span>VISA</span><span>Mastercard</span><span>PayPal</span><span>Bitcoin</span><span>Transferencia</span></div>
+      <p>Solo referencia visual: no hay pagos ni depósitos activos en este proyecto.</p>
+    </div>
+    <div><h4>Licencias y transparencia</h4>
+      <div class="lv-seals"><span class="seal">RNG criptográfico</span><span class="seal warn">Sin licencia real</span></div>
+      <p>Proyecto demostrativo. Antes de operar con dinero real se requiere licencia del regulador local y auditoría externa.</p>
+    </div>
+  </div>
+  <p class="lv-copy-line">© Royal Casino · <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p>
+</footer>
 
 <script src="../js/app.js"></script>
 <script src="../js/auth.js"></script>

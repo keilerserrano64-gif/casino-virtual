@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Amigos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/amigos.css">
+<link rel="stylesheet" href="../css/vegas.css">
+</head>
+<body class="vg">
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+<h1>👥 Amigos</h1>
+<p class="subtitle">Busca jugadores, envíales una solicitud y mira quién está conectado.</p>
+
+<section class="rc-panel">
+  <h2>Buscar jugadores</h2>
+  <div class="rc-bet-row"><input class="rc-bet-input fr-search" type="search" id="frSearch" placeholder="Nombre de usuario..." autocomplete="off" aria-label="Buscar jugadores"></div>
+  <p class="form-error" id="frMsg" role="status"></p>
+  <div id="frResults" class="fr-list"></div>
+</section>
+
+<section class="rc-panel" id="frInBox" hidden>
+  <h2>Solicitudes recibidas <span class="rc-badge pending" id="frInCount">0</span></h2>
+  <div id="frIn" class="fr-list"></div>
+</section>
+
+<section class="rc-panel">
+  <h2>Mis amigos <span class="rc-badge on" id="frOnline">0 en línea</span></h2>
+  <div id="frFriends" class="fr-list"></div>
+</section>
+
+<section class="rc-panel" id="frOutBox" hidden>
+  <h2>Solicitudes enviadas</h2>
+  <div id="frOut" class="fr-list"></div>
+</section>
+
+<p class="subtitle fr-note">Todo se guarda en este navegador (sin servidor): solo verás a las cuentas creadas aquí. Prueba creando otra cuenta en <a href="registro.html">registro</a>.</p>
+</main>
+
+<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+
+<script src="../js/app.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/amigos.js"></script>
+</body>
+</html>
