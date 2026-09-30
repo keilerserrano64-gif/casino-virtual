@@ -3,12 +3,18 @@
 Casino virtual hecho con HTML, CSS y JavaScript. **Monedas 100% ficticias, sin dinero real.**
 
 ## Cómo usarlo
-Abre `html/login.html` en el navegador (o usa la extensión Live Server de VS Code).
+Abre **`index.html`** (la portada, en la raíz del proyecto) en el navegador, o usa la extensión Live Server de VS Code.
+Desde ahí se llega a todo: *Registrarse*, *Iniciar sesión* y el resto de páginas.
+
+Las rutas se calculan solas desde la ubicación de `js/app.js`, así que el sitio funciona igual abriéndolo con doble clic
+(`file://`), con un servidor local o publicado en cualquier carpeta de un hosting estático (GitHub Pages, Netlify, Vercel...).
+Solo hay que subir la carpeta completa conservando `index.html`, `html/`, `css/` y `js/`.
 
 - Administrador de ejemplo: usuario `admin`, contraseña `admin123` (cámbiala en Configuración).
 - Jugadores: créalos desde `html/registro.html`.
 
 ## Estructura
+- `index.html`  portada pública (raíz del proyecto)
 - `html/`  páginas (juegos, usuario, contenido) y `html/admin/` (panel de administración)
 - `css/`   `base.css` (núcleo compartido), `juegos.css` y un CSS por página
 - `js/`    `app.js` (cuentas, monedas, XP, logros, notificaciones), `auth.js` (sesión y rutas) y un JS por página
