@@ -4,32 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Configuración</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/configuracion.css">
+<link rel="stylesheet" href="../css/vegas.css">
 </head>
-<body>
+<body class="vg">
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-<h1>⚙️ Configuración</h1>
-<section class="rc-panel" >
-<h2>Cuenta</h2>
-<form data-form="cuenta" novalidate><label class="rc-field" for="newUser">Nuevo nombre de usuario<input type="text" id="newUser" name="newUser" minlength="3" maxlength="18"></label><label class="rc-field" for="oldPass">Contraseña actual<input type="password" id="oldPass" name="oldPass" ></label><label class="rc-field" for="newPass">Nueva contraseña<input type="password" id="newPass" name="newPass" minlength="6"></label><label class="rc-field" for="newPass2">Confirmar nueva contraseña<input type="password" id="newPass2" name="newPass2" ></label><button class="rc-btn rc-btn-gold" type="submit">Guardar cambios</button><p class="form-error" id="formError" role="alert"></p></form>
-</section>
-<section class="rc-panel" style="margin-top:20px;">
-<h2>Preferencias</h2>
-<div class="pref-list">
-  <label class="rc-field" for="theme">Tema<select id="theme" class="rc-select"><option value="oscuro">Oscuro</option><option value="claro">Claro</option></select></label>
-  <label class="rc-field" for="lang">Idioma<select id="lang" class="rc-select"><option value="es">Español</option><option value="en">English</option></select></label>
-  <label class="rc-check"><input type="checkbox" id="prefSound" checked> Sonido</label>
-  <label class="rc-check"><input type="checkbox" id="prefAnim" checked> Animaciones</label>
-  <label class="rc-check"><input type="checkbox" id="prefNotif" checked> Notificaciones</label>
+<header class="pg-head">
+  <h1>Configuración</h1>
+  <p>Tu cuenta y cómo quieres ver y oír el casino. Las preferencias se guardan al instante.</p>
+</header>
+
+<div class="cfg-layout">
+  <section class="rc-panel cfg-account">
+    <h2><span class="ico" aria-hidden="true">👤</span> Cuenta</h2>
+    <p class="cfg-hint">Para cambiar tu usuario o tu contraseña necesitas escribir la contraseña actual.</p>
+    <form data-form="cuenta" novalidate>
+      <div class="cfg-grid">
+        <label class="rc-field" for="newUser">Nuevo nombre de usuario<input type="text" id="newUser" name="newUser" minlength="3" maxlength="18" autocomplete="username"></label>
+        <label class="rc-field" for="oldPass">Contraseña actual<input type="password" id="oldPass" name="oldPass" autocomplete="current-password"></label>
+        <label class="rc-field" for="newPass">Nueva contraseña<input type="password" id="newPass" name="newPass" minlength="6" autocomplete="new-password"></label>
+        <label class="rc-field" for="newPass2">Confirmar nueva contraseña<input type="password" id="newPass2" name="newPass2" autocomplete="new-password"></label>
+      </div>
+      <button class="rc-btn rc-btn-gold" type="submit">Guardar cambios</button>
+      <p class="form-error" id="formError" role="alert"></p>
+    </form>
+  </section>
+
+  <section class="rc-panel cfg-prefs">
+    <h2><span class="ico" aria-hidden="true">🎛️</span> Preferencias</h2>
+    <div class="pref-selects">
+      <label class="rc-field" for="theme">Tema<select id="theme" class="rc-select"><option value="oscuro">Oscuro</option><option value="claro">Claro</option></select></label>
+      <label class="rc-field" for="lang">Idioma<select id="lang" class="rc-select"><option value="es">Español</option><option value="en">English</option></select></label>
+    </div>
+    <div class="pref-list">
+      <label class="pref-row" for="prefSound"><span class="pref-text"><b>Sonido</b><small>Fichas, tintineos y voces de los juegos.</small></span><input type="checkbox" class="switch" id="prefSound" checked></label>
+      <label class="pref-row" for="prefAnim"><span class="pref-text"><b>Animaciones</b><small>Giros, cartas y efectos visuales.</small></span><input type="checkbox" class="switch" id="prefAnim" checked></label>
+      <label class="pref-row" for="prefNotif"><span class="pref-text"><b>Notificaciones</b><small>Avisos de bonos, premios y solicitudes resueltas.</small></span><input type="checkbox" class="switch" id="prefNotif" checked></label>
+    </div>
+  </section>
 </div>
-</section>
-<section class="rc-panel" style="margin-top:20px;">
-<h2>Sesión</h2>
-<button class="rc-btn rc-btn-burgundy" id="logoutBtn">Cerrar sesión</button> <button class="rc-btn rc-btn-ghost" id="resetBtn">Reiniciar mi cuenta</button>
+
+<section class="rc-panel cfg-session">
+  <h2><span class="ico" aria-hidden="true">🚪</span> Sesión</h2>
+  <div class="sess-row">
+    <div class="sess-text"><b>Cerrar sesión</b><small>Sales de tu cuenta en este navegador.</small></div>
+    <button class="rc-btn rc-btn-burgundy" id="logoutBtn" type="button">Cerrar sesión</button>
+  </div>
+  <div class="sess-row danger">
+    <div class="sess-text"><b>Reiniciar mi cuenta</b><small>Borra tus monedas, nivel, historial y logros. No se puede deshacer.</small></div>
+    <button class="rc-btn rc-btn-ghost rc-btn-danger" id="resetBtn" type="button">Reiniciar mi cuenta</button>
+  </div>
 </section>
 </main>
 

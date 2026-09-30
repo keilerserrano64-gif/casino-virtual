@@ -168,3 +168,14 @@ html[data-anim="off"] *, html[data-anim="off"] *::before { animation: none !impo
 .rc-back-games:hover, .rc-back-games:focus-visible { background: rgba(245,197,66,.2); box-shadow: 0 0 20px rgba(245,197,66,.6); }
 .rc-back-games:hover span { transform: translateX(-4px); }
 @media (max-width: 1199px) { .rc-back-games { position: static; margin: 0 0 12px; } }
+
+/* ---------- Cabecera de página y utilidades compartidas (ayuda, soporte, configuración) ---------- */
+.pg-head { margin: 8px 0 22px; padding-bottom: 16px; border-bottom: 1px solid rgba(201,162,39,.25); }
+.pg-head h1 { margin: 0; font: 400 clamp(2.3rem, 6vw, 3.4rem)/1.05 'Bebas Neue', Impact, 'Arial Narrow Bold', sans-serif; letter-spacing: .03em; color: var(--gold-400, #d6b64a); }
+.pg-head p { margin: 6px 0 0; max-width: 60ch; opacity: .8; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.rc-panel h2 .ico { display: inline-grid; place-items: center; width: 32px; height: 32px; margin-right: 8px; border-radius: 50%; border: 1px solid rgba(201,162,39,.45); background: rgba(201,162,39,.12); font-size: .95rem; vertical-align: middle; }
+body.vg .pg-head { border-bottom: 1px solid var(--vg-line); }
+body.vg .pg-head h1 { margin: 0; }
+body.vg .pg-head p { color: var(--vg-dim); opacity: 1; }
+body.vg .rc-panel h2 .ico { border-color: var(--vg-gold); background: rgba(245,197,66,.1); box-shadow: 0 0 10px rgba(245,197,66,.3); }

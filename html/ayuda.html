@@ -4,23 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Ayuda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/ayuda.css">
+<link rel="stylesheet" href="../css/vegas.css">
 </head>
-<body>
+<body class="vg">
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-<h1>❓ Preguntas frecuentes</h1>
-<section class="rc-panel faq">
-<details><summary>¿Cómo funcionan las monedas?</summary><p>Son monedas ficticias sin valor real. Empiezas con 10.000 y las ganas o pierdes jugando.</p></details>
-<details><summary>¿Cómo puedo subir de nivel?</summary><p>Cada partida da XP: más si ganas. Al completar la barra de XP subes de nivel y recibes recompensas.</p></details>
-<details><summary>¿Cómo funcionan los juegos?</summary><p>Eliges tu apuesta, juegas y el resultado se calcula al azar. Cada juego explica sus reglas en su página.</p></details>
-<details><summary>¿Dónde veo mi historial?</summary><p>En la sección Historial y en tu Billetera, donde también verás cada movimiento de monedas.</p></details>
-<details><summary>¿Cómo cambio mi contraseña?</summary><p>Ve a Configuración → Cuenta y escribe tu contraseña actual y la nueva.</p></details>
-</section>
-<p class="subtitle">¿No encuentras tu respuesta? <a href="soporte.html">Contacta con soporte</a>.</p>
+<header class="pg-head">
+  <h1>Centro de ayuda</h1>
+  <p>Respuestas rápidas sobre tus monedas, los juegos y tu cuenta.</p>
+  <label class="faq-search"><span class="sr-only">Buscar en la ayuda</span>
+    <input type="search" id="faqSearch" placeholder="Busca una palabra, por ejemplo: nivel" autocomplete="off">
+  </label>
+</header>
+
+<div class="help-layout">
+  <div class="faq-groups">
+    <section class="rc-panel faq-group">
+      <h2><span class="ico" aria-hidden="true">💰</span> Monedas y niveles</h2>
+      <div class="faq">
+    <details><summary>¿Cómo funcionan las monedas?</summary><p>Son monedas ficticias sin valor real. Empiezas con 10.000 y las ganas o pierdes jugando. No se pueden cambiar por dinero.</p></details>
+    <details><summary>¿Cómo puedo subir de nivel?</summary><p>Cada partida da XP: más si ganas. Al completar la barra de XP subes de nivel y recibes recompensas.</p></details>
+    <details><summary>¿Qué hago si me quedo sin monedas?</summary><p>Reclama tu bono diario en Bonificaciones. Si prefieres empezar de cero, puedes reiniciar tu cuenta desde Configuración.</p></details>
+    <details><summary>¿Dónde veo mi historial?</summary><p>En la sección Historial y en tu Billetera, donde también verás cada movimiento de monedas.</p></details>
+      </div>
+    </section>
+    <section class="rc-panel faq-group">
+      <h2><span class="ico" aria-hidden="true">🎰</span> Juegos y amigos</h2>
+      <div class="faq">
+    <details><summary>¿Cómo funcionan los juegos?</summary><p>Eliges tu apuesta, juegas y el resultado se calcula al azar. Cada juego explica sus reglas en su página.</p></details>
+    <details><summary>¿Por qué un juego aparece desactivado?</summary><p>El administrador puede desactivar un juego de forma temporal. Cuando vuelva a estar disponible podrás entrar de nuevo.</p></details>
+    <details><summary>¿Cómo agrego amigos?</summary><p>Entra en Amigos, busca a otro jugador por su nombre de usuario y envíale una solicitud. Verás si está en línea desde la portada.</p></details>
+      </div>
+    </section>
+    <section class="rc-panel faq-group">
+      <h2><span class="ico" aria-hidden="true">👤</span> Cuenta y ajustes</h2>
+      <div class="faq">
+    <details><summary>¿Cómo cambio mi contraseña?</summary><p>Ve a Configuración, abre la sección Cuenta y escribe tu contraseña actual y la nueva.</p></details>
+    <details><summary>¿Cómo desactivo el sonido o cambio el tema?</summary><p>En Configuración, sección Preferencias. Los cambios se aplican al instante.</p></details>
+      </div>
+    </section>
+    <p class="faq-none" id="faqNone" hidden>No hay resultados para «<span id="faqTerm"></span>». Prueba con otra palabra o <a href="soporte.html">escribe a soporte</a>.</p>
+  </div>
+
+  <aside class="help-side" aria-label="Más ayuda">
+    <div class="rc-panel help-card help-cta">
+      <h2>¿Sigues con dudas?</h2>
+      <p>Cuéntanos qué pasó. Cuando tu solicitud esté resuelta te avisaremos en Notificaciones.</p>
+      <a class="rc-btn rc-btn-gold" href="soporte.html">Abrir solicitud</a>
+    </div>
+    <div class="rc-panel help-card">
+      <h2>Accesos rápidos</h2>
+      <ul class="quick">
+        <li><a href="bonificasiones.html">Reclamar mi bono diario</a></li>
+        <li><a href="billetera.html">Ver mi billetera</a></li>
+        <li><a href="historial.html">Ver mi historial</a></li>
+        <li><a href="configuracion.html">Cambiar mi contraseña</a></li>
+      </ul>
+    </div>
+  </aside>
+</div>
 </main>
 
 <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
