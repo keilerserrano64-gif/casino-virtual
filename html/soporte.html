@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Soporte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/soporte.css">
 </head>
@@ -12,20 +14,37 @@
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-<h1>📞 Centro de soporte</h1>
-<section class="rc-panel" >
-<h2>¿Qué necesitas?</h2>
-<form data-form="ticket" novalidate>
-  <label class="rc-field" for="categoria">Categoría<select id="categoria" class="rc-select">
-    <option>Problema con mi cuenta</option><option>Problema con un juego</option><option>Monedas o billetera</option><option>Sugerencia</option><option>Otro</option></select></label>
-  <label class="rc-field" for="descripcion">Describe tu problema<textarea id="descripcion" rows="5" minlength="10" maxlength="500" required></textarea></label>
-  <button class="rc-btn rc-btn-gold" type="submit">Enviar solicitud</button>
-  <p class="form-error" id="formError" role="alert"></p>
-</form>
-</section>
-<section class="rc-panel" style="margin-top:20px;">
-<h2>Mis solicitudes</h2>
-<div class="table-wrap"><table class="rc-table"><thead><tr><th>N.º</th><th>Fecha</th><th>Categoría</th><th>Estado</th></tr></thead><tbody id="ticketBody"></tbody></table></div>
+<header class="pg-head">
+  <h1>Centro de soporte</h1>
+  <p>Escribe tu solicitud y te avisaremos en Notificaciones cuando esté resuelta.</p>
+</header>
+
+<div class="sup-layout">
+  <section class="rc-panel sup-form">
+    <h2>Nueva solicitud</h2>
+    <form data-form="ticket" novalidate>
+      <label class="rc-field" for="categoria">¿Sobre qué es?<select id="categoria" class="rc-select">
+        <option>Problema con mi cuenta</option><option>Problema con un juego</option><option>Monedas o billetera</option><option>Sugerencia</option><option>Otro</option></select></label>
+      <label class="rc-field" for="descripcion">Describe tu problema<textarea id="descripcion" rows="6" minlength="10" maxlength="500" required placeholder="Cuéntanos qué hacías, qué esperabas y qué pasó."></textarea></label>
+      <p class="char-count" id="descCount" aria-hidden="true">0 / 500</p>
+      <button class="rc-btn rc-btn-gold" type="submit">Enviar solicitud</button>
+      <p class="form-error" id="formError" role="alert"></p>
+    </form>
+  </section>
+
+  <aside class="rc-panel sup-side" aria-label="Consejos">
+    <h2>Para que te ayudemos antes</h2>
+    <ul class="sup-tips">
+      <li>Indica en qué juego o página ocurrió.</li>
+      <li>Di qué esperabas que pasara y qué pasó en realidad.</li>
+      <li>Si es una duda general, prueba primero el <a href="ayuda.html">Centro de ayuda</a>.</li>
+    </ul>
+  </aside>
+</div>
+
+<section class="rc-panel">
+  <h2>Mis solicitudes</h2>
+  <div class="table-wrap"><table class="rc-table"><thead><tr><th>N.º</th><th>Fecha</th><th>Categoría</th><th>Estado</th></tr></thead><tbody id="ticketBody"></tbody></table></div>
 </section>
 </main>
 

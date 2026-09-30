@@ -12,7 +12,15 @@ const RC = (() => {
   const K = { ACC: 'rc_accounts', SESSION: 'rc_session', NEWS: 'rc_news', TICKETS: 'rc_tickets', OFF: 'rc_disabled_games' };
   const START_COINS = 10000;
   const inAdmin = location.pathname.includes('/admin/');
-  const BASE = inAdmin ? '../' : '';
+  // Rutas absolutas calculadas desde la ubicación real de este archivo (js/app.js):
+  // funcionan igual desde la raíz (index.html), html/ y html/admin/, en local o publicado en cualquier carpeta.
+  const ROOT = (() => {
+    try { return new URL('../', document.currentScript.src).href; }
+    catch (e) { return inAdmin ? '../../' : (location.pathname.includes('/html/') ? '../' : ''); }
+  })();
+  const PAGES = ROOT + 'html/';          // carpeta de las páginas
+  const HOME = ROOT + 'index.html';      // portada pública
+  const BASE = PAGES;                    // alias histórico: prefijo para enlazar páginas de html/
   const GAMES = ['Tragamonedas', 'Ruleta', 'Blackjack', 'Poker', 'Dados', 'Carreras', 'Bingo'];
 
   const GAME_INFO = {
@@ -129,7 +137,7 @@ const RC = (() => {
     return { ok: true };
   }
 
-  function logout() { clearSession(); location.href = BASE + 'login.html'; }
+  function logout() { clearSession(); location.href = PAGES + 'login.html'; }
 
   function recover(email, newPass) {
     const list = getAccounts(); const a = list.find(x => x.email.toLowerCase() === String(email).toLowerCase());
@@ -485,7 +493,12 @@ const RC = (() => {
 
   /* ---------- Header / nav ---------- */
 
-  function pageFile() { return location.pathname.split('/').pop() || 'inicio.html'; }
+  // Nombre de la página actual ('index.html' en la portada). Tolera servidores que ocultan la extensión (/html/juegos).
+  function pageFile() {
+    const f = decodeURIComponent(location.pathname.split('/').pop() || '');
+    if (!f) return 'index.html';
+    return /\.[a-z0-9]+$/i.test(f) ? f : f + '.html';
+  }
 
   function initHeader(rootId) {
     applySettings();
@@ -498,14 +511,14 @@ const RC = (() => {
     // El administrador usa el botón Administración de la barra superior (sin perfil de jugador)
     const items = NAV_ITEMS;
     const href = i => BASE + i.href;
-    const adminBtn = `<a class="rc-btn rc-btn-gold rc-btn-sm rc-admin-btn${inAdmin ? ' active' : ''}" href="${inAdmin ? 'admin.html' : 'admin/admin.html'}" title="Panel de administración">Administración</a>`;
+    const adminBtn = `<a class="rc-btn rc-btn-gold rc-btn-sm rc-admin-btn${inAdmin ? ' active' : ''}" href="${PAGES}admin/admin.html" title="Panel de administración">Administración</a>`;
     const profileBtn = `<a class="rc-avatar-link" href="${BASE}mi_perfil.html" title="Mi perfil (${esc(u || '')})">👤</a>`;
 
     root.innerHTML = `
       <header class="rc-header">
-        <a class="rc-brand" href="${BASE}inicio.html"><span class="crown">♛</span><span class="rc-b1">ROYAL</span><span class="rc-b2">CASINO</span></a>
+        <a class="rc-brand" href="${HOME}"><span class="crown">♛</span><span class="rc-b1">ROYAL</span><span class="rc-b2">CASINO</span></a>
         <nav class="rc-nav">
-          <a class="rc-home-btn${current === 'inicio.html' ? ' active' : ''}" href="${BASE}inicio.html" title="Volver al inicio">🏠 Inicio</a>
+          <a class="rc-home-btn${current === 'index.html' ? ' active' : ''}" href="${HOME}" title="Volver al inicio">🏠 Inicio</a>
           <a class="rc-casino-btn${current === 'juegos.html' ? ' active' : ''}" href="${BASE}juegos.html" title="Ver todos los juegos">🎰 Casino</a>
           ${items.map(i => `<a href="${href(i)}" class="${i.href === current ? 'active' : ''}">${esc(i.label)}</a>`).join('')}
         </nav>
@@ -575,6 +588,8 @@ const RC = (() => {
     playersNow, liveWins, touchPresence,
     getSocial, sendFriendRequest, acceptFriend, dropRequest, removeFriend, friendsStatus, searchPlayers,
     initHeader, toast, barChart, formatNumber, signed, esc, fmtDate,
+    // rutas
+    ROOT, PAGES, HOME, pageFile,
     levelInfo, xpForLevel, levelReward, totalXp, todayKey, isWeekend, START_COINS,
   };
 })();

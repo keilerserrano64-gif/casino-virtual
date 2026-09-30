@@ -16,7 +16,7 @@
     const n = RC.unreadCount(), b = $('lvBell'); if (n) { b.textContent = n > 9 ? '9+' : n; b.hidden = false; }
     $('lvLogout').addEventListener('click', () => { if (confirm('¿Cerrar sesión?')) RC.logout(); });
     const cta = document.querySelector('[data-guest]');
-    if (cta) { cta.href = 'bonificasiones.html'; cta.firstElementChild.textContent = 'Reclamar bono'; }
+    if (cta) { cta.href = RC.PAGES + 'bonificasiones.html'; cta.firstElementChild.textContent = 'Reclamar bono'; }
   }
 
   /* ---- Sonido (opcional, con silenciar) ---- */
@@ -54,7 +54,8 @@
   tickJack(); setInterval(tickJack, 150);
 
   /* ---- Casino en vivo: mesas VIP con crupier virtual ---- */
-  const VIP = [['Blackjack', 'Blackjack VIP', '#0d5a36', '🃏', 'Blackjack.html', 5], ['Ruleta', 'Ruleta Europea VIP', '#7a0f22', '🎡', 'ruleta.html', 7], ['Poker', 'Póker Royal', '#0d3f6a', '♠️', 'poker.html', 4]].filter(v => on(v[0]));
+  const on = g => RC.isGameEnabled(g);             // solo se muestran los juegos que el administrador tiene activos
+  const VIP = [['Blackjack', 'Blackjack VIP', '#0d5a36', '🃏', RC.PAGES + 'Blackjack.html', 5], ['Ruleta', 'Ruleta Europea VIP', '#7a0f22', '🎡', RC.PAGES + 'ruleta.html', 7], ['Poker', 'Póker Royal', '#0d3f6a', '♠️', RC.PAGES + 'poker.html', 4]].filter(v => on(v[0]));
   $('lvVip').innerHTML = VIP.map(([, t, felt, ico, href, seats], i) => `<article class="lv-vip"><div class="lv-table" style="--felt:${felt}">
       <div class="badge"><span class="lv-live"><i></i>EN VIVO</span></div><span class="vip-tag">VIP</span><div class="lv-dealer" aria-hidden="true">🤵</div><span class="tico" aria-hidden="true">${ico}</span></div>
     <div class="lv-vip-body"><div><b>${t}</b><small><span id="vp-${i}">${seats * 3}</span> jugadores · crupier virtual</small></div><a class="lv-slotbtn lv-gold" href="${href}"><span>Unirse</span></a></div></article>`).join('');
