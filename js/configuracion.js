@@ -21,13 +21,14 @@ $('prefNotif').addEventListener('change', e => RC.saveSettings({ notif: e.target
 const form = document.querySelector('form[data-form="cuenta"]');
 const msg = (text, ok) => { const e = $('formError'); e.textContent = text; e.classList.toggle('form-ok', !!ok); };
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e => {
   e.preventDefault();
   const newUser = $('newUser').value.trim(), newPass = $('newPass').value;
   if (!newUser && !newPass) return msg('Escribe un usuario o una contraseña nueva.');
   if (!$('oldPass').value) return msg('Escribe tu contraseña actual.');
   if (newPass && newPass !== $('newPass2').value) return msg('Las contraseñas nuevas no coinciden.');
   if (!confirm('¿Guardar los cambios de tu cuenta?')) return;
+  if (newPass && window.RCFire) { const f = await RCFire.changePassword($('oldPass').value, newPass); if (!f.ok) return msg(f.error); }
   const r = RC.updateAccount({ newUser, oldPass: $('oldPass').value, newPass });
   if (!r.ok) return msg(r.error);
   form.reset();

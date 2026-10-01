@@ -63,14 +63,18 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 - **Chat de sala**: local, sin servidor (se comparte entre pestañas del mismo navegador). Moderación: bloquea insultos, enlaces, floods y limita la frecuencia. Incluye emojis, stickers y minijuegos rápidos (dado y moneda, sin monedas en juego).
 
 ## Firebase (nube)
-`js/firebase.js` conecta el proyecto `royal-casino-7633d`: **Authentication** (correo + contraseña) y **Firestore**
-(`users/{uid}/store/*` con monedas, historial, notificaciones, ajustes y social; `usernames/{usuario}` para iniciar sesión con usuario).
-`localStorage` sigue siendo la caché rápida y cada escritura se sube a Firestore (con 1,5 s de retraso).
+`js/firebase.js` conecta el proyecto `royal-casino-7633d`. `localStorage` es la caché rápida y todo se refleja en Firebase:
+- **Authentication** (correo + contraseña; se puede entrar con usuario o correo; recuperar envía un enlace por correo).
+- `users/{uid}/store/*`: datos privados (monedas, historial, notificaciones, movimientos, ajustes).
+- `players/{usuario}`: perfil público (ranking, amigos y solicitudes, presencia). Se escucha en vivo.
+- `shared/news`, `shared/games_off`: noticias y juegos desactivados. `tickets/{id}`: soporte.
+- `usernames/{usuario}`: reserva de usuario -> correo.
 
 Pasos en la consola de Firebase (una sola vez):
-1. Authentication → *Sign-in method* → activar **Correo electrónico/contraseña**.
-2. Firestore Database → crear la base de datos → pestaña *Reglas* → pegar `firestore.rules` → Publicar.
-3. Authentication → *Settings* → *Authorized domains*: añadir el dominio donde publiques (localhost ya viene).
-Hay que abrir el sitio por `http(s)://` (Live Server, Netlify...), no con doble clic (`file://`): los módulos ES no cargan así.
+1. Authentication -> Sign-in method -> activar **Correo electrónico/contraseña**.
+2. Firestore Database -> crear base de datos -> pestaña Reglas -> pegar `firestore.rules` -> Publicar.
+3. Authentication -> Settings -> Authorized domains: añade el dominio donde publiques.
+4. **Administrador**: regístrate como jugador normal, copia tu UID (Authentication -> Users) y crea en Firestore el documento `admins/{ese UID}` (con cualquier campo). Cierra sesión y vuelve a entrar. El `admin/admin123` de ejemplo ya no funciona.
 
-Pendiente (sigue local por navegador): ranking/amigos entre jugadores, noticias, tickets de soporte, juegos desactivados y el admin de ejemplo.
+Abre el sitio por `http(s)://` (Live Server, Netlify...), no con doble clic: los módulos ES no cargan con `file://`.
+No se sincroniza: ganadores en vivo (`rc_live_wins`), chat/bote del bingo y estado de juegos (siguen locales). Cambiar el nombre de usuario está desactivado.

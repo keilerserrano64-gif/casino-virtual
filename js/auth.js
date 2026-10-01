@@ -36,12 +36,12 @@
     busy(loginForm, true);
     try {
       const local = RC.getAccounts().find(a => a.username.toLowerCase() === id.toLowerCase() || a.email.toLowerCase() === id.toLowerCase());
-      if (fire() && !(local && local.role === 'admin')) {      // el admin de ejemplo sigue siendo local
-        const email = id.includes('@') ? id : (local ? local.email : await fire().emailOf(id));
+      if (fire()) {
+        const email = id.includes('@') ? id : ((local && local.email) || await fire().emailOf(id));
         if (!email) return fail(loginForm, 'Usuario o contraseña incorrectos.');
         const c = await fire().signIn(email, pass);
         if (!c.ok) return fail(loginForm, c.error);
-        RC.adoptAccount(c.meta, pass);
+        RC.adoptAccount(c.meta, pass, c.admin ? 'admin' : 'user');
         id2 = c.meta.username;
       } else id2 = id;
       const r = RC.login(id2, pass, remember);

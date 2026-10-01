@@ -1,15 +1,46 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Cada jugador solo lee y escribe sus propios datos
+    function signedIn() { return request.auth != null; }
+    // Para ser administrador, crea a mano en la consola un documento admins/{tu-uid} (cualquier contenido)
+    function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+
+    match /admins/{uid} { allow read: if signedIn() && request.auth.uid == uid; }
+
+    // Datos privados de cada jugador (el administrador puede acreditar monedas)
     match /users/{uid}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read, write: if signedIn() && (request.auth.uid == uid || isAdmin());
     }
-    // Reserva de nombre de usuario: se consulta por nombre exacto, se crea una vez, no se edita
+
+    // Nombre de usuario -> correo (se consulta por nombre exacto; se crea una vez)
     match /usernames/{name} {
       allow get: if true;
-      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
       allow update, delete: if false;
+    }
+
+    // Perfil público: ranking, amigos, presencia. Solo el administrador cambia "banned".
+    match /players/{name} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid && !('banned' in request.resource.data);
+      allow update: if isAdmin()
+        || (signedIn() && resource.data.get('uid', '') == request.auth.uid
+            && request.resource.data.get('banned', false) == resource.data.get('banned', false))
+        || (signedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['f']));  // solicitudes de amistad
+      allow delete: if isAdmin();
+    }
+
+    // Noticias y juegos desactivados: todos leen, solo el administrador escribe
+    match /shared/{doc} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // Tickets de soporte: cada jugador ve los suyos, el administrador todos
+    match /tickets/{id} {
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAdmin();
     }
   }
 }
