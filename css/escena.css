@@ -1,0 +1,73 @@
+/* escena.css — fondo animado de casino para el login: imagen + siluetas de jugadores + luces en movimiento.
+   Todo está en una "escena" con la proporción de la foto (2:3) y se ajusta como background-size: cover,
+   así las siluetas siempre quedan sobre sus sillas. */
+.escena { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #07050d; pointer-events: none; }
+.escena-fit { position: absolute; left: 50%; top: 47%; width: max(100vw, 66.667vh); aspect-ratio: 2 / 3; transform: translate(-50%, -50%); }
+.escena-stage { position: absolute; inset: 0; transform-origin: 50% 40%; animation: esc-drift 38s ease-in-out infinite alternate; }
+.escena-stage > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; filter: saturate(1.08) brightness(.92); }
+@keyframes esc-drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.07) translate(-1%, .8%); } }
+
+/* viñeta para que el formulario se lea bien */
+.escena::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(7,5,13,.25), rgba(7,5,13,.78) 78%), linear-gradient(rgba(7,5,13,.35), transparent 30%, rgba(7,5,13,.55)); }
+
+/* luces de neón que respiran */
+.glow { position: absolute; border-radius: 50%; mix-blend-mode: screen; animation: esc-pulse 3.2s ease-in-out infinite; }
+.glow.sign { left: 28%; top: 22%; width: 40%; height: 11%; background: radial-gradient(ellipse, rgba(255,120,80,.55), rgba(255,43,214,.25) 55%, transparent 72%); }
+.glow.ring1 { left: -6%; top: 7%; width: 30%; height: 13%; background: radial-gradient(ellipse, rgba(255,43,214,.5), rgba(43,120,255,.25) 55%, transparent 72%); animation-delay: -1s; }
+.glow.ring2 { left: 68%; top: 1%; width: 36%; height: 16%; background: radial-gradient(ellipse, rgba(255,160,40,.5), rgba(255,43,214,.3) 55%, transparent 72%); animation-delay: -2s; }
+.glow.ring3 { left: 78%; top: 23%; width: 28%; height: 9%; background: radial-gradient(ellipse, rgba(255,43,214,.45), rgba(43,212,255,.25) 55%, transparent 72%); animation-delay: -.5s; }
+@keyframes esc-pulse { 0%, 100% { opacity: .25; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
+
+/* pantallas de las tragamonedas parpadeando */
+.scr { position: absolute; width: 2.4%; height: 2.6%; border-radius: 50%; filter: blur(4px); mix-blend-mode: screen; opacity: 0; animation: esc-scr 1.4s ease-in-out infinite; }
+@keyframes esc-scr { 0%, 100% { opacity: .1; } 30% { opacity: .5; } 60% { opacity: .2; } 80% { opacity: .55; } }
+
+/* ruleta girando (destello) y brillos en fichas y vasos */
+.wheel { position: absolute; left: 73%; top: 60.5%; width: 34%; aspect-ratio: 1; transform: scaleY(.4); mix-blend-mode: screen; opacity: .55; }
+.wheel::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0 18%, rgba(255,220,120,.7) 22%, transparent 28% 58%, rgba(255,43,214,.6) 62%, transparent 68%); -webkit-mask: radial-gradient(circle, transparent 38%, #000 40%, #000 70%, transparent 72%); mask: radial-gradient(circle, transparent 38%, #000 40%, #000 70%, transparent 72%); animation: esc-spin 5s linear infinite; }
+@keyframes esc-spin { to { transform: rotate(360deg); } }
+.glint { position: absolute; width: 2.4%; aspect-ratio: 1; background: radial-gradient(circle, #fff 0 12%, rgba(255,226,122,.8) 22%, transparent 60%); mix-blend-mode: screen; animation: esc-glint 2.6s ease-in-out infinite; }
+@keyframes esc-glint { 0%, 100% { opacity: 0; transform: scale(.4) rotate(0); } 50% { opacity: 1; transform: scale(1.1) rotate(45deg); } }
+
+/* polvo de luz que sube despacio */
+.spk { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #ffe27a; box-shadow: 0 0 8px #ffb000; opacity: 0; animation: esc-rise 9s linear infinite; }
+@keyframes esc-rise { 0% { opacity: 0; transform: translateY(0); } 15% { opacity: .9; } 100% { opacity: 0; transform: translateY(-22vh); } }
+
+/* ===== jugadores (siluetas vistas de espaldas) ===== */
+.ply { position: absolute; transform: translateX(-50%); aspect-ratio: 3 / 4; filter: drop-shadow(0 0 2px var(--rim)) drop-shadow(0 0 7px var(--rim)); animation: esc-sway 5s ease-in-out infinite; transform-origin: 50% 100%; -webkit-mask: linear-gradient(#000 72%, transparent 100%); mask: linear-gradient(#000 72%, transparent 100%); }
+.ply svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.ply .sh { fill: #0b0718; }
+.ply .head { transform-box: fill-box; transform-origin: 50% 100%; animation: esc-head 4s ease-in-out infinite; }
+.ply .arm { transform-box: fill-box; transform-origin: 50% 8%; }
+.ply.slot .arm.r { animation: esc-lever 4.5s ease-in-out infinite; }
+.ply.mesa .arm.r { animation: esc-chips 3.6s ease-in-out infinite; }
+@keyframes esc-sway { 0%, 100% { transform: translateX(-50%) rotate(-1.2deg); } 50% { transform: translateX(-50%) rotate(1.2deg); } }
+@keyframes esc-head { 0%, 100% { transform: rotate(-5deg); } 35% { transform: rotate(6deg); } 70% { transform: rotate(-2deg); } }
+@keyframes esc-lever { 0%, 55%, 100% { transform: rotate(0); } 62% { transform: rotate(-38deg); } 72% { transform: rotate(10deg); } 80% { transform: rotate(0); } }
+@keyframes esc-chips { 0%, 100% { transform: rotate(8deg); } 50% { transform: rotate(-22deg); } }
+
+/* celebración: brazos arriba y salto */
+.ply.win { animation: esc-jump .45s ease-in-out 4; }
+.ply.win .arm.l { animation: esc-armL .45s ease-in-out 4 alternate !important; }
+.ply.win .arm.r { animation: esc-armR .45s ease-in-out 4 alternate !important; }
+@keyframes esc-jump { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6%); } }
+@keyframes esc-armL { from { transform: rotate(150deg); } to { transform: rotate(175deg); } }
+@keyframes esc-armR { from { transform: rotate(-150deg); } to { transform: rotate(-175deg); } }
+.coin { position: absolute; width: 1.6%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff6c8, #f5c542 55%, #b8860b); box-shadow: 0 0 8px #ffb000; animation: esc-coin 1.5s ease-out forwards; }
+@keyframes esc-coin { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)); } }
+
+/* formulario sobre la escena */
+body.escena-on { background: #07050d !important; }
+body.escena-on .rc-main, body.escena-on .rc-footer { position: relative; z-index: 2; }
+body.escena-on .auth-box { background: rgba(10,7,32,.74); -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px); }
+body.escena-on .rc-footer { background: rgba(4,3,10,.8); }
+
+/* celular: el formulario es más transparente para que se vean los jugadores detrás */
+@media (max-width: 720px) {
+  body.escena-on .auth-box { background: rgba(10,7,32,.5); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+  .escena::after { background: radial-gradient(ellipse at 50% 45%, rgba(7,5,13,.05), rgba(7,5,13,.6) 85%); }
+}
+
+@media (prefers-reduced-motion: reduce) { .escena *, .escena { animation: none !important; } .scr { opacity: .4; } }
+html[data-anim="off"] .escena * { animation: none !important; }
+html[data-anim="off"] .scr { opacity: .4; }

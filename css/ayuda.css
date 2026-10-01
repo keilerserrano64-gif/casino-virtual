@@ -1,9 +1,62 @@
-/* ayuda.css — preguntas frecuentes */
-.faq details { border-bottom: 1px solid rgba(201,162,39,.2); padding: 4px 0; }
-.faq details:last-child { border-bottom: 0; }
-.faq summary { cursor: pointer; padding: 12px 6px; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+/* ayuda.css — centro de ayuda con el mismo estilo del inicio (noche, oro y neón). Se carga después de base.css e inicio.css */
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.lv-nav a.on { opacity: 1; color: var(--gold); text-shadow: 0 0 10px rgba(245,197,66,.7); box-shadow: inset 0 -2px 0 var(--gold); }
+
+/* hero compacto con buscador */
+.lv-hero-help { height: auto; min-height: 300px; }
+.lv-hero-help .lv-slide { position: relative; inset: auto; opacity: 1; visibility: visible; min-height: 300px; padding: 46px 64px; }
+.lv-hero-help .lv-copy { max-width: 58%; }
+.lv-lead { margin: 8px 0 18px; font-size: 1.05rem; color: #ffe9a0; }
+.lv-hero-help .lv-search { margin: 0; max-width: 480px; }
+.lv-hero-help .lv-ball.b1 { left: 8%; top: 40px; width: 84px; height: 84px; font-size: 2.6rem; }
+.lv-hero-help .lv-chest { left: 38%; top: 54px; font-size: 7rem; }
+.lv-hero-help .lv-chip { width: 80px; height: 80px; }
+
+/* tarjetas de tema (como los jackpots) */
+.lv-topics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.lv-topic { position: relative; display: block; padding: 18px 12px 14px; text-align: center; border-radius: 14px; background: linear-gradient(#1a1240, #0a0720); border: 2px solid var(--jc); box-shadow: 0 0 22px var(--jg), inset 0 0 30px rgba(0,0,0,.6); transition: transform .18s, box-shadow .18s; }
+.lv-topic:hover, .lv-topic:focus-visible { transform: translateY(-5px); box-shadow: 0 0 34px var(--jc), inset 0 0 30px rgba(0,0,0,.5); }
+.lv-topic .ico { display: block; font-size: 2.4rem; filter: drop-shadow(0 6px 8px rgba(0,0,0,.6)); }
+.lv-topic h3 { margin-top: 4px; font-size: 1.35rem; letter-spacing: .1em; color: var(--jc); text-shadow: 0 0 10px var(--jc); }
+body.lv .lv-topic h3 { color: var(--jc); }
+.lv-topic .amt { display: block; margin-top: 2px; font-family: var(--f-marq); font-size: 2.8rem; line-height: 1; color: #fff; text-shadow: 0 0 6px var(--jc), 0 0 22px var(--jc); }
+.lv-topic .unit { font-size: .7rem; color: var(--dim); }
+.lv-topic.gold { --jc: #ffd34d; --jg: rgba(255,211,77,.35); }
+.lv-topic.pink { --jc: #ff2bd6; --jg: rgba(255,43,214,.3); }
+.lv-topic.blue { --jc: #2bd4ff; --jg: rgba(43,212,255,.28); }
+
+/* preguntas */
+.faq-group .lv-h2 .ico { font-size: 1.8rem; filter: drop-shadow(0 0 8px rgba(245,197,66,.6)); }
+.faq details { margin-bottom: 10px; border-radius: 12px; border: 2px solid var(--line); background: linear-gradient(#14163a, #0a0720); box-shadow: inset 0 0 26px rgba(0,0,0,.35); transition: border-color .18s, box-shadow .18s; }
+.faq details:hover { border-color: rgba(245,197,66,.6); }
+.faq details[open] { border-color: var(--gold); box-shadow: 0 0 22px rgba(245,197,66,.3), inset 0 0 26px rgba(0,0,0,.35); }
+.faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 10px; font-family: var(--f-marq); font-size: 1.35rem; letter-spacing: .05em; color: var(--tx); }
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary::after { content: '+'; color: var(--gold-400); font-size: 1.3rem; line-height: 1; }
-.faq details[open] summary::after { content: '−'; }
-.faq details[open] summary { color: var(--gold-400); }
-.faq p { margin: 0; padding: 0 6px 14px; opacity: .85; }
+.faq summary::after { content: '+'; flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--gold); color: var(--gold); font: 400 1.4rem/1 var(--f-marq); transition: transform .2s, background .2s; }
+.faq details[open] summary { color: var(--gold); text-shadow: 0 0 10px rgba(245,197,66,.5); }
+.faq details[open] summary::after { content: '–'; background: var(--gold); color: #3a2400; transform: rotate(180deg); }
+.faq summary:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+.faq p { margin: 0; padding: 0 18px 18px; max-width: 64ch; line-height: 1.55; color: #dcd6ff; animation: slidein .35s ease; }
+
+.faq-none { margin-top: 30px; padding: 22px 12px; font-size: .95rem; }
+.faq-none a { color: var(--gold); text-decoration: underline; }
+
+/* panel lateral */
+.lv-help-side { gap: 0; }
+.lv-side-p { margin: 0 0 14px; font-size: .84rem; line-height: 1.5; color: var(--dim); }
+.lv-block { display: block; text-align: center; }
+.lv-help-side .lv-slotbtn span { padding: 9px 12px; }
+.lv-quick { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.lv-quick a { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 9px; background: rgba(255,255,255,.05); border-left: 3px solid var(--gold); font-size: .82rem; transition: background .15s, transform .15s; }
+.lv-quick a:hover, .lv-quick a:focus-visible { background: rgba(245,197,66,.14); transform: translateX(3px); color: var(--gold); }
+.lv-quick i { font-style: normal; font-size: 1.15rem; }
+
+@media (max-width: 860px) {
+  .lv-topics { grid-template-columns: 1fr; }
+  .lv-hero-help .lv-slide { padding: 34px 26px; }
+  .lv-hero-help .lv-copy { max-width: 100%; }
+  .lv-hero-help .lv-art { opacity: .25; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .faq p, .lv-topic { animation: none !important; transition: none !important; } }
+.lv-help-side .lv-h3b { margin-top: 22px; }

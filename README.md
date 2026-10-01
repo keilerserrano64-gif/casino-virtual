@@ -3,18 +3,31 @@
 Casino virtual hecho con HTML, CSS y JavaScript. **Monedas 100% ficticias, sin dinero real.**
 
 ## Cómo usarlo
-Abre `html/login.html` en el navegador (o usa la extensión Live Server de VS Code).
+Abre **`index.html`** (la portada, en la raíz del proyecto) en el navegador, o usa la extensión Live Server de VS Code.
+Desde ahí se llega a todo: *Registrarse*, *Iniciar sesión* y el resto de páginas.
+
+Las rutas se calculan solas desde la ubicación de `js/app.js`, así que el sitio funciona igual abriéndolo con doble clic
+(`file://`), con un servidor local o publicado en cualquier carpeta de un hosting estático (GitHub Pages, Netlify, Vercel...).
+Solo hay que subir la carpeta completa conservando `index.html`, `html/`, `css/` y `js/`.
 
 - Administrador de ejemplo: usuario `admin`, contraseña `admin123` (cámbiala en Configuración).
 - Jugadores: créalos desde `html/registro.html`.
 
 ## Estructura
+- `index.html`  portada pública (raíz del proyecto)
 - `html/`  páginas (juegos, usuario, contenido) y `html/admin/` (panel de administración)
 - `css/`   `base.css` (núcleo compartido), `juegos.css` y un CSS por página
 - `js/`    `app.js` (cuentas, monedas, XP, logros, notificaciones), `auth.js` (sesión y rutas) y un JS por página
 
+## Cuentas e inicio de sesión (Firebase)
+Registro, login, recuperar contraseña y cambio de contraseña/usuario en Configuración usan **Firebase Realtime Database** a través de `js/firebase_auth.js` (`window.RCRemote`).
+- `usuarios/{usuario}` guarda `nombre, usuario, correo, salt, hash, saldo_billetera, rol, baneado, fecha_registro`; `correos/{correo}` es el índice para entrar o recuperar por correo.
+- **La contraseña no se guarda en texto plano**: se guarda `salt` aleatorio + `hash = SHA-256(salt + ':' + contraseña)`. Al iniciar sesión se recalcula y se compara.
+- Login: se valida primero contra Firebase y, al entrar, se crea/actualiza la copia local (`RC.loginRemote`) que usa el resto del sitio (monedas, historial...). Si la cuenta no existe en Firebase (el `admin` de ejemplo o cuentas antiguas creadas solo en el navegador) o no hay conexión, se usa la cuenta local; las cuentas antiguas se copian a Firebase la primera vez que entran.
+- Pruebas: `node tests/firebase_auth.test.js` (usa una base de datos simulada, no necesita red).
+
 ## Notas
-Todo se guarda en `localStorage`; no hay servidor, así que no es seguridad real.
+Las monedas, el historial y los ajustes se guardan en `localStorage`. Las contraseñas se validan en el navegador, así que no es seguridad real: para producción haría falta Firebase Authentication o un backend.
 
 ## Dados (Craps)
 `html/dados.html` es una mesa de Craps completa: Pass / Don't Pass, Come / Don't Come, Field, Place 4-10,

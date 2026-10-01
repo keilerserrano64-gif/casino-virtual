@@ -4,26 +4,131 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Ayuda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
 <link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/inicio.css">
 <link rel="stylesheet" href="../css/ayuda.css">
 </head>
-<body>
+<body class="lv">
+<div id="lv-legacy"></div>
 
-<div id="rc-header-root"></div>
+<!-- ===== Barra superior (igual que el inicio) ===== -->
+<header class="lv-top">
+  <a class="lv-sign" href="../index.html" aria-label="Royal Casino — Inicio"><span class="crown">♛</span><span class="neon">ROYAL</span><span class="gold">CASINO</span></a>
+  <nav class="lv-nav" aria-label="Principal">
+    <a class="lv-casino-btn" href="juegos.html">🎰 Casino</a>
+    <a href="torneos.html">Torneos</a><a href="ranking.html">Ranking</a><a href="amigos.html">Amigos</a><a href="billetera.html">Billetera</a><a href="bonificasiones.html">Bonificaciones</a><a href="noticias.html">Noticias</a><a href="historial.html">Historial</a><a href="ayuda.html" class="on" aria-current="page">Ayuda</a>
+  </nav>
+  <div class="lv-top-right">
+    <button class="lv-sound" id="lvSound" type="button" aria-pressed="true" title="Sonido">🔊</button>
+    <div class="lv-user" id="lvUser">
+      <a class="lv-pill" href="billetera.html" title="Billetera">💰 <span id="rc-coin-display">—</span></a>
+      <span class="lv-pill rc-level-pill">Nv. —</span>
+      <a class="lv-pill" href="notificaciones.html" title="Notificaciones">🔔<b id="lvBell" hidden></b></a>
+      <a class="lv-pill" href="amigos.html" title="Amigos">👥</a>
+      <a class="lv-mini" href="mi_perfil.html">Mi perfil</a>
+      <button class="lv-mini" id="lvLogout" type="button">Salir</button>
+    </div>
+  </div>
+</header>
 
-<main class="rc-main">
-<h1>❓ Preguntas frecuentes</h1>
-<section class="rc-panel faq">
-<details><summary>¿Cómo funcionan las monedas?</summary><p>Son monedas ficticias sin valor real. Empiezas con 10.000 y las ganas o pierdes jugando.</p></details>
-<details><summary>¿Cómo puedo subir de nivel?</summary><p>Cada partida da XP: más si ganas. Al completar la barra de XP subes de nivel y recibes recompensas.</p></details>
-<details><summary>¿Cómo funcionan los juegos?</summary><p>Eliges tu apuesta, juegas y el resultado se calcula al azar. Cada juego explica sus reglas en su página.</p></details>
-<details><summary>¿Dónde veo mi historial?</summary><p>En la sección Historial y en tu Billetera, donde también verás cada movimiento de monedas.</p></details>
-<details><summary>¿Cómo cambio mi contraseña?</summary><p>Ve a Configuración → Cuenta y escribe tu contraseña actual y la nueva.</p></details>
-</section>
-<p class="subtitle">¿No encuentras tu respuesta? <a href="soporte.html">Contacta con soporte</a>.</p>
+<div class="lv-wrap">
+<main class="lv-main">
+
+  <!-- ===== Hero con buscador ===== -->
+  <section class="lv-hero lv-hero-help" aria-label="Centro de ayuda">
+    <div class="lv-bulbs top"></div><div class="lv-bulbs bottom"></div>
+    <div class="lv-slide is-on">
+      <div class="lv-copy">
+        <p class="lv-kicker">Estamos para ayudarte</p>
+        <h1><span class="lv-neon-red">CENTRO DE</span> <span class="lv-gold-txt">AYUDA</span></h1>
+        <p class="lv-lead">Respuestas rápidas sobre tus monedas, los juegos y tu cuenta.</p>
+        <label class="lv-search"><span class="sr-only">Buscar en la ayuda</span><span aria-hidden="true">🔎</span>
+          <input type="search" id="faqSearch" placeholder="Busca una palabra, por ejemplo: nivel" autocomplete="off">
+        </label>
+      </div>
+      <div class="lv-art" aria-hidden="true">
+        <div class="lv-ball b1">?</div>
+        <div class="lv-chest">💬</div>
+        <div class="lv-chip c1"></div><div class="lv-chip c2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Temas (tarjetas de neón) ===== -->
+  <section class="lv-sec" id="faqTopics" aria-label="Temas de ayuda">
+    <div class="lv-topics">
+      <a class="lv-topic gold" href="#g-monedas"><span class="ico" aria-hidden="true">💰</span><h3>Monedas y niveles</h3><span class="amt">4</span><span class="unit">preguntas</span></a>
+      <a class="lv-topic pink" href="#g-juegos"><span class="ico" aria-hidden="true">🎰</span><h3>Juegos y amigos</h3><span class="amt">3</span><span class="unit">preguntas</span></a>
+      <a class="lv-topic blue" href="#g-cuenta"><span class="ico" aria-hidden="true">👤</span><h3>Cuenta y ajustes</h3><span class="amt">2</span><span class="unit">preguntas</span></a>
+    </div>
+  </section>
+
+  <!-- ===== Preguntas frecuentes ===== -->
+  <section class="lv-sec faq-group" id="g-monedas">
+    <h2 class="lv-h2"><span class="ico" aria-hidden="true">💰</span> Monedas y niveles</h2>
+    <div class="faq">
+      <details><summary>¿Cómo funcionan las monedas?</summary><p>Son monedas ficticias sin valor real. Empiezas con 10.000 y las ganas o pierdes jugando. No se pueden cambiar por dinero.</p></details>
+      <details><summary>¿Cómo puedo subir de nivel?</summary><p>Cada partida da XP: más si ganas. Al completar la barra de XP subes de nivel y recibes recompensas.</p></details>
+      <details><summary>¿Qué hago si me quedo sin monedas?</summary><p>Reclama tu bono diario en Bonificaciones. Si prefieres empezar de cero, puedes reiniciar tu cuenta desde Configuración.</p></details>
+      <details><summary>¿Dónde veo mi historial?</summary><p>En la sección Historial y en tu Billetera, donde también verás cada movimiento de monedas.</p></details>
+    </div>
+  </section>
+
+  <section class="lv-sec faq-group" id="g-juegos">
+    <h2 class="lv-h2"><span class="ico" aria-hidden="true">🎰</span> Juegos y amigos</h2>
+    <div class="faq">
+      <details><summary>¿Cómo funcionan los juegos?</summary><p>Eliges tu apuesta, juegas y el resultado se calcula al azar. Cada juego explica sus reglas en su página.</p></details>
+      <details><summary>¿Por qué un juego aparece desactivado?</summary><p>El administrador puede desactivar un juego de forma temporal. Cuando vuelva a estar disponible podrás entrar de nuevo.</p></details>
+      <details><summary>¿Cómo agrego amigos?</summary><p>Entra en Amigos, busca a otro jugador por su nombre de usuario y envíale una solicitud. Verás si está en línea desde la portada.</p></details>
+    </div>
+  </section>
+
+  <section class="lv-sec faq-group" id="g-cuenta">
+    <h2 class="lv-h2"><span class="ico" aria-hidden="true">👤</span> Cuenta y ajustes</h2>
+    <div class="faq">
+      <details><summary>¿Cómo cambio mi contraseña?</summary><p>Ve a Configuración, abre la sección Cuenta y escribe tu contraseña actual y la nueva.</p></details>
+      <details><summary>¿Cómo desactivo el sonido o cambio el tema?</summary><p>En Configuración, sección Preferencias. Los cambios se aplican al instante.</p></details>
+    </div>
+  </section>
+
+  <p class="lv-empty faq-none" id="faqNone" hidden>No hay resultados para «<span id="faqTerm"></span>». Prueba con otra palabra o <a href="soporte.html">escribe a soporte</a>.</p>
 </main>
 
-<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+<!-- ===== Panel lateral (como «Jugando ahora» del inicio) ===== -->
+<aside class="lv-winners lv-help-side" aria-label="Más ayuda">
+  <h3>¿Sigues con dudas?</h3>
+  <p class="lv-side-p">Cuéntanos qué pasó. Cuando tu solicitud esté resuelta te avisaremos en Notificaciones.</p>
+  <a class="lv-slotbtn lv-gold lv-block" href="soporte.html"><span>Abrir solicitud</span></a>
+  <h3 class="lv-h3b">Accesos rápidos</h3>
+  <ul class="lv-quick">
+    <li><a href="bonificasiones.html"><i aria-hidden="true">🎁</i> Reclamar mi bono diario</a></li>
+    <li><a href="billetera.html"><i aria-hidden="true">💰</i> Ver mi billetera</a></li>
+    <li><a href="historial.html"><i aria-hidden="true">📜</i> Ver mi historial</a></li>
+    <li><a href="configuracion.html"><i aria-hidden="true">🔑</i> Cambiar mi contraseña</a></li>
+  </ul>
+</aside>
+</div>
+
+<!-- ===== Footer (igual que el inicio) ===== -->
+<footer class="lv-footer">
+  <div class="lv-foot-row">
+    <div><h4>Juego responsable</h4>
+      <div class="lv-seals"><span class="seal r18">18+</span><span class="seal">Juega con responsabilidad</span><span class="seal">Autoexclusión</span><span class="seal">Límites de juego</span></div>
+      <p>Este casino usa <b>monedas virtuales sin valor real</b>. Si el juego deja de ser diversión, busca ayuda profesional.</p>
+    </div>
+    <div><h4>Métodos de pago</h4>
+      <div class="lv-pay"><span>VISA</span><span>Mastercard</span><span>PayPal</span><span>Bitcoin</span><span>Transferencia</span></div>
+      <p>Solo referencia visual: no hay pagos ni depósitos activos en este proyecto.</p>
+    </div>
+    <div><h4>Licencias y transparencia</h4>
+      <div class="lv-seals"><span class="seal">RNG criptográfico</span><span class="seal warn">Sin licencia real</span></div>
+      <p>Proyecto demostrativo. Antes de operar con dinero real se requiere licencia del regulador local y auditoría externa.</p>
+    </div>
+  </div>
+  <p class="lv-copy-line">© Royal Casino · <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p>
+</footer>
 
 <script src="../js/app.js"></script>
 <script src="../js/auth.js"></script>

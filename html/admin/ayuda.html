@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Admin · Centro de ayuda</title>
+<link rel="stylesheet" href="../../css/base.css">
+<link rel="stylesheet" href="../../css/admin.css">
+<link rel="stylesheet" href="../../css/vegas.css">
+<link rel="stylesheet" href="../../css/admin_ayuda.css">
+</head>
+<body class="vg adm-help" data-admin>
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+<h1>Administración · Centro de ayuda</h1>
+<nav class="admin-nav"><a href="admin.html">Panel</a><a href="usuarios.html">Usuarios</a><a href="juegos.html">Juegos</a><a href="estadisticas.html">Estadísticas</a><a href="noticias.html">Noticias</a><a href="soporte.html">Soporte</a><a href="ayuda.html" class="active">Ayuda</a><a href="../../index.html">← Volver al casino</a></nav>
+
+<p class="ah-lead">Aquí llegan todas las solicitudes de los jugadores (formulario, chat y correo) y los avisos de juego responsable. Cada respuesta se notifica al jugador.</p>
+
+<section class="ah-stats" aria-label="Resumen">
+  <div><b id="sNew">0</b><span>Sin leer</span></div>
+  <div><b id="sOpen">0</b><span>Abiertas</span></div>
+  <div><b id="sProg">0</b><span>En curso</span></div>
+  <div><b id="sDone">0</b><span>Resueltas</span></div>
+  <div><b id="sExc">0</b><span>Autoexclusiones</span></div>
+</section>
+
+<div class="ah-layout">
+  <section class="rc-panel ah-inbox" aria-label="Bandeja de entrada">
+    <h2>Bandeja de entrada</h2>
+    <div class="ah-filters">
+      <input type="search" id="fText" placeholder="Buscar por usuario o texto" aria-label="Buscar">
+      <select id="fStatus" aria-label="Estado"><option value="">Todos los estados</option><option value="open">Abiertas</option><option value="progress">En curso</option><option value="closed">Resueltas</option></select>
+      <select id="fCat" aria-label="Categoría"><option value="">Todas las categorías</option></select>
+    </div>
+    <ul class="ah-list" id="inbox"></ul>
+  </section>
+
+  <section class="rc-panel ah-detail" id="detail" aria-label="Detalle de la solicitud" aria-live="polite">
+    <p class="ah-empty">Seleccione una solicitud de la bandeja para leerla y responder.</p>
+  </section>
+</div>
+
+<div class="ah-cols">
+  <section class="rc-panel" aria-label="Notificaciones">
+    <h2>Notificaciones del administrador <button class="rc-btn rc-btn-ghost rc-btn-sm" id="readAll" type="button">Marcar leídas</button></h2>
+    <ul class="ah-feed" id="notifs"></ul>
+  </section>
+  <section class="rc-panel" aria-label="Registro de juego responsable">
+    <h2>Registro de juego responsable</h2>
+    <ul class="ah-feed" id="events"></ul>
+    <p class="ah-note">Las autoexclusiones deben respetarse hasta su fecha de fin. No se reactiva una cuenta sin una solicitud escrita del titular.</p>
+  </section>
+</div>
+
+<section class="rc-panel" aria-label="Guía del administrador">
+  <h2>Guía del administrador</h2>
+  <div class="ah-faq">
+    <details><summary>¿Cómo debo responder una solicitud?</summary><p>Lea el mensaje completo, responda de forma clara y respetuosa y evite tecnicismos. Al enviar la respuesta la solicitud pasa a «En curso» y el jugador recibe un aviso. Cuando el caso quede resuelto, márquelo como «Resuelta».</p></details>
+    <details><summary>¿En qué plazo se debe atender?</summary><p>Objetivo recomendado: primera respuesta en menos de 24 horas y solicitudes de «Juego responsable» (prioridad alta) en el mismo día.</p></details>
+    <details><summary>¿Qué hago ante una autoexclusión?</summary><p>No intervenga: el sistema bloquea el acceso hasta la fecha indicada o de forma permanente. Si la persona pide ayuda, indíquele las líneas de apoyo del centro de ayuda. No ofrezca bonos ni contacto promocional a cuentas autoexcluidas.</p></details>
+    <details><summary>¿Cómo trato los datos personales y los adjuntos?</summary><p>Use la información únicamente para resolver la solicitud. No la comparta fuera del equipo ni la copie a otros medios. En esta versión de demostración solo se guarda el nombre de los adjuntos.</p></details>
+    <details><summary>¿Cuándo bloquear o eliminar una cuenta?</summary><p>Solo ante incumplimiento de los términos (trampas, varias cuentas, suplantación). Hágalo desde Usuarios y deje constancia respondiendo la solicitud relacionada.</p></details>
+  </div>
+  <p class="ah-note">Canales configurados: correo <b id="cfgMail">soporte@royalcasino.example</b> · línea gratuita <b id="cfgPhone">01 8000 000 000</b>. Los correos reales requieren un servidor; aquí se reciben como solicitudes.</p>
+</section>
+</main>
+
+<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="../ayuda.html">Ayuda</a> · <a href="../soporte.html">Soporte</a> · <a href="../noticias.html">Noticias</a> · <a href="../configuracion.html">Configuración</a></p></footer>
+
+<script src="../../js/app.js"></script>
+<script src="../../js/auth.js"></script>
+<script src="../../js/admin_ayuda.js"></script>
+</body>
+</html>

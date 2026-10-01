@@ -1,0 +1,39 @@
+/* admin_ayuda.css — centro de ayuda del administrador (tono sobrio) */
+body.adm-help { background: #0d1117; }
+.adm-help h1 { font: 600 1.8rem var(--font-display); color: #f1ead2; text-shadow: none; }
+.adm-help h2 { font: 600 1.1rem system-ui; color: #f1ead2; text-shadow: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.adm-help .rc-panel { background: #121826; box-shadow: none; border: 1px solid rgba(245,197,66,.22); border-radius: 8px; margin: 0 0 16px; }
+.adm-help .rc-brand { animation: none; text-shadow: none; }
+.ah-lead { margin: 0 0 14px; max-width: 70ch; color: #c6c9dc; font-size: .92rem; }
+.ah-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+.ah-stats div { padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(245,197,66,.22); background: #121826; }
+.ah-stats b { display: block; font: 600 1.7rem system-ui; color: var(--vg-gold, #f5c542); }
+.ah-stats span { font-size: .76rem; color: #9a9cc4; }
+.ah-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 16px; align-items: start; }
+.ah-filters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.ah-filters input, .ah-filters select, .ah-reply textarea { padding: 9px 10px; border-radius: 6px; border: 1px solid rgba(245,197,66,.28); background: rgba(0,0,0,.4); color: #f6f0ff; font: .88rem system-ui; min-width: 0; }
+.ah-list, .ah-feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-height: 460px; overflow: auto; }
+.ah-item { width: 100%; text-align: left; display: grid; gap: 3px; padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(245,197,66,.18); background: rgba(255,255,255,.03); color: inherit; font: inherit; cursor: pointer; }
+.ah-item:hover, .ah-item.on { border-color: var(--vg-gold, #f5c542); background: rgba(245,197,66,.08); }
+.ah-item.unread strong::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 7px; border-radius: 50%; background: #5b8cff; }
+.ah-item .l1 { display: flex; justify-content: space-between; gap: 8px; font-size: .86rem; }
+.ah-item .l2 { font-size: .8rem; color: #9a9cc4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tag { font-size: .68rem; padding: 1px 8px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.tag.open { color: #a9c0ff; } .tag.progress { color: #f0c46a; } .tag.closed { color: #7dd3a0; } .tag.alta { color: #ff8a9a; }
+.ah-detail h2 { display: block; }
+.ah-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 12px; font-size: .8rem; color: #9a9cc4; }
+.ah-msg { padding: 10px 12px; margin-bottom: 8px; border-radius: 6px; background: rgba(255,255,255,.05); font-size: .9rem; line-height: 1.5; white-space: pre-wrap; }
+.ah-msg.adm { background: rgba(245,197,66,.1); border-left: 3px solid var(--vg-gold, #f5c542); }
+.ah-msg small { display: block; color: #9a9cc4; margin-bottom: 2px; }
+.ah-reply { display: grid; gap: 8px; margin-top: 12px; }
+.ah-reply textarea { resize: vertical; }
+.ah-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ah-empty, .ah-note { color: #9a9cc4; font-size: .84rem; margin: 10px 0 0; }
+.ah-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ah-feed li { padding: 8px 12px; border-radius: 6px; background: rgba(255,255,255,.04); font-size: .84rem; line-height: 1.4; }
+.ah-feed li.new { border-left: 3px solid #5b8cff; }
+.ah-feed time { display: block; font-size: .72rem; color: #9a9cc4; }
+.ah-faq details { border-bottom: 1px solid rgba(245,197,66,.15); }
+.ah-faq summary { cursor: pointer; padding: 11px 2px; font-weight: 600; font-size: .92rem; }
+.ah-faq p { margin: 0 0 12px; max-width: 70ch; font-size: .88rem; line-height: 1.55; color: #c6c9dc; }
+@media (max-width: 900px) { .ah-layout, .ah-cols { grid-template-columns: 1fr; } .ah-stats { grid-template-columns: repeat(2, 1fr); } .ah-filters { grid-template-columns: 1fr; } }

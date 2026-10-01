@@ -72,7 +72,7 @@ function finish(p) {                       // paga una sola vez: primero se borr
     ? `¡${h[p.pick].name} llegó ${r.rank}.º! ${K[p.kind].label} a ×${r.odds.toFixed(1)}: +${money(r.payout)} monedas.`
     : `Ganó ${h[p.order[0]].name}. ${h[p.pick].name} llegó ${r.rank}.º y no cumple ${K[p.kind].label}.`;
   raceMsg.textContent = text;
-  RC.toast(r.won ? 'win' : 'lose', text);
+  RC.result(r.won ? { type: 'win', title: '¡GANASTE!', amount: r.payout, text } : { type: 'lose', title: 'PERDISTE', amount: p.bet, text });
   RC.registerGameResult('Carreras', r.won, p.bet, r.payout);
 }
 

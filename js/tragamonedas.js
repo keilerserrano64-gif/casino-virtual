@@ -117,7 +117,14 @@ async function resolveSpin(result) {
   // Primero se acredita y se registra (aunque falle un efecto), después se celebra.
   if (payout > 0) RC.addCoins(payout);
   clearPending();
-  RC.toast(won ? 'win' : 'lose', won ? `+${RC.formatNumber(payout)} monedas` : 'Sin premio');
+  // Los premios grandes (×10 o más) los celebra el Big Win propio de la máquina; el resto usa el cartel central.
+  const ownBigWin = kind === 'triple' && mult >= 10 && RC.getSettings().anim !== false;
+  if (!ownBigWin) {
+    const quick = autoLeft > 0 ? 1200 : undefined;
+    if (kind === 'triple') RC.result({ type: 'win', title: '¡GANASTE!', amount: payout, text: `Triple ${symbols[0]} · ×${mult}`, sound: false, duration: quick });
+    else if (kind === 'pair') RC.result({ type: 'push', title: '¡CASI!', text: 'Dos iguales: recuperas tu apuesta.', sound: false, duration: quick });
+    else RC.result({ type: 'lose', title: 'SIN PREMIO', amount: bet, text: 'Sigue intentándolo.', sound: false, duration: quick });
+  }
   RC.registerGameResult('Tragamonedas', payout > bet, bet, payout);
   fx('hud');
 
