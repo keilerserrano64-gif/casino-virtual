@@ -3,12 +3,18 @@
 Casino virtual hecho con HTML, CSS y JavaScript. **Monedas 100% ficticias, sin dinero real.**
 
 ## Cómo usarlo
-Abre `html/login.html` en el navegador (o usa la extensión Live Server de VS Code).
+Abre **`index.html`** (la portada, en la raíz del proyecto) en el navegador, o usa la extensión Live Server de VS Code.
+Desde ahí se llega a todo: *Registrarse*, *Iniciar sesión* y el resto de páginas.
+
+Las rutas se calculan solas desde la ubicación de `js/app.js`, así que el sitio funciona igual abriéndolo con doble clic
+(`file://`), con un servidor local o publicado en cualquier carpeta de un hosting estático (GitHub Pages, Netlify, Vercel...).
+Solo hay que subir la carpeta completa conservando `index.html`, `html/`, `css/` y `js/`.
 
 - Administrador de ejemplo: usuario `admin`, contraseña `admin123` (cámbiala en Configuración).
 - Jugadores: créalos desde `html/registro.html`.
 
 ## Estructura
+- `index.html`  portada pública (raíz del proyecto)
 - `html/`  páginas (juegos, usuario, contenido) y `html/admin/` (panel de administración)
 - `css/`   `base.css` (núcleo compartido), `juegos.css` y un CSS por página
 - `js/`    `app.js` (cuentas, monedas, XP, logros, notificaciones), `auth.js` (sesión y rutas) y un JS por página
@@ -55,3 +61,16 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 - **Bonos**: 3 cartones gratis de bienvenida y 1 cartón gratis cada 10 partidas de bingo (lealtad). No existe un sistema de depósitos en el proyecto, así que no hay bono por depósito.
 - **Voz y sonidos**: voz del navegador (`speechSynthesis`) que canta las bolas y "Línea"/"Bingo", y tonos con WebAudio. Respeta Configuración → Sonido.
 - **Chat de sala**: local, sin servidor (se comparte entre pestañas del mismo navegador). Moderación: bloquea insultos, enlaces, floods y limita la frecuencia. Incluye emojis, stickers y minijuegos rápidos (dado y moneda, sin monedas en juego).
+
+## Firebase (nube)
+`js/firebase.js` conecta el proyecto `royal-casino-7633d`: **Authentication** (correo + contraseña) y **Firestore**
+(`users/{uid}/store/*` con monedas, historial, notificaciones, ajustes y social; `usernames/{usuario}` para iniciar sesión con usuario).
+`localStorage` sigue siendo la caché rápida y cada escritura se sube a Firestore (con 1,5 s de retraso).
+
+Pasos en la consola de Firebase (una sola vez):
+1. Authentication → *Sign-in method* → activar **Correo electrónico/contraseña**.
+2. Firestore Database → crear la base de datos → pestaña *Reglas* → pegar `firestore.rules` → Publicar.
+3. Authentication → *Settings* → *Authorized domains*: añadir el dominio donde publiques (localhost ya viene).
+Hay que abrir el sitio por `http(s)://` (Live Server, Netlify...), no con doble clic (`file://`): los módulos ES no cargan así.
+
+Pendiente (sigue local por navegador): ranking/amigos entre jugadores, noticias, tickets de soporte, juegos desactivados y el admin de ejemplo.

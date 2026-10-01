@@ -467,7 +467,10 @@ RC.initHeader();
 
     msg(net > 0 ? `¡Ganaste! Ganancia neta +${fmt(net)} monedas` : net < 0 ? `Perdiste ${fmt(-net)} monedas.` : (r.wager ? 'Tirada sin ganancia neta.' : 'Las apuestas siguen en juego.'));
     if (r.wager > 0) {
-      RC.toast(net > 0 ? 'win' : 'lose', net > 0 ? `¡Ganaste! +${fmt(net)} monedas` : net < 0 ? `Perdiste ${fmt(-net)} monedas.` : 'Empate.');
+      const q = S.auto ? 1200 : undefined;
+      if (net > 0) RC.result({ type: net >= 500 ? 'big' : 'win', title: '¡GANASTE!', amount: net, text: c[0], sound: false, duration: q });
+      else if (net < 0) RC.result({ type: 'lose', title: 'PERDISTE', amount: -net, text: c[0], sound: false, duration: q });
+      else RC.result({ type: 'push', title: 'SIN GANANCIA', text: 'Tirada sin ganancia neta.', sound: false, duration: q });
       RC.registerGameResult('Dados', net > 0, r.wager, r.ret);
     }
     if (net > 0) { Snd.win(); if (net >= 500) Snd.cheer(); } else if (net < 0 || r.event === 'sevenOut') Snd.lose();

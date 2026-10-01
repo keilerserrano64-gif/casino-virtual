@@ -1,0 +1,76 @@
+# =====================================================================
+# ROYAL CASINO · Capa 3: Base de datos en memoria (Redis 7+)
+# Sesiones, leaderboards en vivo, apuestas inmediatas, límites de tasa.
+# Uso:  redis-cli < 03_redis_setup.redis   (carga datos de ejemplo)
+# Convención de claves:  casino:<dominio>:<id>
+# Redis NO es fuente de verdad: todo lo que importe se persiste en PostgreSQL.
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# 1) SESIONES ACTIVAS  (HASH + TTL 30 min, se renueva con cada acción)
+# ---------------------------------------------------------------------
+HSET casino:sesion:tok_demo_123 usuario_id 00000000-0000-0000-0000-0000000000aa usuario jugador1 rol jugador ip 127.0.0.1 inicio 1790000000
+EXPIRE casino:sesion:tok_demo_123 1800
+
+# Índice de sesiones por usuario (para cerrar todas al suspender la cuenta)
+SADD casino:sesiones_usuario:00000000-0000-0000-0000-0000000000aa tok_demo_123
+EXPIRE casino:sesiones_usuario:00000000-0000-0000-0000-0000000000aa 86400
+
+# Jugadores en línea (SET ordenado por último latido)
+ZADD casino:en_linea 1790000000 jugador1
+
+# ---------------------------------------------------------------------
+# 2) LEADERBOARDS  (ZSET: puntaje = miembro ordenado)
+# ---------------------------------------------------------------------
+# Ranking global (página Ranking)
+ZADD casino:ranking:global 25000 jugador1 18000 jugador2 9000 jugador3
+# Ranking por torneo en vivo (página Torneos)
+ZADD casino:torneo:demo:ranking 1200 jugador1 900 jugador2
+# Ranking semanal con caducidad
+ZADD casino:ranking:semanal:2026-W40 5000 jugador1
+EXPIRE casino:ranking:semanal:2026-W40 1209600
+
+# Consultas típicas:
+#   ZREVRANGE casino:ranking:global 0 9 WITHSCORES      -> Top 10
+#   ZREVRANK  casino:ranking:global jugador1            -> posición (0 = primero)
+#   ZINCRBY   casino:torneo:demo:ranking 50 jugador1    -> sumar puntos en vivo
+
+# ---------------------------------------------------------------------
+# 3) SALDO EN CACHÉ y APUESTAS INMEDIATAS
+# ---------------------------------------------------------------------
+# Copia de lectura rápida del saldo (la verdad está en PostgreSQL)
+SET casino:saldo:00000000-0000-0000-0000-0000000000aa 10000 EX 60
+
+# Apuesta pendiente (se confirma/expira en segundos)
+HSET casino:apuesta:partida_demo usuario_id 00000000-0000-0000-0000-0000000000aa juego tragamonedas monto 100 estado pendiente
+EXPIRE casino:apuesta:partida_demo 120
+
+# Bloqueo anti doble-giro: solo una partida activa por jugador y juego
+SET casino:lock:jugador1:tragamonedas 1 NX EX 10
+
+# ---------------------------------------------------------------------
+# 4) LÍMITE DE TASA (anti-abuso: máx. 30 giros/min por jugador)
+# ---------------------------------------------------------------------
+# En la app:  INCR casino:rate:jugador1:<minuto>  ; EXPIRE ... 60 ; si > 30 -> rechazar
+SET casino:rate:jugador1:29666666 1 EX 60
+
+# ---------------------------------------------------------------------
+# 5) BOTES ACUMULADOS (bingo) y CONTADORES
+# ---------------------------------------------------------------------
+SET casino:bote:bingo75 1000
+SET casino:bote:bingo90 1000
+# INCRBY casino:bote:bingo75 <5% de cada cartón>
+SET casino:contador:giros_hoy 0 EX 86400
+
+# ---------------------------------------------------------------------
+# 6) PUB/SUB para eventos en vivo (ganadores, bote, chat de sala)
+# ---------------------------------------------------------------------
+# PUBLISH casino:eventos '{"tipo":"jackpot","usuario":"jugador1","juego":"tragamonedas"}'
+# SUBSCRIBE casino:eventos
+
+# ---------------------------------------------------------------------
+# 7) POLÍTICA DE MEMORIA (en redis.conf)
+#    maxmemory 256mb
+#    maxmemory-policy allkeys-lru     # para caché pura
+#    appendonly yes                   # persistencia AOF para leaderboards
+# ---------------------------------------------------------------------

@@ -8,3 +8,13 @@ body { min-height: 100vh; background: radial-gradient(ellipse at top, var(--felt
 .auth-box .rc-btn { width: 100%; margin-top: 4px; }
 .auth-links { margin: 18px 0 0; text-align: center; font-size: .82rem; opacity: .85; }
 .rc-footer { border-top: 0; }
+
+/* tema nocturno (vegas.css): el mismo letrero de neón del inicio */
+body.vg .auth-box { border-color: var(--vg-gold); box-shadow: 0 0 28px rgba(245,197,66,.25), 0 14px 40px rgba(0,0,0,.6), inset 0 0 30px rgba(0,0,0,.35); }
+body.vg .auth-box .rc-brand { font-size: 2.3rem; margin-bottom: 6px; white-space: nowrap; }
+body.vg .auth-box h1 { text-align: center; font-size: 2.2rem; margin: 0 0 2px; text-shadow: 0 2px 0 #7a5200, 0 0 16px rgba(245,197,66,.5); }
+body.vg .auth-box .subtitle { text-align: center; color: var(--vg-dim); }
+body.vg .auth-box .rc-btn { width: 100%; margin-top: 6px; }
+body.vg .auth-links { color: var(--vg-dim); opacity: 1; }
+body.vg .auth-links a { color: var(--vg-gold); }
+body.vg .rc-footer { border-top: 2px solid var(--vg-gold); }

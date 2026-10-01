@@ -278,16 +278,18 @@ async function showdown() {
 
   if (cmp > 0) {
     playerSeat.classList.add('win'); botSeat.classList.add('lose'); mood('😡'); say(pick(BOT_LINES.lose), 2400);
-    if (P.score[0] >= 4) { showBanner(pn + '!', 'bj'); coinBurst(90); tableEl.classList.add('jackpot'); setTimeout(() => tableEl.classList.remove('jackpot'), 2600); }
-    else { showBanner('¡Ganas!', 'win'); coinBurst(45); }
+    if (P.score[0] >= 4) { coinBurst(90); tableEl.classList.add('jackpot'); setTimeout(() => tableEl.classList.remove('jackpot'), 2600); }
+    else { coinBurst(45); }
     floatText('+' + fmt(net), 'pk-f-green'); renderChips(pot, 'chips-win');
   } else if (cmp === 0) {
-    showBanner('Empate', 'push'); mood('😐'); renderChips(pot, 'chips-win');
+    mood('😐'); renderChips(pot, 'chips-win');
   } else {
     botSeat.classList.add('win'); playerSeat.classList.add('lose'); mood('😎'); say(pick(BOT_LINES.win), 2400);
-    showBanner('Pierdes', 'lose'); shakeTable(); floatText('-' + fmt(paid), 'pk-f-red'); renderChips(pot, 'chips-lose');
+    shakeTable(); floatText('-' + fmt(paid), 'pk-f-red'); renderChips(pot, 'chips-lose');
   }
-  RC.toast(cmp > 0 ? 'win' : (cmp === 0 ? 'info' : 'lose'), text);
+  if (cmp > 0) RC.result(P.score[0] >= 4 ? { type: 'big', title: pn.toUpperCase() + '!', amount: net, text } : { type: 'win', title: '¡GANASTE!', amount: net, text });
+  else if (cmp === 0) RC.result({ type: 'push', title: 'EMPATE', text });
+  else RC.result({ type: 'lose', title: 'PERDISTE', amount: paid, text });
   RC.registerGameResult('Poker', payout > paid, paid, payout);
   endRound();
 }
@@ -296,10 +298,10 @@ function fold() {
   if (!live || busy) return;
   const text = `Te retiras y pierdes ${fmt(paid)} monedas.`;
   msgEl.textContent = text;
-  RC.toast('lose', text);
+  RC.result({ type: 'lose', title: 'TE RETIRAS', amount: paid, text });
   RC.registerGameResult('Poker', false, paid, 0);
   botSeat.classList.add('win'); playerSeat.classList.add('lose'); mood('😎'); say(pick(BOT_LINES.fold), 2200);
-  showBanner('Te retiras', 'lose'); shakeTable(); floatText('-' + fmt(paid), 'pk-f-red'); renderChips(pot, 'chips-lose');
+  shakeTable(); floatText('-' + fmt(paid), 'pk-f-red'); renderChips(pot, 'chips-lose');
   playerCoins.textContent = fmt(RC.getUser().coins);
   endRound();
 }

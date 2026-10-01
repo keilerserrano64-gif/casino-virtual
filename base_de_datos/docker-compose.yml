@@ -1,0 +1,37 @@
+# Levanta las tres capas con:  docker compose up -d
+# PostgreSQL ejecuta 01_postgresql_schema.sql automáticamente la primera vez.
+# Luego carga las otras dos:
+#   docker exec -i casino_mongo mongosh < 02_mongodb_init.js
+#   docker exec -i casino_redis redis-cli < 03_redis_setup.redis
+# CAMBIA las contraseñas antes de usar fuera de tu equipo.
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: casino_postgres
+    environment:
+      POSTGRES_DB: royal_casino
+      POSTGRES_USER: casino_admin
+      POSTGRES_PASSWORD: cambia_esta_clave
+    ports: ["5432:5432"]
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./01_postgresql_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+
+  mongo:
+    image: mongo:7
+    container_name: casino_mongo
+    ports: ["27017:27017"]
+    volumes: [mongo_data:/data/db]
+
+  redis:
+    image: redis:7
+    container_name: casino_redis
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    ports: ["6379:6379"]
+    volumes: [redis_data:/data]
+
+volumes:
+  pg_data:
+  mongo_data:
+  redis_data:

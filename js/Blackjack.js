@@ -440,15 +440,17 @@ function settle() {
 
   const playerNat = hands.some(h => isNatural(h)) && !dBJ;
   const allBust = hands.every(h => evaluate(h.cards).total > 21);
-  if (playerNat) { showBanner('¡Blackjack!', 'bj'); coinBurst(70); renderBetChips(wager, 'chips-win', true); }
-  else if (net > 0) { showBanner('¡Ganas!', 'win'); coinBurst(40); renderBetChips(wager, 'chips-win', true); }
-  else if (net === 0) { showBanner('Push', 'push'); }
-  else { showBanner(allBust ? 'Pasado' : 'Pierdes', allBust ? 'bust' : 'lose'); shakeTable(); renderBetChips(wager, 'chips-lose', true); }
+  if (playerNat) { coinBurst(70); renderBetChips(wager, 'chips-win', true); }
+  else if (net > 0) { coinBurst(40); renderBetChips(wager, 'chips-win', true); }
+  else if (net < 0) { shakeTable(); renderBetChips(wager, 'chips-lose', true); }
 
   // Tras la animación, la apuesta vuelve a mostrarse lista para la siguiente mano
   setTimeout(() => { if (phase === 'idle') renderBetChips(betInput.value, '', true); }, 1500);
 
-  RC.toast(net > 0 ? 'win' : (net === 0 ? 'info' : 'lose'), text);
+  if (playerNat) RC.result({ type: 'big', title: '¡BLACKJACK!', amount: net, text });
+  else if (net > 0) RC.result({ type: 'win', title: '¡GANASTE!', amount: net, text });
+  else if (net === 0) RC.result({ type: 'push', title: 'PUSH', text });
+  else RC.result({ type: 'lose', title: allBust ? '¡TE PASASTE!' : 'PERDISTE', amount: -net, text });
   RC.registerGameResult('Blackjack', payout > wager, wager, payout);
 }
 

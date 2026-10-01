@@ -46,7 +46,8 @@ function joinTournament(t) {
   const text = prize > 0
     ? `Terminaste #${playerRank + 1} en ${t.name}. +${RC.formatNumber(prize)} monedas.`
     : `Terminaste #${playerRank + 1} en ${t.name}. Sin premio esta vez.`;
-  RC.toast(prize > 0 ? 'win' : 'lose', text);
+  if (prize > 0) RC.result({ type: playerRank === 0 ? 'big' : 'win', title: playerRank === 0 ? '¡CAMPEÓN!' : `¡PUESTO #${playerRank + 1}!`, amount: prize, text });
+  else RC.result({ type: 'lose', title: 'SIN PREMIO', amount: t.entry, text });
   RC.registerGameResult('Torneo · ' + t.name, prize > 0, t.entry, prize);
 
   document.getElementById('leaderboardPanel').style.display = 'block';

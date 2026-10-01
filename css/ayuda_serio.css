@@ -1,0 +1,49 @@
+/* ayuda_serio.css — tono sobrio para el centro de ayuda (sin neón, bombillas ni decoraciones). Se carga tras ayuda.css */
+body.lv.help { background: #0d1117; }
+.help .lv-hero-help { min-height: 0; border: 1px solid var(--line); border-radius: 10px; background: #121826; box-shadow: none; }
+.help .lv-hero-help .lv-slide { min-height: 0; padding: 34px 40px; }
+.help .lv-hero-help .lv-copy { max-width: 720px; }
+.help .lv-kicker { font: 600 .78rem system-ui; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.help .lv-copy h1 { font: 600 clamp(1.9rem, 4vw, 2.6rem)/1.15 var(--f-lux); letter-spacing: 0; color: #f1ead2; text-shadow: none; }
+.help .lv-lead { color: #c6c9dc; font-size: .98rem; line-height: 1.55; }
+.help .lv-search { border-width: 1px; box-shadow: none; border-radius: 8px; }
+.help .lv-h2 { font: 600 1.35rem var(--f-lux); letter-spacing: 0; color: #f1ead2; text-shadow: none; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.help .lv-h2 .ico, .help .ch-card .ico, .help .lv-topic .ico, .help .lv-quick i { display: none; }
+.help .ch-card, .help .lv-topic, .help .ct-form, .help .rg-card, .help .faq details, .help .lv-winners { background: #121826; box-shadow: none; border: 1px solid var(--line); border-radius: 8px; }
+.help .lv-topic { --jc: var(--gold); text-align: left; padding: 14px 16px; }
+.help .lv-topic:hover { transform: none; border-color: var(--gold); box-shadow: none; }
+.help .lv-topic h3 { font: 600 1rem system-ui; color: #f1ead2; text-shadow: none; }
+.help .lv-topic .amt { font: 600 1.4rem system-ui; text-shadow: none; color: var(--gold); display: inline; }
+.help .lv-topic .unit { margin-left: 4px; }
+.help .ch-card { align-items: flex-start; text-align: left; }
+.help .ch-card h3, .help .rg-card h3 { font: 600 1.05rem system-ui; color: #f1ead2; text-shadow: none; }
+.help .faq details[open] { box-shadow: none; }
+.help .faq summary { font: 600 .98rem system-ui; letter-spacing: 0; }
+.help .faq details[open] summary { text-shadow: none; }
+.help .pop-list li button::before { border-radius: 4px; width: 26px; height: 26px; font: 700 .85rem system-ui; }
+.help .lv-slotbtn { background: none; box-shadow: none; padding: 0; border-radius: 6px; }
+.help .lv-slotbtn span { font: 700 .9rem system-ui; letter-spacing: 0; text-transform: none; text-shadow: none; border-radius: 6px; padding: 9px 18px; box-shadow: none; }
+.help .lv-slotbtn:active { transform: none; }
+.help .lv-topics { gap: 10px; }
+.help .chat-fab { border: 0; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.5); font-size: .9rem; }
+.help .chat-fab::before { content: none; }
+.help .chat-box { border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+.help .chat-box header b { font: 700 1rem system-ui; letter-spacing: 0; }
+.help .lv-sign .neon { animation: none; text-shadow: none; }
+.help .lv-seals .seal { border-radius: 4px; }
+
+/* mis solicitudes */
+.tk-list { display: grid; gap: 8px; }
+.tk { border: 1px solid var(--line); border-radius: 8px; background: #121826; }
+.tk summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; font-weight: 600; font-size: .92rem; }
+.tk summary::-webkit-details-marker { display: none; }
+.tk-st { font-size: .72rem; padding: 2px 10px; border-radius: 999px; border: 1px solid currentColor; }
+.tk-st.open { color: #a9c0ff; } .tk-st.progress { color: #f0c46a; } .tk-st.closed { color: #7dd3a0; }
+.tk-body { padding: 0 14px 14px; display: grid; gap: 8px; }
+.tk-meta { margin: 0; font-size: .76rem; color: var(--dim); }
+.tk-msg { padding: 9px 12px; border-radius: 6px; font-size: .88rem; line-height: 1.5; background: rgba(255,255,255,.05); white-space: pre-wrap; }
+.tk-msg.adm { background: rgba(245,197,66,.1); border-left: 3px solid var(--gold); }
+.tk-reply { display: flex; gap: 8px; }
+.tk-reply input { flex: 1; min-width: 0; padding: 9px 12px; border-radius: 6px; border: 1px solid var(--line); background: rgba(0,0,0,.4); color: var(--tx); font: .92rem system-ui; }
+.tk-reply button { padding: 0 16px; border-radius: 6px; border: 0; background: var(--gold); color: #3a2400; font-weight: 700; cursor: pointer; }
+@media (max-width: 860px) { .help .lv-hero-help .lv-slide { padding: 24px 18px; } }

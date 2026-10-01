@@ -277,7 +277,9 @@ spinBtn.addEventListener('click', () => {
 
     const payout = won ? bet * mult : 0;
     if (payout > 0) RC.addCoins(payout);
-    RC.toast(won ? 'win' : 'lose', won ? `¡Acertaste! +${RC.formatNumber(payout)} monedas` : `Salió ${landing}. Sin premio.`);
+    RC.result(won
+      ? { type: mult >= 35 ? 'big' : 'win', title: mult >= 35 ? '¡PLENO!' : '¡GANASTE!', amount: payout, text: `Salió el ${landing}.` }
+      : { type: 'lose', title: 'SIN PREMIO', amount: bet, text: `Salió el ${landing}.` });
     RC.registerGameResult('Ruleta', won, bet, payout);
 
     history.unshift(landing);

@@ -147,7 +147,7 @@ drawBtn.addEventListener('click', () => {
       const prize = BE.linePrize(game.mode, price);
       RC.addCoins(prize); payout += prize;
       msgEl.textContent = `¡LÍNEA! Cartón ${e.card + 1}. +${RC.formatNumber(prize)} monedas.`;
-      RC.toast('win', msgEl.textContent); say('¡Línea!'); tones([660, 880]);
+      RC.result({ type: 'win', title: '¡LÍNEA!', amount: prize, text: `Cartón ${e.card + 1}`, sound: false, duration: 2200 }); say('¡Línea!'); tones([660, 880]);
       postSystem(`${who()} cantó LÍNEA en el cartón ${e.card + 1}.`);
     } else if (e.type === 'bingo') {
       let prize = BE.fullPrize(game.mode, price);
@@ -158,7 +158,7 @@ drawBtn.addEventListener('click', () => {
       }
       RC.addCoins(prize); payout += prize;
       msgEl.textContent = text;
-      RC.toast('win', text); say('¡Bingo!'); tones([523, 659, 784, 1047]);
+      RC.result({ type: 'big', title: e.jackpot ? '¡BINGO Y BOTE!' : '¡BINGO!', amount: prize, text: `Cartón ${e.card + 1}`, sound: false }); say('¡Bingo!'); tones([523, 659, 784, 1047]);
       postSystem(`${who()} cantó BINGO${e.jackpot ? ' y se llevó el bote' : ''}.`);
     }
   });
@@ -170,7 +170,7 @@ function finish() {
   const won = payout > 0;
   if (!won) msgEl.textContent = 'Se acabaron las bolas sin premio.';
   else if (game.fullCards.length === 0) msgEl.textContent += ` Total de la partida: +${RC.formatNumber(payout)} monedas.`;
-  if (!won) RC.toast('lose', msgEl.textContent);
+  if (!won) RC.result({ type: 'lose', title: 'SIN PREMIO', amount: paidStake, text: 'Se acabaron las bolas.', sound: false });
   RC.registerGameResult('Bingo · ' + game.mode + ' bolas', won, paidStake, payout);
   // Lealtad: 1 cartón gratis cada LOYALTY_EVERY partidas
   const u = RC.getUser();

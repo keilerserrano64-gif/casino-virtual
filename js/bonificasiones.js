@@ -28,23 +28,13 @@ function renderChests() {
   }
 }
 
-function openChest() {
-  const u = RC.getUser();
-  if (u.chests < 1) return;
-  u.chests -= 1; u.chestsOpened += 1;
-  RC.saveUser(u);
-  const roll = Math.random();
-  let text;
-  if (roll < 0.6) { const c = 100 + Math.floor(Math.random() * 9) * 100; RC.addCoins(c, 'Cofre virtual', 'recompensa'); text = `¡El cofre tenía ${RC.formatNumber(c)} monedas!`; }
-  else if (roll < 0.95) { const x = 50 + Math.floor(Math.random() * 4) * 50; RC.addXP(x); text = `¡El cofre tenía ${x} XP!`; }
-  else { RC.addCoins(2500, 'Cofre virtual (premio gordo)', 'recompensa'); text = '¡PREMIO GORDO! 2.500 monedas.'; }
-  $('chestMsg').textContent = text;
-  RC.toast('win', text);
-  RC.notify(text, '📦');
-  RC.checkAchievements();
+// Al tocar un cofre guardado aparece el cofre medieval y se abre solo (la lógica del premio está en RC.openChest).
+function openChest() { RC.chestShow({ autoOpen: true }); }
+window.addEventListener('rc:chest', e => {
+  $('chestMsg').textContent = e.detail.text;
   renderChests();
   syncAchievementsUI();
-}
+});
 
 /* ---- Eventos y recompensas por nivel ---- */
 function renderEvents() {
@@ -117,7 +107,7 @@ claimBonusBtn.addEventListener('click', () => {
   RC.saveUser(user);
   RC.addCoins(reward, `Bono diario (racha ${next})`, 'bono');
   RC.addXP(50);
-  RC.toast('win', `Bono diario reclamado: +${RC.formatNumber(reward)} monedas`);
+  RC.result({ type: 'win', title: '¡BONO DIARIO!', icon: '🎁', amount: reward, text: `Racha de ${next} día(s) · +50 XP` });
   RC.notify(`Has recibido tu bono diario: +${RC.formatNumber(reward)} monedas.`, '🎁');
   RC.checkAchievements();
   refreshBonusUI();
@@ -130,7 +120,7 @@ claimMissionBtn.addEventListener('click', () => {
   RC.saveUser(user);
   RC.addCoins(500, 'Misión diaria completada', 'recompensa');
   RC.addXP(100);
-  RC.toast('win', 'Misión completada: +500 monedas, +100 XP');
+  RC.result({ type: 'win', title: '¡MISIÓN CUMPLIDA!', icon: '🎯', amount: 500, text: '+100 XP' });
   RC.notify('Misión del día completada: +500 monedas y +100 XP.', '🎯');
   refreshBonusUI();
 });
