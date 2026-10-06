@@ -121,6 +121,7 @@ const AUTH_ERRORS = {
   'auth/user-disabled': 'Tu cuenta está bloqueada. Contacta con soporte.',
   'auth/operation-not-allowed': 'El acceso con correo y contraseña no está activado en Firebase (Authentication → Sign-in method).',
   'permission-denied': 'Firebase rechazó la operación. Revisa las reglas de Firestore (firestore.rules).',
+  'firestore-timeout': 'Firestore no responde. En la consola de Firebase crea la base de datos (Firestore Database → Crear base de datos) y publica las reglas de firestore.rules.',
   'username-taken': 'Ese usuario ya existe.',
 };
 const msg = e => AUTH_ERRORS[e.code || e.message] || 'No se pudo conectar con Firebase (' + (e.code || e.message) + ').';
@@ -128,6 +129,8 @@ const msg = e => AUTH_ERRORS[e.code || e.message] || 'No se pudo conectar con Fi
 // para que la web pueda usar la cuenta local de respaldo en vez de quedarse bloqueada.
 const USER_ERRORS = ['auth/invalid-credential', 'auth/user-not-found', 'auth/wrong-password', 'auth/invalid-email', 'auth/user-disabled',
   'auth/too-many-requests', 'auth/email-already-in-use', 'auth/weak-password', 'username-taken'];
+// Firestore no da error si la base de datos no existe o no hay red: la promesa se queda esperando. Se corta con un límite de tiempo.
+const withTimeout = (p, ms = 12000) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(Object.assign(new Error('firestore-timeout'), { code: 'firestore-timeout' })), ms))]);
 const fail = e => ({ ok: false, error: msg(e), code: e.code || e.message, network: !USER_ERRORS.includes(e.code || e.message) });
 
 async function emailOf(username) {                 // usuario -> correo (para iniciar sesión con el nombre de usuario)
@@ -139,10 +142,11 @@ async function signUp({ username, name, email, password }) {
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     try {
-      await setDoc(doc(db, 'usernames', username.toLowerCase()), { uid: cred.user.uid, email });
-    } catch (e) { await cred.user.delete(); throw new Error('username-taken'); }
-    await setDoc(store('account_meta'), { username, name, email, created: new Date().toISOString() });
-    await pushAll();
+      await withTimeout(setDoc(doc(db, 'usernames', username.toLowerCase()), { uid: cred.user.uid, email }));
+    } catch (e) { await cred.user.delete().catch(() => {}); throw e.code === 'firestore-timeout' ? e : new Error('username-taken'); }
+    try { await withTimeout(setDoc(store('account_meta'), { username, name, email, created: new Date().toISOString() })); }
+    catch (e) { await cred.user.delete().catch(() => {}); throw e; }
+    await withTimeout(pushAll(), 8000).catch(() => {});
     return { ok: true };
   } catch (e) { return fail(e); }
 }
@@ -150,7 +154,7 @@ async function signUp({ username, name, email, password }) {
 async function signIn(email, password) {          // inicia sesión y baja los datos del jugador a localStorage
   try {
     const cred = await signInWithEmailAndPassword(auth, email, password);
-    const snap = await getDocs(collection(db, 'users', cred.user.uid, 'store'));
+    const snap = await withTimeout(getDocs(collection(db, 'users', cred.user.uid, 'store')));
     let meta = null;
     snap.forEach(d => { if (d.id === 'account_meta') meta = d.data(); else localStorage.setItem(d.id, d.data().v); });
     if (!meta) { await signOut(auth).catch(() => {}); return { ok: false, error: 'Cuenta sin perfil en la nube.' }; }

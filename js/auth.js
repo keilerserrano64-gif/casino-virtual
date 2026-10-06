@@ -44,6 +44,10 @@
     })();
   });
 
+  // Ninguna llamada a Firebase puede dejar el formulario esperando para siempre
+  const limit = (p, ms = 20000) => Promise.race([p, new Promise(res => setTimeout(() => res({ ok: false, network: true,
+    error: 'Firebase no respondió a tiempo. Revisa tu conexión y que Authentication y Firestore estén creados y activos en la consola de Firebase.' }), ms))]);
+
   const RE_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   /* LOGIN: primero Firebase (cuentas registradas). Si la cuenta no existe en la nube (admin de ejemplo,
@@ -70,7 +74,7 @@
         if (email && /\.local$/i.test(email)) email = null;   // admin de ejemplo: solo existe en el navegador
 
         if (email) {
-          const c = await f.signIn(email, pass);
+          const c = await limit(f.signIn(email, pass));
           if (c.ok) {
             const r = RC.loginRemote({ username: c.meta.username, name: c.meta.name, email: c.meta.email || email,
               role: c.admin ? 'admin' : 'user' }, pass, remember);
@@ -108,11 +112,11 @@
       const r = RC.register(d);
       if (!r.ok) return fail(regForm, r.error);
       if (f) {
-        const c = await f.signUp(d);
+        const c = await limit(f.signUp(d));
         if (!c.ok) { RC.discardLocalAccount(d.username); return fail(regForm, c.error); }
       }
       RC.login(r.username, d.password, false);
-      if (f) await f.pushAll();                      // sube monedas y datos iniciales antes de cambiar de página
+      if (f) await Promise.race([f.pushAll().catch(() => {}), new Promise(r => setTimeout(r, 5000))]);   // sube datos iniciales (máx. 5 s)
       location.href = RC.HOME;
     } catch (err) {
       console.error('registro:', err);
@@ -132,7 +136,7 @@
     try {
       const f = await fireReady();
       if (!f) return fail(recForm, 'Firebase no está disponible. Abre el sitio con http(s):// (Live Server, hosting) y revisa tu conexión.');
-      const r = await f.reset(correo);
+      const r = await limit(f.reset(correo), 15000);
       if (!r.ok) return fail(recForm, r.error);
       okMsg(recForm, 'Si el correo existe, te enviamos un enlace para cambiar la contraseña.');
     } finally { busy(recForm, false); }
