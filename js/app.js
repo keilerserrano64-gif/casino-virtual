@@ -80,7 +80,7 @@ const RC = (() => {
   /* ---------- Utilidades ---------- */
 
   const read = (key, fb) => { try { const v = JSON.parse(localStorage.getItem(key)); return v ?? fb; } catch (e) { return fb; } };
-  const write = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+  const write = (key, val) => { localStorage.setItem(key, JSON.stringify(val)); if (window.RCFire) RCFire.push(key, val); };
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const formatNumber = n => Math.round(n).toLocaleString('es-ES');
   const signed = n => (n > 0 ? '+' : n < 0 ? '−' : '') + formatNumber(Math.abs(n));
@@ -177,6 +177,7 @@ const RC = (() => {
     if (!me || (!trusted && me.hash !== pw(oldPass || ''))) return { ok: false, error: 'La contraseña actual no es correcta.' };
     if (newPass && newPass.length < 6) return { ok: false, error: 'La nueva contraseña debe tener al menos 6 caracteres.' };
     if (newUser && newUser !== me.username) {
+      if (window.RCFire) return { ok: false, error: 'El cambio de nombre de usuario no está disponible con la cuenta en la nube.' };
       if (!/^[a-zA-Z0-9_]{3,18}$/.test(newUser)) return { ok: false, error: 'Usuario no válido (3-18 caracteres: letras, números o _).' };
       if (findAccount(newUser)) return { ok: false, error: 'Ese usuario ya existe.' };
       ['u', 'h', 'n', 'm', 's', 'l', 'p', 'f'].forEach(t => { const v = localStorage.getItem(dk(t, me.username)); if (v !== null) localStorage.setItem(dk(t, newUser), v); localStorage.removeItem(dk(t, me.username)); });
@@ -189,10 +190,11 @@ const RC = (() => {
     return { ok: true };
   }
 
-  function setBanned(username, banned) { const l = getAccounts(); const a = l.find(x => x.username === username); if (a && a.role !== 'admin') { a.banned = banned; saveAccounts(l); } }
+  function setBanned(username, banned) { const l = getAccounts(); const a = l.find(x => x.username === username); if (a && a.role !== 'admin') { a.banned = banned; saveAccounts(l); if (window.RCFire) RCFire.adminBan(username, banned); } }
   function deleteAccount(username) {
     const a = findAccount(username); if (!a || a.role === 'admin') return;
     saveAccounts(getAccounts().filter(x => x.username !== a.username));
+    if (window.RCFire) RCFire.adminBan(a.username, true);       // en la nube queda bloqueada permanentemente
     ['u', 'h', 'n', 'm', 's', 'l'].forEach(t => localStorage.removeItem(dk(t, a.username)));
   }
 
@@ -501,6 +503,7 @@ const RC = (() => {
     if (!(amount > 0)) return { ok: false, error: 'Indica una cantidad válida.' };
     const d = getUser(a.username); d.coins += amount; saveUser(d, a.username);
     logMove('Recompensa del administrador', amount, 'recompensa', d.coins, a.username);
+    if (window.RCFire) RCFire.adminPushUser(a.username);
     notify(`Recibiste ${formatNumber(amount)} monedas del administrador.`, '🎁', a.username);
     return { ok: true, username: a.username };
   }
