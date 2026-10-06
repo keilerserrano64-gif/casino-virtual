@@ -118,9 +118,17 @@ const AUTH_ERRORS = {
   'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
   'auth/too-many-requests': 'Demasiados intentos. Espera un momento.',
   'auth/network-request-failed': 'Sin conexión con Firebase.',
+  'auth/user-disabled': 'Tu cuenta está bloqueada. Contacta con soporte.',
+  'auth/operation-not-allowed': 'El acceso con correo y contraseña no está activado en Firebase (Authentication → Sign-in method).',
+  'permission-denied': 'Firebase rechazó la operación. Revisa las reglas de Firestore (firestore.rules).',
   'username-taken': 'Ese usuario ya existe.',
 };
 const msg = e => AUTH_ERRORS[e.code || e.message] || 'No se pudo conectar con Firebase (' + (e.code || e.message) + ').';
+// Errores "del usuario" (credenciales, correo repetido...). Cualquier otro (red, configuración, reglas) se marca como network
+// para que la web pueda usar la cuenta local de respaldo en vez de quedarse bloqueada.
+const USER_ERRORS = ['auth/invalid-credential', 'auth/user-not-found', 'auth/wrong-password', 'auth/invalid-email', 'auth/user-disabled',
+  'auth/too-many-requests', 'auth/email-already-in-use', 'auth/weak-password', 'username-taken'];
+const fail = e => ({ ok: false, error: msg(e), code: e.code || e.message, network: !USER_ERRORS.includes(e.code || e.message) });
 
 async function emailOf(username) {                 // usuario -> correo (para iniciar sesión con el nombre de usuario)
   const s = await getDoc(doc(db, 'usernames', String(username).toLowerCase()));
@@ -136,7 +144,7 @@ async function signUp({ username, name, email, password }) {
     await setDoc(store('account_meta'), { username, name, email, created: new Date().toISOString() });
     await pushAll();
     return { ok: true };
-  } catch (e) { return { ok: false, error: msg(e) }; }
+  } catch (e) { return fail(e); }
 }
 
 async function signIn(email, password) {          // inicia sesión y baja los datos del jugador a localStorage
@@ -145,17 +153,17 @@ async function signIn(email, password) {          // inicia sesión y baja los d
     const snap = await getDocs(collection(db, 'users', cred.user.uid, 'store'));
     let meta = null;
     snap.forEach(d => { if (d.id === 'account_meta') meta = d.data(); else localStorage.setItem(d.id, d.data().v); });
-    if (!meta) return { ok: false, error: 'Cuenta sin perfil en la nube.' };
+    if (!meta) { await signOut(auth).catch(() => {}); return { ok: false, error: 'Cuenta sin perfil en la nube.' }; }
     const pl = await getDoc(doc(db, 'players', meta.username.toLowerCase()));
     if (pl.exists() && pl.data().banned) { await signOut(auth); return { ok: false, error: 'Tu cuenta está bloqueada. Contacta con soporte.' }; }
     const admin = (await getDoc(doc(db, 'admins', cred.user.uid))).exists();
     return { ok: true, meta, admin };
-  } catch (e) { return { ok: false, error: msg(e) }; }
+  } catch (e) { if (auth.currentUser) await signOut(auth).catch(() => {}); return fail(e); }
 }
 
 async function reset(email) {
   try { await sendPasswordResetEmail(auth, email); return { ok: true }; }
-  catch (e) { return { ok: false, error: msg(e) }; }
+  catch (e) { return fail(e); }
 }
 
 const logout = () => { flush(); return signOut(auth).catch(() => {}); };
@@ -163,9 +171,10 @@ const logout = () => { flush(); return signOut(auth).catch(() => {}); };
 async function changePassword(oldPass, newPass) {
   try {
     const u = auth.currentUser;
+    if (!u) return { ok: false, notSignedIn: true, error: 'Esta cuenta solo existe en este navegador.' };   // admin de ejemplo / cuentas antiguas
     await reauthenticateWithCredential(u, EmailAuthProvider.credential(u.email, oldPass));
     await updatePassword(u, newPass); return { ok: true };
-  } catch (e) { return { ok: false, error: msg(e) }; }
+  } catch (e) { return fail(e); }
 }
 // Acciones de administrador (las reglas exigen que tu uid exista en la colección admins)
 const adminBan = (username, banned) => setDoc(doc(db, 'players', username.toLowerCase()), { banned: !!banned }, { merge: true }).catch(e => console.warn(e.code));

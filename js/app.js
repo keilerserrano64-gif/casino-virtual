@@ -9,7 +9,7 @@
 
 const RC = (() => {
 
-  const K = { ACC: 'rc_accounts', SESSION: 'rc_session', NEWS: 'rc_news', TICKETS: 'rc_tickets', OFF: 'rc_disabled_games' };
+  const K = { ACC: 'rc_accounts', SESSION: 'rc_session', NEWS: 'rc_news', TICKETS: 'rc_tickets', OFF: 'rc_disabled_games', EVENTS: 'rc_events' };
   const START_COINS = 10000;
   const inAdmin = location.pathname.includes('/admin/');
   // Rutas absolutas calculadas desde la ubicación real de este archivo (js/app.js):
@@ -161,7 +161,8 @@ const RC = (() => {
     return { ok: true };
   }
 
-  function logout() { clearSession(); location.href = PAGES + 'login.html'; }
+  // Cierra también la sesión de Firebase: si no, la siguiente cuenta que entre en este navegador escribiría datos en la cuenta anterior
+  function logout() { clearSession(); const go = () => { location.href = PAGES + 'login.html'; }; window.RCFire ? RCFire.signOut().then(go, go) : go(); }
 
   function recover(email, newPass) {
     const list = getAccounts(); const a = list.find(x => x.email.toLowerCase() === String(email).toLowerCase());
@@ -191,11 +192,16 @@ const RC = (() => {
   }
 
   function setBanned(username, banned) { const l = getAccounts(); const a = l.find(x => x.username === username); if (a && a.role !== 'admin') { a.banned = banned; saveAccounts(l); if (window.RCFire) RCFire.adminBan(username, banned); } }
-  function deleteAccount(username) {
+  // Borra solo la copia local (sin tocar la nube): sirve para deshacer un registro que Firebase rechazó
+  function discardLocalAccount(username) {
     const a = findAccount(username); if (!a || a.role === 'admin') return;
     saveAccounts(getAccounts().filter(x => x.username !== a.username));
-    if (window.RCFire) RCFire.adminBan(a.username, true);       // en la nube queda bloqueada permanentemente
     ['u', 'h', 'n', 'm', 's', 'l'].forEach(t => localStorage.removeItem(dk(t, a.username)));
+  }
+  function deleteAccount(username) {
+    const a = findAccount(username); if (!a || a.role === 'admin') return;
+    if (window.RCFire) RCFire.adminBan(a.username, true);       // en la nube queda bloqueada permanentemente
+    discardLocalAccount(a.username);
   }
 
   /* ---------- Datos del jugador ---------- */
@@ -464,6 +470,17 @@ const RC = (() => {
   }
   const setTicketStatus = (id, status) => { const l = getTickets(); const t = l.find(x => x.id === id); if (t) { t.status = status; write(K.TICKETS, l); if (status === 'closed') notify(`Tu solicitud #${id} fue resuelta.`, '📞', t.user); } };
   const deleteTicket = id => write(K.TICKETS, getTickets().filter(t => t.id !== id));
+  // Centro de ayuda del administrador (admin/ayuda.html): marcar leída, responder y registro de eventos de juego responsable
+  const markTicketRead = id => { const l = getTickets(); const t = l.find(x => x.id === id); if (t && !t.readByAdmin) { t.readByAdmin = true; write(K.TICKETS, l); } };
+  function replyTicket(id, text) {
+    const l = getTickets(); const t = l.find(x => x.id === id); if (!t || !String(text || '').trim()) return false;
+    (t.replies = t.replies || []).push({ by: 'admin', user: cu(), text: String(text).trim(), date: new Date().toISOString() });
+    if (t.status === 'open') t.status = 'progress';
+    t.readByAdmin = true; write(K.TICKETS, l);
+    notify(`Tu solicitud #${id} tiene una respuesta del soporte.`, '📞', t.user);
+    return true;
+  }
+  const getEvents = () => read(K.EVENTS, []);
 
   const disabledGames = () => read(K.OFF, []);
   const isGameEnabled = name => !disabledGames().includes(name);
@@ -1048,13 +1065,13 @@ const RC = (() => {
   return {
     // cuentas
     register, login, loginRemote, logout, recover, updateAccount, getSession, isLoggedIn, isAdmin, currentUser: cu,
-    getAccounts, setBanned, deleteAccount, adminGrant,
+    getAccounts, setBanned, deleteAccount, discardLocalAccount, adminGrant,
     // juego
     getUser, saveUser, addCoins, canBet, addXP, registerGameResult, checkAchievements, resetAccount,
     getHistory, logHistory, clearHistory, getMovements, logMove,
     // datos
     ACHIEVEMENTS, GAMES, GAME_INFO, NAV_ITEMS, DEMO,
-    getRanking, globalStats, getNews, addNews, deleteNews, getTickets, addTicket, setTicketStatus, deleteTicket,
+    getRanking, globalStats, getNews, addNews, deleteNews, getTickets, addTicket, setTicketStatus, deleteTicket, markTicketRead, replyTicket, getEvents,
     isGameEnabled, setGameEnabled, notify, getNotifications, unreadCount, markAllRead, clearNotifications,
     getSettings, saveSettings, applySettings,
     // interfaz

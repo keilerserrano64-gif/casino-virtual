@@ -33,15 +33,18 @@ form.addEventListener('submit', async e => {
   if (newPass && newPass !== $('newPass2').value) return msg('Las contraseñas nuevas no coinciden.');
   if (!confirm('¿Guardar los cambios de tu cuenta?')) return;
 
+  // Con la cuenta en la nube no se puede renombrar: se avisa antes de cambiar nada (evita dejar la contraseña a medias)
+  if (newUser && window.RCFire) return msg('El cambio de nombre de usuario no está disponible con la cuenta en la nube.');
+
   form.dataset.busy = '1';
   try {
-    // 1) Base de datos (Firebase): comprueba la contraseña actual y guarda el cambio. Si la cuenta solo existe
-    //    en este navegador (admin de ejemplo, cuentas antiguas) devuelve notFound y se sigue solo en local.
+    // 1) Firebase: comprueba la contraseña actual y guarda la nueva. Si la cuenta solo existe en este navegador
+    //    (admin de ejemplo, cuentas antiguas) no hay sesión en la nube (notSignedIn) y se sigue solo en local.
     let trusted = false;
-    if (window.RCRemote) {
-      const rr = await RCRemote.updateAccount({ username: me, oldPass: $('oldPass').value, newUser, newPass });
-      if (rr.ok) trusted = true;
-      else if (!rr.notFound) return msg(rr.error);
+    if (newPass && window.RCFire) {
+      const c = await RCFire.changePassword($('oldPass').value, newPass);
+      if (c.ok) trusted = true;
+      else if (!c.notSignedIn) return msg(c.error);
     }
     // 2) Copia local (sesión, datos del jugador)
     const r = RC.updateAccount({ newUser, oldPass: $('oldPass').value, newPass, trusted });
