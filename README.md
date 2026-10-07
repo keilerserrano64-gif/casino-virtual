@@ -115,3 +115,11 @@ Siguiente paso: conectar `backend/` con PostgreSQL (`base_de_datos/`) para guard
 | `nginx/nginx.conf` | **Nginx** | HTTPS, gzip, caché y proxy a `/api` y `/socket.io` |
 | `robots.txt`, `sitemap.xml`, JSON-LD en `index.html` | **SEO** | Cambia `TU-DOMINIO.com` por tu dominio real |
 | `tests/unit`, `tests/e2e` | **Vitest + Playwright** | `npm run test:unit` y `npm run test:e2e` (tras `npm install`) |
+
+## IA que aprende cómo juegas (Poker)
+`js/ia_engine.js` (`RCIA`) crea un modelo de ti: cuenta cuántas veces te retiras cuando la banca **sube** y cuántas cuando no, olvidando poco a poco lo viejo (se adapta si cambias de estilo). La banca decide subir comparando el valor esperado: sube con manos fuertes y hace **faroles** si aprendió que te retiras mucho; si nunca te retiras, deja de farolear. Calcula su probabilidad de ganar con sus propias cartas y el tablero; **nunca ve tus cartas**. El modelo se guarda por usuario en `localStorage` (`rc_ia_poker_<usuario>`). Pruebas: `node tests/ia_engine.test.js`.
+
+Esta IA no cambia las probabilidades de tragamonedas, ruleta, dados ni bingo: son azar (RNG) y su RTP publicado debe mantenerse.
+
+## Rival IA en todos los juegos (menos Tragamonedas)
+Ruleta, Blackjack, Dados, Carreras y Bingo tienen un **Rival IA** (`js/ia_rival_engine.js` + `js/ia_rival.js`). Aprende de cada jugada tuya cuánto apuestas y cuánto riesgo tomas (con memoria que se desvanece, así se adapta si cambias de estilo) y juega sus propias rondas **como tú**, con su propio saldo, para que compitas contra tu sombra. Un panel abajo a la izquierda compara tu neto con el de la IA. El Poker usa además la IA que sube y hace faroles (`js/ia_engine.js`). **Nada de esto altera los resultados del juego**: el rival usa su propio azar con la misma ventaja de la casa. Pruebas: `node tests/ia_rival_engine.test.js`.

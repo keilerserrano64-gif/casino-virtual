@@ -216,11 +216,39 @@ function endRound() {
 }
 
 /* ---- Flujo de juego ---- */
+/* ---- IA de la banca: aprende cómo juegas y sube cuando le conviene (js/ia_engine.js) ---- */
+let raiseExtra = 0, iaModel = null;
+const iaKey = () => 'rc_ia_poker_' + (RC.currentUser() || 'guest');
+function iaLoad() { try { iaModel = RCIA.load(JSON.parse(localStorage.getItem(iaKey()))); } catch (e) { iaModel = RCIA.newModel(); } }
+function iaSave() { try { localStorage.setItem(iaKey(), JSON.stringify(iaModel)); } catch (e) {} }
+function equityVsRandom(hole, board, sims = 120) {   // probabilidad de ganar contra una mano rival al azar (no ve cartas ajenas)
+  const known = new Set([...hole, ...board].map(c => JSON.stringify(c)));
+  const rest = freshDeck().filter(c => !known.has(JSON.stringify(c)));
+  let score = 0;
+  for (let i = 0; i < sims; i++) {
+    const d = rest.slice();
+    for (let k = d.length - 1; k > 0; k--) { const j = randInt(k + 1); [d[k], d[j]] = [d[j], d[k]]; }
+    const full = board.concat(d.splice(0, 5 - board.length)), opp = d.splice(0, 2);
+    const c = compareScores(bestHand([...hole, ...full]).score, bestHand([...opp, ...full]).score);
+    score += c > 0 ? 1 : c === 0 ? 0.5 : 0;
+  }
+  return score / sims;
+}
+function iaMaybeRaise() {                              // tras revelar flop/turn
+  if (!iaModel || stage < 1 || stage > 2) return;
+  const eq = equityVsRandom(botHole, community);
+  if (RCIA.decideRaise(iaModel, { stage, eq, pot, r: ante })) {
+    raiseExtra = ante;
+    msgEl.textContent = '⚠️ ¡La banca SUBE +' + fmt(ante) + '! Igualar cuesta ' + fmt(ante * 2) + ' esta ronda.';
+    mood('😈'); say('Sube la apuesta… ¿te atreves?', 2200);
+  } else if (RCIA.confidence(iaModel) > 0.5 && Math.random() < 0.3) { say('Ya sé cuándo te retiras…', 1800); }
+}
+
 function deal() {
   if (live || busy) return;
   const b = Math.max(MIN_BET, Math.floor(Number(betInput.value) || 0));
   if (b * 2 > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes para esta apuesta.'); return; }
-  ante = b; betInput.value = b;
+  ante = b; betInput.value = b; raiseExtra = 0; iaLoad();
   RC.addCoins(-b);
   paid = b; pot = b * 2; stage = 0; community = []; live = true;
   document.querySelectorAll('.card.hl, .card.dim').forEach(el => el.classList.remove('hl', 'dim'));
@@ -240,9 +268,11 @@ function deal() {
 
 async function bet() {
   if (!live || busy) return;
-  if (ante > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes para igualar.'); return; }
+  const cost = ante + raiseExtra;
+  if (cost > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes para igualar.'); return; }
+  if (iaModel && stage >= 1) { RCIA.observe(iaModel, stage, raiseExtra > 0, false); iaSave(); }
   busy = true; controls();
-  RC.addCoins(-ante); paid += ante; pot += ante * 2;
+  RC.addCoins(-cost); paid += cost; pot += cost * 2; raiseExtra = 0;
   renderChips(pot); floatText('+' + fmt(ante * 2), 'pk-f-gold'); playerCoins.textContent = fmt(RC.getUser().coins);
   await think();
   stage++; setStage();
@@ -250,6 +280,7 @@ async function bet() {
   else if (stage === 2) { community.push(deck.pop()); msgEl.textContent = 'Turn revelado. ¿Apuestas o te retiras?'; }
   else { community.push(deck.pop()); msgEl.textContent = 'River revelado…'; }
   render(false);
+  if (stage < 3) iaMaybeRaise();
   if (stage === 3) { await sleep(1100); await showdown(); return; }
   await sleep(stage === 1 ? 900 : 500);
   busy = false; controls();
@@ -296,6 +327,7 @@ async function showdown() {
 
 function fold() {
   if (!live || busy) return;
+  if (iaModel && stage >= 1) { RCIA.observe(iaModel, stage, raiseExtra > 0, true); iaSave(); }
   const text = `Te retiras y pierdes ${fmt(paid)} monedas.`;
   msgEl.textContent = text;
   RC.result({ type: 'lose', title: 'TE RETIRAS', amount: paid, text });

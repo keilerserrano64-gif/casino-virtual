@@ -1,7 +1,7 @@
 { "name": "royal-casino", "private": true,
   "scripts": {
     "build:ts": "tsc -p ts",
-    "test": "node tests/tragamonedas_engine.test.js && node tests/bingo_engine.test.js && node tests/carreras_engine.test.js && node tests/firebase_auth.test.js",
+    "test": "node tests/tragamonedas_engine.test.js && node tests/bingo_engine.test.js && node tests/carreras_engine.test.js && node tests/ia_engine.test.js && node tests/ia_rival_engine.test.js && node tests/firebase_auth.test.js",
     "test:unit": "vitest run",
     "test:e2e": "playwright test"
   },
