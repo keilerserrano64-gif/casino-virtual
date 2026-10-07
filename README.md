@@ -19,15 +19,16 @@ Solo hay que subir la carpeta completa conservando `index.html`, `html/`, `css/`
 - `css/`   `base.css` (núcleo compartido), `juegos.css` y un CSS por página
 - `js/`    `app.js` (cuentas, monedas, XP, logros, notificaciones), `auth.js` (sesión y rutas) y un JS por página
 
-## Cuentas e inicio de sesión (Firebase)
-Registro, login, recuperar contraseña y cambio de contraseña/usuario en Configuración usan **Firebase Realtime Database** a través de `js/firebase_auth.js` (`window.RCRemote`).
-- `usuarios/{usuario}` guarda `nombre, usuario, correo, salt, hash, saldo_billetera, rol, baneado, fecha_registro`; `correos/{correo}` es el índice para entrar o recuperar por correo.
-- **La contraseña no se guarda en texto plano**: se guarda `salt` aleatorio + `hash = SHA-256(salt + ':' + contraseña)`. Al iniciar sesión se recalcula y se compara.
-- Login: se valida primero contra Firebase y, al entrar, se crea/actualiza la copia local (`RC.loginRemote`) que usa el resto del sitio (monedas, historial...). Si la cuenta no existe en Firebase (el `admin` de ejemplo o cuentas antiguas creadas solo en el navegador) o no hay conexión, se usa la cuenta local; las cuentas antiguas se copian a Firebase la primera vez que entran.
-- Pruebas: `node tests/firebase_auth.test.js` (usa una base de datos simulada, no necesita red).
-
-## Notas
-Las monedas, el historial y los ajustes se guardan en `localStorage`. Las contraseñas se validan en el navegador, así que no es seguridad real: para producción haría falta Firebase Authentication o un backend.
+## Base de datos: Firebase Realtime Database (proyecto `royal--casino`)
+No se usa `localStorage`. Los datos viven en memoria (`RCMem`, en `js/app.js`) y se guardan en Firebase:
+- `js/nube.js` (se carga antes de `app.js`): al abrir cada página lee la base de datos (REST, síncrono) y sube cada cambio. Si no puede leer, **no escribe nada** y muestra un aviso, para no pisar tus datos con valores por defecto.
+- `js/firebase_auth.js` (`window.RCRemote`): registro, login, recuperar y cambio de contraseña/usuario con el SDK de Firebase 13.0.0.
+- Estructura: `usuarios/{id}` (salt + hash SHA-256), `correos/{correo}` (índice), `perfiles/{id}` (cuenta + partes públicas: datos del jugador, presencia, amigos), `datos/{id}` (historial, notificaciones, movimientos, ajustes, premios pendientes), `compartido/` (noticias, tickets, juegos desactivados).
+- La sesión se guarda en `window.name`: dura mientras la pestaña esté abierta (no hay «Recordarme»).
+- Administrador de ejemplo: `admin` / `admin123`; existe solo en memoria y no se sube a la nube. Para un administrador real, pon `rol: "admin"` en `usuarios/{id}` desde la consola de Firebase.
+- Reglas: pega `database.rules.json` en Realtime Database → Reglas.
+- **Seguridad**: sin Firebase Authentication las reglas tienen que ser abiertas (las contraseñas se comprueban en el navegador). Es válido para monedas ficticias, no para producción. «Recuperar contraseña» cambia la clave solo con el correo, porque no hay servidor de correo.
+- Abre el sitio por `http(s)://` (Live Server, Netlify...). Pruebas: `node tests/firebase_auth.test.js` (base simulada, sin red).
 
 ## Dados (Craps)
 `html/dados.html` es una mesa de Craps completa: Pass / Don't Pass, Come / Don't Come, Field, Place 4-10,
@@ -64,28 +65,10 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 - **Cartones únicos**: hasta 6 por partida, sin duplicados entre sí. Cada cartón 90 cumple 5 números por fila y 1-3 por columna.
 - **Marcado automático** (opción) y cómputo instantáneo: tras cada bola se evalúan todos los cartones y el sistema canta **Línea** (una vez por cartón) y **Bingo** (termina la partida) sin pulsar nada. El marcado manual sigue disponible.
 - **Premios** (sobre el precio del cartón que gana): 75 bolas → línea ×0,5 · bingo ×15 (66 bolas). 90 bolas → línea ×0,5 · bingo ×4,5 (78 bolas). RTP simulado sin bote ≈ 86 % (75) y ≈ 82-85 % (90); con el 5 % de cada compra que alimenta el bote, ≈ 90 %.
-- **Bote acumulado** por sala: bingo en ≤ 60 bolas (75) o ≤ 63 bolas (90). Se guarda en `localStorage` (por navegador) y vuelve a 1.000 al ganarse.
+- **Bote acumulado** por sala: bingo en ≤ 60 bolas (75) o ≤ 63 bolas (90). Vive en memoria (por pestaña) y vuelve a 1.000 al ganarse.
 - **Bonos**: 3 cartones gratis de bienvenida y 1 cartón gratis cada 10 partidas de bingo (lealtad). No existe un sistema de depósitos en el proyecto, así que no hay bono por depósito.
 - **Voz y sonidos**: voz del navegador (`speechSynthesis`) que canta las bolas y "Línea"/"Bingo", y tonos con WebAudio. Respeta Configuración → Sonido.
 - **Chat de sala**: local, sin servidor (se comparte entre pestañas del mismo navegador). Moderación: bloquea insultos, enlaces, floods y limita la frecuencia. Incluye emojis, stickers y minijuegos rápidos (dado y moneda, sin monedas en juego).
-
-## Firebase (nube)
-`js/firebase.js` conecta el proyecto `royal-casino-7633d`. `localStorage` es la caché rápida y todo se refleja en Firebase:
-- **Authentication** (correo + contraseña; se puede entrar con usuario o correo; recuperar envía un enlace por correo).
-- `users/{uid}/store/*`: datos privados (monedas, historial, notificaciones, movimientos, ajustes).
-- `players/{usuario}`: perfil público (ranking, amigos y solicitudes, presencia). Se escucha en vivo.
-- `shared/news`, `shared/games_off`: noticias y juegos desactivados. `tickets/{id}`: soporte.
-- `usernames/{usuario}`: reserva de usuario -> correo.
-
-Pasos en la consola de Firebase (una sola vez):
-1. Authentication -> Sign-in method -> activar **Correo electrónico/contraseña**.
-2. Firestore Database -> crear base de datos -> pestaña Reglas -> pegar `firestore.rules` -> Publicar.
-3. Authentication -> Settings -> Authorized domains: añade el dominio donde publiques.
-4. **Administrador**: regístrate como jugador normal, copia tu UID (Authentication -> Users) y crea en Firestore el documento `admins/{ese UID}` (con cualquier campo). Cierra sesión y vuelve a entrar. El `admin/admin123` de ejemplo ya no funciona.
-
-Abre el sitio por `http(s)://` (Live Server, Netlify...), no con doble clic: los módulos ES no cargan con `file://`.
-No se sincroniza: ganadores en vivo (`rc_live_wins`), chat/bote del bingo y estado de juegos (siguen locales). Cambiar el nombre de usuario está desactivado.
-
 
 ## Lenguajes y carpetas nuevas
 | Carpeta | Lenguaje | Para qué sirve |
@@ -96,8 +79,6 @@ No se sincroniza: ganadores en vivo (`rc_live_wins`), chat/bote del bingo y esta
 | `graphql/` | **GraphQL** | Esquema para perfil, ranking, historial y estadísticas |
 | `rust/` | **Rust → WebAssembly** | Cálculo rápido de RTP; `cd rust && wasm-pack build --target web` |
 | `glsl/` | **GLSL** | Shader para efectos 3D de la ruleta (Three.js) |
-
-Siguiente paso: conectar `backend/` con PostgreSQL (`base_de_datos/`) para guardar saldo y validar sesión.
 
 ## Integración con el backend
 `js/api.js` (`RCApi`) llama a `POST /api/tragamonedas/girar` del backend; si no hay servidor usa el motor local sin esperar (y no reintenta durante 60 s), así el sitio sigue funcionando. El cliente recalcula el premio con `SlotEngine.evaluate`. Para usar el servidor: `cd backend && npm install && npm run dev` y, si lo publicas, define `window.RC_API_URL` antes de cargar `api.js`.

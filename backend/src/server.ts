@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.get('/api/salud', (_req, res) => res.json({ ok: true }));
 
-// El servidor sortea el giro. TODO: validar sesión y descontar/acreditar saldo en PostgreSQL.
+// El servidor sortea el giro. Sin base de datos: no guarda saldo ni sesiones.
 app.post('/api/tragamonedas/girar', (req, res) => {
   try { res.json(spin(Number(req.body?.apuesta))); }
   catch (e) { res.status(400).json({ error: (e as Error).message }); }

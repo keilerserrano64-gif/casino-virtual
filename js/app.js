@@ -2,10 +2,27 @@
    ROYAL CASINO — núcleo compartido (versión multiusuario)
    Cuentas, sesión, monedas virtuales, XP, logros, notificaciones,
    billetera, ranking, noticias, soporte y ajustes.
-   Todo persiste en localStorage. Monedas 100% ficticias.
+   Los datos viven en memoria (RCMem) y se guardan en Firebase Realtime Database (js/nube.js); sin localStorage. Monedas 100% ficticias.
    NOTA: sin servidor no hay seguridad real (los datos se pueden
    editar desde la consola); es una simulación para practicar.
    ============================================================ */
+
+// Almacén en memoria: sustituye a localStorage/sessionStorage. Nada se escribe en el navegador;
+// la persistencia la hace js/nube.js contra Firebase.
+const RCMem = (() => {
+  const m = new Map();
+  return {
+    getItem: k => (m.has(String(k)) ? m.get(String(k)) : null),
+    setItem: (k, v) => { m.set(String(k), String(v)); RCMem.onChange && RCMem.onChange(String(k), String(v)); },
+    setItemSilent: (k, v) => { m.set(String(k), String(v)); },     // para cargar datos de la nube sin volver a subirlos
+    onChange: null,
+    removeItem: k => { m.delete(String(k)); RCMem.onChange && RCMem.onChange(String(k), null); },
+    key: i => [...m.keys()][i] ?? null,
+    get length() { return m.size; },
+  };
+})();
+// Enlace con Firebase Realtime Database (js/nube.js): baja los datos al abrir la página y sube cada cambio.
+if (window.RCNube) { RCNube.hydrate(RCMem); RCMem.onChange = RCNube.onChange; }
 
 const RC = (() => {
 
@@ -79,8 +96,8 @@ const RC = (() => {
 
   /* ---------- Utilidades ---------- */
 
-  const read = (key, fb) => { try { const v = JSON.parse(localStorage.getItem(key)); return v ?? fb; } catch (e) { return fb; } };
-  const write = (key, val) => { localStorage.setItem(key, JSON.stringify(val)); if (window.RCFire) RCFire.push(key, val); };
+  const read = (key, fb) => { try { const v = JSON.parse(RCMem.getItem(key)); return v ?? fb; } catch (e) { return fb; } };
+  const write = (key, val) => { RCMem.setItem(key, JSON.stringify(val)); };
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const formatNumber = n => Math.round(n).toLocaleString('es-ES');
   const signed = n => (n > 0 ? '+' : n < 0 ? '−' : '') + formatNumber(Math.abs(n));
@@ -107,49 +124,27 @@ const RC = (() => {
   const saveAccounts = list => write(K.ACC, list);
   const findAccount = id => { const x = String(id || '').toLowerCase(); return getAccounts().find(a => a.username.toLowerCase() === x || a.email.toLowerCase() === x) || null; };
 
-  function getSession() { return sessionStorage.getItem(K.SESSION) || localStorage.getItem(K.SESSION) || null; }
-  function setSession(u, remember) { clearSession(); (remember ? localStorage : sessionStorage).setItem(K.SESSION, u); }
-  function clearSession() { sessionStorage.removeItem(K.SESSION); localStorage.removeItem(K.SESSION); }
+  // La sesión se guarda en window.name: sobrevive al cambiar de página en la misma pestaña y se pierde al cerrarla.
+  const SES = 'rc_sesion=';
+  function getSession() { const n = String(window.name || ''); return n.startsWith(SES) ? n.slice(SES.length) : null; }
+  function setSession(u) { window.name = SES + u; }
+  function clearSession() { window.name = ''; }
   const cu = () => { const s = getSession(); return s && findAccount(s) ? findAccount(s).username : null; };
   const isLoggedIn = () => !!cu();
   const isAdmin = () => { const a = cu() && findAccount(cu()); return !!a && a.role === 'admin'; };
 
-  function register({ name, username, email, password }) {
-    if (!name || name.length < 2) return { ok: false, error: 'Escribe tu nombre.' };
-    if (!/^[a-zA-Z0-9_]{3,18}$/.test(username || '')) return { ok: false, error: 'El usuario debe tener 3-18 caracteres (letras, números o _).' };
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '')) return { ok: false, error: 'Correo no válido.' };
-    if (!password || password.length < 6) return { ok: false, error: 'La contraseña debe tener al menos 6 caracteres.' };
-    if (findAccount(username)) return { ok: false, error: 'Ese usuario ya existe.' };
-    if (findAccount(email)) return { ok: false, error: 'Ese correo ya está registrado.' };
-    const list = getAccounts();
-    list.push({ username, name, email, hash: pw(password), role: 'user', banned: false, created: new Date().toISOString() });
-    saveAccounts(list);
-    write(dk('u', username), { ...defaultUser(), name });
-    notify('Bienvenido a Royal Casino. Recibiste ' + formatNumber(START_COINS) + ' monedas virtuales.', '🎁', username);
-    return { ok: true, username };
-  }
-
-  function login(id, password, remember) {
-    const a = findAccount(id);
-    if (!a || a.hash !== pw(password || '')) return { ok: false, error: 'Usuario o contraseña incorrectos.' };
-    if (a.banned) return { ok: false, error: 'Tu cuenta está bloqueada. Contacta con soporte.' };
-    setSession(a.username, remember);
-    return { ok: true };
-  }
-
-  // Abre sesión con una cuenta ya verificada en Firebase (firebase_auth.js).
-  // Crea o actualiza la copia local que usa el resto del sitio (monedas, historial, etc.).
-  function loginRemote(acc, password, remember) {
+  // Registra en memoria una cuenta ya verificada en Firebase (firebase_auth.js) y abre sesión.
+  // La copia en la nube (perfiles/ y datos/) la sube js/nube.js solo al escribir.
+  function adoptAccount(acc) {
     if (!acc || !acc.username) return { ok: false, error: 'Cuenta no válida.' };
+    if (window.RCNube && !RCNube.ready()) return { ok: false, error: 'Sin conexión con la base de datos. Inténtalo de nuevo.' };
     const list = getAccounts();
     const i = list.findIndex(a => a.username.toLowerCase() === String(acc.username).toLowerCase());
     const prev = i >= 0 ? list[i] : null;
     if (prev && prev.banned) return { ok: false, error: 'Tu cuenta está bloqueada. Contacta con soporte.' };
     const rec = {
-      username: acc.username, name: acc.name || acc.username, email: acc.email || '',
-      hash: pw(password),                              // permite el login sin conexión y la comprobación local de la contraseña actual
-      role: (acc.role === 'admin' || (prev && prev.role === 'admin')) ? 'admin' : 'user',
-      banned: false, created: prev ? prev.created : new Date().toISOString(),
+      username: acc.username, name: acc.name || acc.username, email: acc.email || '', hash: '',
+      role: acc.role === 'admin' ? 'admin' : 'user', banned: false, created: prev ? prev.created : new Date().toISOString(),
     };
     if (prev) list[i] = rec; else list.push(rec);
     saveAccounts(list);
@@ -157,50 +152,46 @@ const RC = (() => {
       write(dk('u', rec.username), { ...defaultUser(), name: rec.name });
       notify('Bienvenido a Royal Casino. Recibiste ' + formatNumber(START_COINS) + ' monedas virtuales.', '🎁', rec.username);
     }
-    setSession(rec.username, remember);
+    setSession(rec.username);
+    return { ok: true, username: rec.username };
+  }
+
+  function login(id, password) {
+    const a = findAccount(id);
+    if (!a || !a.hash || a.hash !== pw(password || '')) return { ok: false, error: 'Usuario o contraseña incorrectos.' };
+    if (a.banned) return { ok: false, error: 'Tu cuenta está bloqueada. Contacta con soporte.' };
+    setSession(a.username);
     return { ok: true };
   }
 
-  // Cierra también la sesión de Firebase: si no, la siguiente cuenta que entre en este navegador escribiría datos en la cuenta anterior
-  function logout() { clearSession(); const go = () => { location.href = PAGES + 'login.html'; }; window.RCFire ? RCFire.signOut().then(go, go) : go(); }
+  function logout() { clearSession(); location.href = PAGES + 'login.html'; }
 
-  function recover(email, newPass) {
-    const list = getAccounts(); const a = list.find(x => x.email.toLowerCase() === String(email).toLowerCase());
-    if (!a) return { ok: false, error: 'No existe ninguna cuenta con ese correo.' };
-    if (!newPass || newPass.length < 6) return { ok: false, error: 'La contraseña debe tener al menos 6 caracteres.' };
-    a.hash = pw(newPass); saveAccounts(list);
-    return { ok: true };
-  }
-
-  // trusted: la contraseña actual ya fue verificada contra Firebase (configuracion.js), no se vuelve a comprobar en local
+  // trusted: la contraseña actual ya se verificó en Firebase (configuracion.js); aquí solo se refleja el cambio en memoria
   function updateAccount({ newUser, oldPass, newPass, trusted }) {
     const list = getAccounts(); const me = list.find(a => a.username === cu());
     if (!me || (!trusted && me.hash !== pw(oldPass || ''))) return { ok: false, error: 'La contraseña actual no es correcta.' };
     if (newPass && newPass.length < 6) return { ok: false, error: 'La nueva contraseña debe tener al menos 6 caracteres.' };
     if (newUser && newUser !== me.username) {
-      if (window.RCFire) return { ok: false, error: 'El cambio de nombre de usuario no está disponible con la cuenta en la nube.' };
       if (!/^[a-zA-Z0-9_]{3,18}$/.test(newUser)) return { ok: false, error: 'Usuario no válido (3-18 caracteres: letras, números o _).' };
       if (findAccount(newUser)) return { ok: false, error: 'Ese usuario ya existe.' };
-      ['u', 'h', 'n', 'm', 's', 'l', 'p', 'f'].forEach(t => { const v = localStorage.getItem(dk(t, me.username)); if (v !== null) localStorage.setItem(dk(t, newUser), v); localStorage.removeItem(dk(t, me.username)); });
+      ['u', 'h', 'n', 'm', 's', 'l', 'p', 'f'].forEach(t => { const v = RCMem.getItem(dk(t, me.username)); if (v !== null) RCMem.setItem(dk(t, newUser), v); RCMem.removeItem(dk(t, me.username)); });
       const tk = getTickets(); tk.forEach(t => { if (t.user === me.username) t.user = newUser; }); write(K.TICKETS, tk);
-      const remember = !!localStorage.getItem(K.SESSION);
-      me.username = newUser; setSession(newUser, remember);
+      me.username = newUser; setSession(newUser);
     }
-    if (newPass) me.hash = pw(newPass);
+    if (newPass && !trusted) me.hash = pw(newPass);
     saveAccounts(list);
     return { ok: true };
   }
 
-  function setBanned(username, banned) { const l = getAccounts(); const a = l.find(x => x.username === username); if (a && a.role !== 'admin') { a.banned = banned; saveAccounts(l); if (window.RCFire) RCFire.adminBan(username, banned); } }
-  // Borra solo la copia local (sin tocar la nube): sirve para deshacer un registro que Firebase rechazó
+  function setBanned(username, banned) { const l = getAccounts(); const a = l.find(x => x.username === username); if (a && a.role !== 'admin') { a.banned = banned; saveAccounts(l); } }
   function discardLocalAccount(username) {
     const a = findAccount(username); if (!a || a.role === 'admin') return;
     saveAccounts(getAccounts().filter(x => x.username !== a.username));
-    ['u', 'h', 'n', 'm', 's', 'l'].forEach(t => localStorage.removeItem(dk(t, a.username)));
+    ['u', 'h', 'n', 'm', 's', 'l', 'p', 'f'].forEach(t => RCMem.removeItem(dk(t, a.username)));
   }
   function deleteAccount(username) {
     const a = findAccount(username); if (!a || a.role === 'admin') return;
-    if (window.RCFire) RCFire.adminBan(a.username, true);       // en la nube queda bloqueada permanentemente
+    if (window.RCNube) RCNube.bloquear(a.username);              // en la nube queda bloqueada para siempre
     discardLocalAccount(a.username);
   }
 
@@ -409,7 +400,7 @@ const RC = (() => {
   function resetAccount() {
     const u = cu(); const old = getUser();
     write(dk('u', u), { ...defaultUser(), name: old.name });
-    [ 'h', 'm', 'n' ].forEach(t => localStorage.removeItem(dk(t, u)));
+    [ 'h', 'm', 'n' ].forEach(t => RCMem.removeItem(dk(t, u)));
     refreshBell();
   }
 
@@ -520,7 +511,6 @@ const RC = (() => {
     if (!(amount > 0)) return { ok: false, error: 'Indica una cantidad válida.' };
     const d = getUser(a.username); d.coins += amount; saveUser(d, a.username);
     logMove('Recompensa del administrador', amount, 'recompensa', d.coins, a.username);
-    if (window.RCFire) RCFire.adminPushUser(a.username);
     notify(`Recibiste ${formatNumber(amount)} monedas del administrador.`, '🎁', a.username);
     return { ok: true, username: a.username };
   }
@@ -1064,7 +1054,7 @@ const RC = (() => {
 
   return {
     // cuentas
-    register, login, loginRemote, logout, recover, updateAccount, getSession, isLoggedIn, isAdmin, currentUser: cu,
+    adoptAccount, login, logout, updateAccount, getSession, isLoggedIn, isAdmin, currentUser: cu,
     getAccounts, setBanned, deleteAccount, discardLocalAccount, adminGrant,
     // juego
     getUser, saveUser, addCoins, canBet, addXP, registerGameResult, checkAchievements, resetAccount,

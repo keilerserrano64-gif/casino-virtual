@@ -218,9 +218,9 @@ function endRound() {
 /* ---- Flujo de juego ---- */
 /* ---- IA de la banca: aprende cómo juegas y sube cuando le conviene (js/ia_engine.js) ---- */
 let raiseExtra = 0, iaModel = null;
-const iaKey = () => 'rc_ia_poker_' + (RC.currentUser() || 'guest');
-function iaLoad() { try { iaModel = RCIA.load(JSON.parse(localStorage.getItem(iaKey()))); } catch (e) { iaModel = RCIA.newModel(); } }
-function iaSave() { try { localStorage.setItem(iaKey(), JSON.stringify(iaModel)); } catch (e) {} }
+const iaKey = () => 'rc_ia_poker_' + String(RC.currentUser() || 'guest').toLowerCase();
+function iaLoad() { try { iaModel = RCIA.load(JSON.parse(RCMem.getItem(iaKey()))); } catch (e) { iaModel = RCIA.newModel(); } }
+function iaSave() { try { RCMem.setItem(iaKey(), JSON.stringify(iaModel)); } catch (e) {} }
 function equityVsRandom(hole, board, sims = 120) {   // probabilidad de ganar contra una mano rival al azar (no ve cartas ajenas)
   const known = new Set([...hole, ...board].map(c => JSON.stringify(c)));
   const rest = freshDeck().filter(c => !known.has(JSON.stringify(c)));

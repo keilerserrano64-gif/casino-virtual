@@ -20,7 +20,7 @@
 (() => {
   'use strict';
 
-  const FB_URL = 'https://www.gstatic.com/firebasejs/10.12.2/';
+  const FB_URL = 'https://www.gstatic.com/firebasejs/13.0.0/';
   const FIREBASE_CONFIG = {
     apiKey: 'AIzaSyA60wNSk5UDdKdRiX7IdTcvm9wUJvYgzQE',
     authDomain: 'royal--casino.firebaseapp.com',
@@ -32,7 +32,7 @@
   };
 
   const SALDO_INICIAL = 10000;
-  const RESERVADOS = ['admin'];                       // la cuenta admin vive solo en el navegador
+  const RESERVADOS = ['admin'];                       // la cuenta admin de ejemplo vive solo en memoria
   const RE_USUARIO = /^[a-zA-Z0-9_]{3,18}$/;
   const RE_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const MSG_CREDENCIALES = 'Usuario o contraseña incorrectos.';

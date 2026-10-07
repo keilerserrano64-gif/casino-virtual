@@ -18,9 +18,9 @@
 <div class="auth-box rc-panel">
   <a class="rc-brand" href="../index.html"><span class="crown">♛</span><span class="rc-b1">ROYAL</span> <span class="rc-b2">CASINO</span></a>
   <h1>Recuperar contraseña</h1>
-  <p class="subtitle">Escribe tu correo y te enviaremos un enlace para crear una contraseña nueva.</p>
+  <p class="subtitle">Escribe tu correo y la contraseña nueva que quieres usar.</p>
   <form data-form="recuperar" novalidate>
-<label class="rc-field" for="correo">Correo<input type="email" id="correo" name="correo" required></label><button class="rc-btn rc-btn-gold" type="submit">Enviar enlace</button>
+<label class="rc-field" for="correo">Correo<input type="email" id="correo" name="correo" required></label><label class="rc-field" for="nuevaPassword">Contraseña nueva<input type="password" id="nuevaPassword" name="nuevaPassword" minlength="6" required></label><button class="rc-btn rc-btn-gold" type="submit">Cambiar contraseña</button>
     <p class="form-error" id="formError" role="alert"></p>
   </form>
   <p class="auth-links"><a href="login.html">Volver al inicio de sesión</a></p>
@@ -29,8 +29,9 @@
 
 <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
 
+<script src="../js/nube.js"></script>
 <script src="../js/app.js"></script>
-<script type="module" src="../js/firebase.js"></script>
+<script src="../js/firebase_auth.js"></script>
 <script src="../js/auth.js"></script>
 </body>
 </html>

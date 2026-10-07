@@ -15,8 +15,8 @@ let game = null, cardCells = [], playing = false, price = 0, paidStake = 0, payo
 
 /* ---------- Bote acumulado (uno por sala, compartido en este navegador) ---------- */
 const jpKey = m => 'rc_bingo_jackpot_' + m;
-const getJackpot = m => { try { const v = Number(JSON.parse(localStorage.getItem(jpKey(m)))); return Number.isFinite(v) && v >= BE.JACKPOT_SEED ? v : BE.JACKPOT_SEED; } catch (e) { return BE.JACKPOT_SEED; } };
-const setJackpot = (m, v) => { try { localStorage.setItem(jpKey(m), JSON.stringify(v)); } catch (e) { /* sin almacenamiento */ } };
+const getJackpot = m => { try { const v = Number(JSON.parse(RCMem.getItem(jpKey(m)))); return Number.isFinite(v) && v >= BE.JACKPOT_SEED ? v : BE.JACKPOT_SEED; } catch (e) { return BE.JACKPOT_SEED; } };
+const setJackpot = (m, v) => { try { RCMem.setItem(jpKey(m), JSON.stringify(v)); } catch (e) { /* sin almacenamiento */ } };
 const curMode = () => Number(modeSel.value);
 // Color/letra de cada bola (75: B-I-N-G-O por rango; 90: por decena)
 const ballInfo = (n, mode) => mode === 75 ? { l: 'BINGO'[Math.floor((n - 1) / 15)], g: Math.floor((n - 1) / 15) } : { l: '', g: Math.min(Math.floor((n - 1) / 10), 8) };
@@ -193,8 +193,8 @@ const plain = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCas
 const BAD_WORDS = /(puta|mierda|joder|cabron|pendejo|gilipollas|imbecil|idiota|estupid|marica|hijueputa|malparid|verga|cono)/;
 let lastSent = 0;
 
-function readChat() { try { const v = JSON.parse(localStorage.getItem(chatKey())); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
-function pushChat(msg) { const l = readChat(); l.push(msg); try { localStorage.setItem(chatKey(), JSON.stringify(l.slice(-50))); } catch (e) { /* sin almacenamiento */ } loadChat(); }
+function readChat() { try { const v = JSON.parse(RCMem.getItem(chatKey())); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+function pushChat(msg) { const l = readChat(); l.push(msg); try { RCMem.setItem(chatKey(), JSON.stringify(l.slice(-50))); } catch (e) { /* sin almacenamiento */ } loadChat(); }
 function loadChat() {
   chatLog.innerHTML = '';
   readChat().forEach(m => {

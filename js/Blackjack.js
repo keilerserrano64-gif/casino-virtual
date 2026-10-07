@@ -33,13 +33,13 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 // ---- Configuración persistente ----
 function loadSettings() {
   try {
-    const s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    const s = JSON.parse(RCMem.getItem(SETTINGS_KEY) || '{}');
     if (s.decks >= 1 && s.decks <= 8) deckCountEl.value = String(s.decks);
     if (['0.5', '0.65', '0.75', '0.85'].includes(String(s.pen))) penetrationEl.value = String(s.pen);
   } catch (e) { /* sin configuración guardada */ }
 }
 function saveSettings() {
-  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ decks: Number(deckCountEl.value), pen: Number(penetrationEl.value) })); } catch (e) { /* ignorar */ }
+  try { RCMem.setItem(SETTINGS_KEY, JSON.stringify({ decks: Number(deckCountEl.value), pen: Number(penetrationEl.value) })); } catch (e) { /* ignorar */ }
 }
 
 // ---- Mazo (shoe) ----

@@ -14,7 +14,7 @@
   const reduced = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   const animOn = () => cfg().anim !== false && !reduced();
   let soundPref = true;
-  try { soundPref = localStorage.getItem('rc_slot_sound') !== '0'; } catch (e) {}
+  try { soundPref = RCMem.getItem('rc_slot_sound') !== '0'; } catch (e) {}
   const soundOn = () => soundPref && cfg().sound !== false;
   const fmt = n => (typeof RC !== 'undefined' && RC.formatNumber) ? RC.formatNumber(n) : String(n);
 
@@ -252,7 +252,7 @@
     const b = $('soundBtn'); if (!b) return;
     b.addEventListener('click', () => {
       soundPref = !soundPref;
-      try { localStorage.setItem('rc_slot_sound', soundPref ? '1' : '0'); } catch (e) {}
+      try { RCMem.setItem('rc_slot_sound', soundPref ? '1' : '0'); } catch (e) {}
       paintSound();
       if (soundPref && cfg().sound === false && typeof RC !== 'undefined') RC.toast('info', 'El sonido está desactivado en Configuración.');
       Snd.click();

@@ -41,9 +41,9 @@ RC.initHeader();
   const KEY = 'rc_craps_' + String(RC.currentUser() || 'guest').toLowerCase();
   const def = () => ({ bets: [], point: null, history: [], counts: {}, rolls: 0, last: [], auto: false, autoTpl: null, prefs: { turbo: false, ambient: soundAllowed(), voice: soundAllowed() }, chip: 100 });
   let S;
-  try { S = { ...def(), ...(JSON.parse(localStorage.getItem(KEY)) || {}) }; S.prefs = { ...def().prefs, ...S.prefs }; } catch (e) { S = def(); }
+  try { S = { ...def(), ...(JSON.parse(RCMem.getItem(KEY)) || {}) }; S.prefs = { ...def().prefs, ...S.prefs }; } catch (e) { S = def(); }
   if (!Array.isArray(S.bets)) S.bets = [];
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* sin almacenamiento */ } };
+  const save = () => { try { RCMem.setItem(KEY, JSON.stringify(S)); } catch (e) { /* sin almacenamiento */ } };
 
   let rolling = false;
   let undoStack = [];

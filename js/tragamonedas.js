@@ -49,11 +49,11 @@ document.querySelectorAll('.rc-chip-btn[data-step]').forEach(btn => {
 /* Giro pendiente: el resultado se decide y se guarda ANTES de animar. Si el jugador cierra o
    recarga la página a mitad de giro, el premio se acredita al volver a entrar (no se pierde). */
 const pendingKey = () => `rc_slotpend_${String(RC.currentUser()).toLowerCase()}`;
-const savePending = spin => { try { localStorage.setItem(pendingKey(), JSON.stringify(spin)); } catch (e) {} };
-const clearPending = () => { try { localStorage.removeItem(pendingKey()); } catch (e) {} };
+const savePending = spin => { try { RCMem.setItem(pendingKey(), JSON.stringify(spin)); } catch (e) {} };
+const clearPending = () => { try { RCMem.removeItem(pendingKey()); } catch (e) {} };
 function loadPending() {
   try {
-    const s = JSON.parse(localStorage.getItem(pendingKey()));
+    const s = JSON.parse(RCMem.getItem(pendingKey()));
     const ok = s && Array.isArray(s.symbols) && s.symbols.length === SlotEngine.REELS &&
       s.symbols.every(x => SYMBOLS.includes(x)) && Number.isInteger(s.bet) && s.bet >= SlotEngine.MIN_BET;
     // se vuelve a calcular el pago con las reglas del motor (no se confía en el valor guardado)

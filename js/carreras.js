@@ -54,11 +54,11 @@ document.querySelectorAll('.rc-chip-btn[data-add]').forEach(btn =>
 /* Giro pendiente: el resultado se decide y se guarda ANTES de animar; si se cierra la página a mitad de
    carrera, el premio se acredita al volver. Al leerlo se reconstruye y valida todo con el motor. */
 const pendKey = () => `rc_racepend_${String(RC.currentUser()).toLowerCase()}`;
-const savePending = p => { try { localStorage.setItem(pendKey(), JSON.stringify(p)); } catch (e) {} };
-const clearPending = () => { try { localStorage.removeItem(pendKey()); } catch (e) {} };
+const savePending = p => { try { RCMem.setItem(pendKey(), JSON.stringify(p)); } catch (e) {} };
+const clearPending = () => { try { RCMem.removeItem(pendKey()); } catch (e) {} };
 function loadPending() {
   try {
-    const p = JSON.parse(localStorage.getItem(pendKey()));
+    const p = JSON.parse(RCMem.getItem(pendKey()));
     if (!p || !RE.validConds(p.conds) || !RE.isOrder(p.order, RE.HORSES.length) || !K[p.kind] ||
         !Number.isInteger(p.pick) || p.pick < 0 || p.pick >= RE.HORSES.length || !Number.isInteger(p.bet) || p.bet < RE.MIN_BET) return null;
     return { ...p, race: RE.buildRace(p.conds) };

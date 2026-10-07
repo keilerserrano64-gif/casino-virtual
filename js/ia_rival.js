@@ -6,9 +6,9 @@
   const GAME = PAGES[(location.pathname.split('/').pop() || '').toLowerCase()];
   if (!GAME) return;
 
-  const key = () => 'rc_ia_rival_' + (RC.currentUser() || 'guest');
-  let st; try { st = E.load(JSON.parse(localStorage.getItem(key()))); } catch (e) { st = E.newState(); }
-  const save = () => { try { localStorage.setItem(key(), JSON.stringify(st)); } catch (e) {} };
+  const key = () => 'rc_ia_rival_' + String(RC.currentUser() || 'guest').toLowerCase();
+  let st; try { st = E.load(JSON.parse(RCMem.getItem(key()))); } catch (e) { st = E.newState(); }
+  const save = () => { try { RCMem.setItem(key(), JSON.stringify(st)); } catch (e) {} };
   const fmt = n => (n > 0 ? '+' : '') + RC.formatNumber(Math.round(n));
 
   const css = document.createElement('style');
