@@ -50,7 +50,7 @@
   ];
   $('lvJackpots').innerHTML = JACKS.map(j => `<div class="lv-jack ${j.id}"><h3>${j.name}</h3><span class="amt" id="jk-${j.id}">0</span><span class="unit">monedas virtuales</span></div>`).join('');
   const T0 = Date.UTC(2026, 0, 1) / 1000;
-  const tickJack = () => { const t = Date.now() / 1000 - T0; JACKS.forEach(j => { $('jk-' + j.id).textContent = fmt(j.base + (t * j.rate) % j.range); }); };
+  const tickJack = () => { if (document.hidden) return; const t = Date.now() / 1000 - T0; JACKS.forEach(j => { $('jk-' + j.id).textContent = fmt(j.base + (t * j.rate) % j.range); }); };
   tickJack(); setInterval(tickJack, 150);
 
   /* ---- Casino en vivo: mesas VIP con crupier virtual ---- */
@@ -60,7 +60,7 @@
       <div class="badge"><span class="lv-live"><i></i>EN VIVO</span></div><span class="vip-tag">VIP</span><div class="lv-dealer" aria-hidden="true">🤵</div><span class="tico" aria-hidden="true">${ico}</span></div>
     <div class="lv-vip-body"><div><b>${t}</b><small><span id="vp-${i}">${seats * 3}</span> jugadores · crupier virtual</small></div><a class="lv-slotbtn lv-gold" href="${href}"><span>Unirse</span></a></div></article>`).join('');
   const seats = VIP.map(v => v[5] * 3);
-  setInterval(() => VIP.forEach((_, i) => { seats[i] = Math.max(3, seats[i] + (Math.random() < .5 ? -1 : 1)); const e = $('vp-' + i); if (e) e.textContent = seats[i]; }), 3500);
+  setInterval(() => document.hidden || VIP.forEach((_, i) => { seats[i] = Math.max(3, seats[i] + (Math.random() < .5 ? -1 : 1)); const e = $('vp-' + i); if (e) e.textContent = seats[i]; }), 3500);
 
   /* ---- Jugadores activos y ganadores en tiempo real (datos reales de las cuentas de este navegador) ---- */
   const me = RC.currentUser();
@@ -104,7 +104,7 @@
   }
   const renderAll = () => { renderLive(); renderFriends(); };
   renderAll();
-  setInterval(renderAll, 3000);                                     // refresco continuo
+  setInterval(() => { if (!document.hidden) renderAll(); }, 3000);                                     // refresco continuo
   window.addEventListener('storage', renderAll);                    // otras pestañas: actualización inmediata
 
   /* ---- Carrusel ---- */

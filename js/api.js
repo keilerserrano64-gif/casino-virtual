@@ -1,33 +1,45 @@
-// api.js — cliente del backend (backend/). Si el servidor no responde, el sitio sigue
-// funcionando con el motor local (SlotEngine). Cambia API_URL al publicar el backend.
+"use strict";
+// api.ts — cliente del backend (se compila a js/api.js con: npm run build:ts).
+// Sin servidor, el sitio usa el motor local SIN esperar: tras un fallo no reintenta durante 60 s.
 (function (root) {
-  const API_URL = (root.RC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
-  const TIMEOUT_MS = 1500;
-
-  async function post(ruta, cuerpo) {
-    const ctl = new AbortController();
-    const t = setTimeout(() => ctl.abort(), TIMEOUT_MS);
-    try {
-      const r = await fetch(API_URL + ruta, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(cuerpo), signal: ctl.signal
-      });
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return await r.json();
-    } finally { clearTimeout(t); }
-  }
-
-  // Giro del tragamonedas: el servidor sortea; el cliente valida y recalcula el premio con
-  // las reglas locales, así una respuesta alterada no puede inventar un premio.
-  async function girarTragamonedas(apuesta) {
-    try {
-      const s = await post('/api/tragamonedas/girar', { apuesta });
-      const ok = Array.isArray(s.symbols) && s.symbols.length === SlotEngine.REELS &&
-        s.symbols.every(x => SlotEngine.SYMBOLS.includes(x));
-      if (ok) return { symbols: s.symbols, bet: apuesta, ...SlotEngine.evaluate(s.symbols, apuesta), origen: 'servidor' };
-    } catch (e) { /* sin servidor: motor local */ }
-    return { ...SlotEngine.spin(apuesta), origen: 'local' };
-  }
-
-  root.RCApi = { girarTragamonedas };
+    const API_URL = (root.RC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+    const TIMEOUT_MS = 700;
+    const REINTENTO_MS = 60000;
+    let caidoHasta = 0;
+    async function pedir(ruta, opciones) {
+        const ctl = new AbortController();
+        const t = setTimeout(() => ctl.abort(), TIMEOUT_MS);
+        try {
+            const r = await fetch(API_URL + ruta, { ...opciones, signal: ctl.signal });
+            if (!r.ok)
+                throw new Error('HTTP ' + r.status);
+            return await r.json();
+        }
+        catch (e) {
+            caidoHasta = Date.now() + REINTENTO_MS;
+            throw e;
+        }
+        finally {
+            clearTimeout(t);
+        }
+    }
+    pedir('/api/salud').catch(() => { });
+    // El servidor sortea; el cliente valida y recalcula el premio con las reglas locales.
+    async function girarTragamonedas(apuesta) {
+        if (Date.now() >= caidoHasta) {
+            try {
+                const s = await pedir('/api/tragamonedas/girar', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ apuesta })
+                });
+                const ok = Array.isArray(s.symbols) && s.symbols.length === SlotEngine.REELS &&
+                    s.symbols.every((x) => SlotEngine.SYMBOLS.includes(x));
+                if (ok)
+                    return { symbols: s.symbols, bet: apuesta, ...SlotEngine.evaluate(s.symbols, apuesta), origen: 'servidor' };
+            }
+            catch (e) { /* sin servidor: motor local */ }
+        }
+        return { ...SlotEngine.spin(apuesta), origen: 'local' };
+    }
+    root.RCApi = { girarTragamonedas };
 })(window);

@@ -7,3 +7,8 @@ backend/dist/
 rust/target/
 rust/pkg/
 __pycache__/
+node_modules/
+web-next/.next/
+respaldos/
+test-results/
+playwright-report/

@@ -1,0 +1,2 @@
+{ "compilerOptions": { "target": "ES2019", "lib": ["ES2019", "DOM"], "outDir": "../js", "rootDir": ".", "strict": true, "removeComments": false },
+  "include": ["*.ts", "../types/*.d.ts"] }

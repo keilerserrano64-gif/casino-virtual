@@ -43,5 +43,5 @@ document.addEventListener('click', e => {
 });
 $('frSearch').addEventListener('input', render);
 window.addEventListener('storage', render);
-setInterval(() => { if (document.activeElement !== $('frSearch')) render(); }, 4000);   // estado en línea al día
+setInterval(() => { if (!document.hidden && document.activeElement !== $('frSearch')) render(); }, 4000);   // estado en línea al día
 render();

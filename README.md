@@ -100,4 +100,18 @@ No se sincroniza: ganadores en vivo (`rc_live_wins`), chat/bote del bingo y esta
 Siguiente paso: conectar `backend/` con PostgreSQL (`base_de_datos/`) para guardar saldo y validar sesión.
 
 ## Integración con el backend
-`js/api.js` (`RCApi`) llama a `POST /api/tragamonedas/girar` del backend; si no hay servidor (1,5 s) usa el motor local, así el sitio sigue funcionando. El cliente recalcula el premio con `SlotEngine.evaluate`. Para usar el servidor: `cd backend && npm install && npm run dev` y, si lo publicas, define `window.RC_API_URL` antes de cargar `api.js`.
+`js/api.js` (`RCApi`) llama a `POST /api/tragamonedas/girar` del backend; si no hay servidor usa el motor local sin esperar (y no reintenta durante 60 s), así el sitio sigue funcionando. El cliente recalcula el premio con `SlotEngine.evaluate`. Para usar el servidor: `cd backend && npm install && npm run dev` y, si lo publicas, define `window.RC_API_URL` antes de cargar `api.js`.
+
+## Rendimiento
+`css/rendimiento.css` (cargado en todas las páginas): las animaciones infinitas de opacidad/transform van en la GPU (`will-change`), las bombillas usan un brillo fijo y solo animan la opacidad, y el contenido fuera de pantalla no se pinta hasta que se ve. En `js/inicio.js` y `js/amigos.js` los refrescos se pausan con la pestaña oculta y no se reconstruye el DOM si el HTML no cambió. No se desactivó ningún efecto.
+
+## Más lenguajes y herramientas
+| Carpeta / archivo | Lenguaje | Para qué |
+|---|---|---|
+| `ts/api.ts` + `types/` | **TypeScript** (frontend) | `npm run build:ts` genera `js/api.js`. Pasa el resto de `js/` a TS poco a poco |
+| `web-next/` | **React / Next.js** (TSX) | Cabecera y menú en un componente, SSR para SEO. `cd web-next && npm install && npm run dev` |
+| `.github/workflows/ci.yml` | **YAML** (GitHub Actions) | Corre pruebas, compila TS y backend en cada push |
+| `scripts/*.sh` | **Bash** | `levantar.sh` (bases de datos), `respaldo_db.sh`, `desplegar.sh` |
+| `nginx/nginx.conf` | **Nginx** | HTTPS, gzip, caché y proxy a `/api` y `/socket.io` |
+| `robots.txt`, `sitemap.xml`, JSON-LD en `index.html` | **SEO** | Cambia `TU-DOMINIO.com` por tu dominio real |
+| `tests/unit`, `tests/e2e` | **Vitest + Playwright** | `npm run test:unit` y `npm run test:e2e` (tras `npm install`) |

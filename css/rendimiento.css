@@ -1,0 +1,68 @@
+/* rendimiento.css — animaciones en la GPU y brillos sin repintar. No quita ningún efecto. */
+.rc-res-rays{will-change:transform}
+.rc-res-bulbs::before, .rc-res-bulbs::after{will-change:opacity}
+.rc-res-icon{will-change:transform}
+.rc-res.lose .rc-res-icon{will-change:transform}
+.rc-chest-stars{will-change:opacity}
+.rc-chest-rays{will-change:transform}
+.rc-chest-ov.ready:not(.open) .rc-chest-spark{will-change:opacity,transform}
+.rc-chest-ov.ready:not(.open) .rc-chest-box{will-change:transform}
+.rc-chest-ov.ready:not(.open) .lid-closed{will-change:transform}
+.rc-chest-ov.ready:not(.open) .c-slit{will-change:opacity}
+.rc-chest-ov.ready:not(.open) .rc-chest-halo{will-change:opacity,transform}
+.rc-chest-ov.open .c-glow{will-change:opacity}
+.rc-chest-ov.revealed .rc-chest-halo{will-change:transform}
+.pk-bubble i{will-change:opacity,transform}
+.slot-wrap::before{will-change:opacity}
+.reel.win .cell:nth-child(2){will-change:transform}
+.bigwin-title{will-change:transform}
+.slot-ambient::before, .slot-ambient::after{will-change:opacity}
+.slot-ambient .beam{will-change:transform}
+.race-ambient::before, .race-ambient::after{will-change:opacity}
+.race-ambient .beam{will-change:transform}
+.race-page .track.racing .horse{will-change:transform}
+.race-page .track.racing .horse::before{will-change:opacity}
+body.bingo-page .jackpot-sign::before, body.bingo-page .jackpot-sign::after{will-change:opacity}
+body.vg .rc-brand{will-change:opacity}
+body.vg #rc-header-root::after{will-change:opacity}
+body.vg .wallet-balance::before, body.vg .wallet-balance::after{will-change:opacity}
+body.vg .vg-bulbed::before, body.vg .vg-bulbed::after{will-change:opacity}
+body.vg .vg-hero-art{will-change:transform}
+body.vg .chest:not(.locked) .big{will-change:transform}
+body.vg.slot-page .slot-title{will-change:opacity}
+body.vg.roulette-page .wheel-zone h1{will-change:opacity}
+body.vg.bj-page .game-title{will-change:opacity}
+body.vg.dice-page .game-title{will-change:opacity}
+body.vg.race-page .race-title{will-change:opacity}
+body.vg .rc-brand .rc-b1{will-change:opacity}
+.bj-ambient::before, .bj-ambient::after{will-change:opacity}
+.bj-ambient .b1{will-change:transform}
+.bj-ambient .b2{will-change:transform}
+.bj-page .game-title{will-change:opacity}
+.dice-ambient::before, .dice-ambient::after{will-change:opacity}
+.dice-ambient .beam{will-change:transform}
+.lv-sign .neon{will-change:opacity}
+.lv-ticker-track{will-change:transform}
+.lv-live i{will-change:opacity,transform}
+.lv-bulbs{will-change:opacity}
+.lv-chest{will-change:transform}
+.escena-stage{will-change:transform}
+.glow{will-change:opacity,transform}
+.scr{will-change:opacity}
+.wheel::before{will-change:transform}
+.glint{will-change:opacity,transform}
+.spk{will-change:opacity,transform}
+.ply{will-change:transform}
+.ply .head{will-change:transform}
+.ply.slot .arm.r{will-change:transform}
+.ply.mesa .arm.r{will-change:transform}
+
+/* Bombillas: el brillo es fijo y solo cambia la opacidad (antes se repintaba una sombra en cada fotograma) */
+.bulb{box-shadow:0 0 8px 2px rgba(255,226,120,.9);will-change:opacity}
+@keyframes bulb{0%,100%{opacity:.25}50%{opacity:1}}
+.slot-machine[data-state="win"] .bulb{box-shadow:0 0 12px 4px rgba(255,240,150,1)}
+@keyframes bulb-win{0%,100%{opacity:.3}50%{opacity:1}}
+body.vg.slot-page .bulb,body.vg.slot-page .slot-machine[data-state="win"] .bulb{box-shadow:0 0 10px 3px currentColor}
+@keyframes vgbulb{0%,100%{opacity:.3}50%{opacity:1}}
+/* Contenido fuera de pantalla no se pinta hasta que se ve */
+.rc-panel,.lv-vip,.lv-now{content-visibility:auto;contain-intrinsic-size:auto 120px}
