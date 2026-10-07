@@ -1,0 +1,15 @@
+// Variables del tema Las Vegas (neón, oro y noche). Una sola fuente para todos los CSS.
+$oro: #ffcc33;
+$neon-rosa: #ff2d95;
+$neon-azul: #29d9ff;
+$noche: #0b0618;
+$radio: 14px;
+$fuente-titulo: 'Bebas Neue', sans-serif;
+$fuente-serif: 'Cinzel', serif;
+
+@mixin neon($color, $blur: 12px) { text-shadow: 0 0 $blur $color, 0 0 ($blur * 2) $color; }
+@mixin boton-casino($fondo: $oro) {
+  background: $fondo; border: 0; border-radius: $radio; padding: .7rem 1.4rem;
+  font-family: $fuente-titulo; letter-spacing: .08em; cursor: pointer;
+  &:hover { filter: brightness(1.15); }
+}

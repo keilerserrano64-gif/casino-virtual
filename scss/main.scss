@@ -1,0 +1,7 @@
+// Compilar:  npx sass scss/main.scss css/tema.css
+@use 'variables' as *;
+
+.titulo-neon { font-family: $fuente-titulo; color: $oro; @include neon($oro); }
+.btn-oro     { @include boton-casino($oro); }
+.btn-rosa    { @include boton-casino($neon-rosa); color: #fff; }
+.tarjeta     { background: rgba($noche, .85); border: 1px solid rgba($oro, .4); border-radius: $radio; }

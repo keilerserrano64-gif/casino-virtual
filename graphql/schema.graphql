@@ -1,0 +1,12 @@
+# Esquema GraphQL para perfil, ranking, historial y estadísticas.
+type Jugador { id: ID! usuario: String! saldo: Int! nivel: Int! xp: Int! }
+type Apuesta { id: ID! juego: String! monto: Int! premio: Int! fecha: String! }
+type Estadisticas { partidas: Int! ganadas: Int! mayorPremio: Int! }
+
+type Query {
+  yo: Jugador!
+  ranking(limite: Int = 10): [Jugador!]!
+  historial(juego: String, limite: Int = 20): [Apuesta!]!
+  estadisticas: Estadisticas!
+}
+type Mutation { girarTragamonedas(apuesta: Int!): Apuesta! }

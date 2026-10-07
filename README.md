@@ -85,3 +85,19 @@ Pasos en la consola de Firebase (una sola vez):
 
 Abre el sitio por `http(s)://` (Live Server, Netlify...), no con doble clic: los módulos ES no cargan con `file://`.
 No se sincroniza: ganadores en vivo (`rc_live_wins`), chat/bote del bingo y estado de juegos (siguen locales). Cambiar el nombre de usuario está desactivado.
+
+
+## Lenguajes y carpetas nuevas
+| Carpeta | Lenguaje | Para qué sirve |
+|---|---|---|
+| `backend/` | **TypeScript + Node.js** (Express, Socket.IO) | API que sortea los giros en el servidor y WebSockets para chat/ganadores en vivo. `cd backend && npm install && npm run dev` |
+| `python/` | **Python** | `python python/simulador_rtp.py` verifica el RTP del tragamonedas |
+| `scss/` | **SCSS** | Variables y mixins del tema; `npx sass scss/main.scss css/tema.css` |
+| `graphql/` | **GraphQL** | Esquema para perfil, ranking, historial y estadísticas |
+| `rust/` | **Rust → WebAssembly** | Cálculo rápido de RTP; `cd rust && wasm-pack build --target web` |
+| `glsl/` | **GLSL** | Shader para efectos 3D de la ruleta (Three.js) |
+
+Siguiente paso: conectar `backend/` con PostgreSQL (`base_de_datos/`) para guardar saldo y validar sesión.
+
+## Integración con el backend
+`js/api.js` (`RCApi`) llama a `POST /api/tragamonedas/girar` del backend; si no hay servidor (1,5 s) usa el motor local, así el sitio sigue funcionando. El cliente recalcula el premio con `SlotEngine.evaluate`. Para usar el servidor: `cd backend && npm install && npm run dev` y, si lo publicas, define `window.RC_API_URL` antes de cargar `api.js`.

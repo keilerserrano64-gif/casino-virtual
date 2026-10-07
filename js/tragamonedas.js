@@ -93,7 +93,7 @@ async function doSpin(fromAuto) {
   spinBtn.disabled = true;
   payoutLine.textContent = '\u00A0';
 
-  const result = SlotEngine.spin(bet);   // resultado decidido por el RNG del motor
+  const result = await RCApi.girarTragamonedas(bet);   // lo sortea el backend (o el motor local si no hay servidor)
   savePending(result);
   RC.addCoins(-bet);
   fx('hud');
