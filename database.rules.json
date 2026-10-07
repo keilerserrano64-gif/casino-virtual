@@ -2,10 +2,39 @@
   "rules": {
     ".read": false,
     ".write": false,
-    "usuarios": { "$id": { ".read": true, ".write": true } },
-    "correos":  { "$correo": { ".read": true, ".write": true } },
-    "perfiles": { ".read": true, "$id": { ".write": true } },
-    "datos":    { "$id": { ".read": true, ".write": true } },
-    "compartido": { ".read": true, ".write": true }
+    "usuarios": {
+      "$id": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "correos": {
+      "$correo": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "perfiles": {
+      ".read": true,
+      "$id": {
+        ".write": true
+      }
+    },
+    "datos": {
+      "$id": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "compartido": {
+      ".read": true,
+      ".write": true
+    },
+    "salas": {
+      ".read": true,
+      "$codigo": {
+        ".write": true
+      }
+    }
   }
 }

@@ -36,12 +36,43 @@
   <div id="frFriends" class="fr-list"></div>
 </section>
 
+<section class="rc-panel" id="rmBox">
+  <h2>🎲 Salas <span class="rc-badge on" id="rmCount">0</span></h2>
+  <p class="subtitle rm-hint">Crea una sala con jugadores conectados ahora mismo. Se genera un código aleatorio para que otros se unan.</p>
+  <div class="rm-form">
+    <input class="rc-bet-input rm-name" type="text" id="rmName" maxlength="30" placeholder="Nombre de la sala (opcional)" autocomplete="off" aria-label="Nombre de la sala">
+    <select class="rc-select" id="rmGame" aria-label="Juego de la sala">
+      <option value="">Cualquier juego</option>
+      <option value="Ruleta|ruleta.html">Ruleta</option>
+      <option value="Blackjack|Blackjack.html">Blackjack</option>
+      <option value="Poker|poker.html">Póker</option>
+      <option value="Dados|dados.html">Dados</option>
+      <option value="Carreras|carreras.html">Carreras</option>
+      <option value="Bingo|bingo.html">Bingo</option>
+      <option value="Tragamonedas|tragamonedas.html">Tragamonedas</option>
+      <option value="Torneo|torneos.html">Torneos</option>
+    </select>
+  </div>
+  <h3 class="rm-sub">Jugadores conectados <small id="rmSel">0 elegidos</small></h3>
+  <div id="rmPick" class="fr-list"></div>
+  <div class="rm-actions">
+    <button type="button" class="rc-btn rc-btn-gold" id="rmCreate">🎲 Crear sala</button>
+  </div>
+  <h3 class="rm-sub">¿Tienes un código?</h3>
+  <div class="rm-form">
+    <input class="rc-bet-input rm-code-in" type="text" id="rmCode" maxlength="6" placeholder="K7X9QP" autocomplete="off" aria-label="Código de sala">
+    <button type="button" class="rc-btn rc-btn-ghost" id="rmJoin">Unirme</button>
+  </div>
+  <p class="form-error" id="rmMsg" role="status"></p>
+  <div id="rmList" class="fr-list"></div>
+</section>
+
 <section class="rc-panel" id="frOutBox" hidden>
   <h2>Solicitudes enviadas</h2>
   <div id="frOut" class="fr-list"></div>
 </section>
 
-<p class="subtitle fr-note">Todo se guarda en este navegador (sin servidor): solo verás a las cuentas creadas aquí. Prueba creando otra cuenta en <a href="registro.html">registro</a>.</p>
+<p class="subtitle fr-note">Las salas se guardan en la base de datos (Firebase) y se actualizan solas cada pocos segundos.</p>
 </main>
 
 <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
