@@ -58,6 +58,13 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 - El orden de llegada completo se decide y se guarda **antes** de animar (sin empates); si se cierra la página, el premio se acredita al volver. La animación solo muestra el resultado.
 - La cuota se fija al pulsar «¡A CORRER!». Apuesta: entero ≥ 10 y ≤ saldo.
 
+## Crash Games
+`html/aviator.html`, `spaceman.html`, `jetx.html`, `cricketx.html`, `aero.html`, `zeppelin.html`, `spacexy.html`, `bigbasscrash.html`, `cashit.html` y `highstriker.html` — el multiplicador sube desde 1,00x y hay que retirar antes de que caiga.
+- `js/crash_engine.js`: RNG (crypto), punto de caída con ventaja de la casa 3 % (RTP 97 %), multiplicador e^(k·t) y pagos. Sin DOM; se prueba en Node (`node tests/crash_engine.test.js`).
+- `js/crash.js` + `css/crash.css`: lógica y estilos compartidos; cada página declara `data-crash="..."` en el `<body>` y uno o más bloques `.cx-slot` (una apuesta cada uno). Los juegos se diferencian por velocidad (`k`) e icono en `GAMES` del motor.
+- Apuesta mínima 10, retiro manual o automático (x). Spaceman permite retirar el 50 %, Zeppelin tiene dos apuestas simultáneas (la segunda es opcional) Aero muestra estadísticas en vivo y High Striker dibuja la curva del multiplicador en un `<canvas>`. Si se cierra la página a mitad de ronda cuenta como caída.
+- Para añadir otro crash: nueva entrada en `GAMES` del motor, una página copiando `aviator.html`, y registrarlo en `app.js` (GAMES, GAME_INFO), `auth.js`, `lobby.js` y el admin.
+
 ## Bingo
 `html/bingo.html` — dos salas: **Bingo 75** (cartón 5x5, centro libre) y **Bingo 90** (cartón 3x9 con 15 números).
 - `js/bingo_engine.js`: RNG, cartones, evaluación y premios. Sin DOM; se prueba en Node (`node tests/bingo_engine.test.js`).

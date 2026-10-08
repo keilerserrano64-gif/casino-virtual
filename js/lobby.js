@@ -10,6 +10,16 @@ const CLASSIC = [
   ['Dados', 'Dados', 'linear-gradient(160deg,#f28c1a,#4a1f04)', 'Craps con mesa completa'],
   ['Carreras', 'Carreras', 'linear-gradient(160deg,#12b5b0,#053a3a)', 'Elige tu caballo'],
   ['Bingo', 'Bingo', 'linear-gradient(160deg,#8a3ff0,#25094f)', 'Completa líneas y gana'],
+  ['Aviator', 'Aviator', 'linear-gradient(160deg,#e0243a,#3a0710)', 'Crash · Spribe'],
+  ['Spaceman', 'Spaceman', 'linear-gradient(160deg,#6a3ff0,#120a4f)', 'Crash · retiro del 50 %'],
+  ['JetX', 'JetX', 'linear-gradient(160deg,#1a8fd6,#04243a)', 'Crash · Smartsoft'],
+  ['Cricket X', 'Cricket X', 'linear-gradient(160deg,#2fb34a,#073a12)', 'Crash · Smartsoft'],
+  ['Aero', 'Aero', 'linear-gradient(160deg,#5a6b7a,#0d1a26)', 'Crash · Turbo Games'],
+  ['Zeppelin', 'Zeppelin', 'linear-gradient(160deg,#c98a2b,#3a2204)', 'Crash · doble apuesta'],
+  ['Space XY', 'Space XY', 'linear-gradient(160deg,#16c7c7,#06203a)', 'Crash · BGaming'],
+  ['Big Bass Crash', 'Big Bass Crash', 'linear-gradient(160deg,#1f8fe0,#052a4a)', 'Crash de pesca'],
+  ['Cash It', 'Cash It', 'linear-gradient(160deg,#2fa84f,#06280f)', 'Crash · Playtech'],
+  ['High Striker', 'High Striker', 'linear-gradient(160deg,#e0a21f,#3a2704)', 'Crash · curva de mercado'],
   ['Torneo', 'Torneos', 'linear-gradient(160deg,#e0b422,#4a3604)', 'Compite contra otros jugadores'],
 ].filter(c => c[0] === 'Torneo' || on(c[0]));
 const norm = t => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
