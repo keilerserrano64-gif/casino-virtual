@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Casino — Book of Dead</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/slots.css">
+<link rel="stylesheet" href="../css/vegas.css">
+<link rel="stylesheet" href="../css/rendimiento.css">
+</head>
+<body class="vg slots-page" data-slot="bod">
+
+<div id="rc-header-root"></div>
+
+<main class="rc-main">
+  <h1>📖 Book of Dead</h1>
+  <p>Aventura en Egipto: 5x3 con 10 líneas, libro comodín/scatter y símbolo especial que se expande en los giros gratis. <small>(Play'n GO · versión virtual, monedas ficticias · RTP ≈ 96 %)</small></p>
+
+  <section class="rc-panel s-panel">
+    <div class="s-info" id="sInfo" aria-live="polite"></div>
+    <div class="s-grid" id="sGrid" aria-label="Cuadrícula de símbolos"></div>
+    <div class="s-win" id="sWin" aria-live="polite"></div>
+    <div class="s-msg" id="sMsg" aria-live="polite"></div>
+
+    <div class="rc-bet-row" style="justify-content:center;">
+      <label for="sBet">Apuesta</label>
+      <input type="number" id="sBet" class="rc-bet-input" value="100" min="10" step="10">
+      <button class="rc-chip-btn" data-add="100" type="button">+100</button>
+      <button class="rc-chip-btn" data-add="500" type="button">+500</button>
+    </div>
+    <div class="s-actions">
+      <button class="rc-btn rc-btn-gold" id="sSpin" type="button">GIRAR</button>
+    </div>
+  </section>
+
+  <details class="rc-panel s-pay">
+    <summary>Tabla de pagos y reglas</summary>
+    <div id="sPay"></div>
+  </details>
+</main>
+
+<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+
+<script src="../js/nube.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/firebase_auth.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/slots_engine.js"></script>
+<script src="../js/slots.js"></script>
+</body>
+</html>

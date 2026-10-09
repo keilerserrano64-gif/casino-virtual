@@ -1,0 +1,19 @@
+/* crash.css — estilos mínimos y funcionales de los Crash Games (mejorar después) */
+.cx-panel { max-width: 640px; margin: 0 auto; }
+.cx-hist { min-height: 30px; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.cx-chip { padding: 3px 9px; border-radius: 999px; font-size: .8rem; font-weight: 700; background: rgba(0,0,0,.35); }
+.cx-chip.hi { color: #5be08f; }
+.cx-chip.lo { color: #ff7a7a; }
+.cx-screen { text-align: center; padding: 28px 10px; margin-bottom: 14px; border: 1px solid rgba(201,162,39,.3); border-radius: 10px; background: rgba(0,0,0,.3); }
+.cx-screen.crashed { border-color: #c0392b; }
+#cxIcon { font-size: 2.6rem; }
+#cxMult { font-family: var(--font-display); font-size: 3.4rem; color: var(--gold-300); }
+.cx-screen.crashed #cxMult { color: #ff6b6b; }
+#cxStatus { min-height: 1.4em; opacity: .85; }
+.cx-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.cx-actions .rc-btn { padding: 12px 24px; }
+.cx-slot { margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(201,162,39,.2); }
+.cx-slot:first-of-type { border-top: 0; }
+.cx-smsg { text-align: center; margin-top: 8px; min-height: 1.3em; font-family: var(--font-display); color: var(--gold-400); }
+.cx-stats { text-align: center; font-size: .82rem; opacity: .85; margin-bottom: 8px; }
+.cx-chart { display: block; width: 100%; max-width: 600px; height: 140px; margin: 0 auto 10px; background: rgba(0,0,0,.25); border-radius: 6px; }

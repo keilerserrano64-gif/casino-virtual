@@ -38,7 +38,7 @@ const RC = (() => {
   const PAGES = ROOT + 'html/';          // carpeta de las páginas
   const HOME = ROOT + 'index.html';      // portada pública
   const BASE = PAGES;                    // alias histórico: prefijo para enlazar páginas de html/
-  const GAMES = ['Tragamonedas', 'Ruleta', 'Blackjack', 'Poker', 'Dados', 'Carreras', 'Bingo'];
+  const GAMES = ['Tragamonedas', 'Ruleta', 'Blackjack', 'Poker', 'Dados', 'Carreras', 'Bingo', 'Aviator', 'Spaceman', 'JetX', 'Cricket X', 'Aero', 'Zeppelin', 'Space XY', 'Big Bass Crash', 'Cash It', 'High Striker', 'Gates of Olympus', 'Sweet Bonanza', 'Book of Dead', 'Starburst'];
 
   const GAME_INFO = {
     Tragamonedas: { href: 'tragamonedas.html', icon: '🎰', desc: '3 carretes y multiplicadores.' },
@@ -48,6 +48,20 @@ const RC = (() => {
     Dados: { href: 'dados.html', icon: '🎲', desc: 'Craps con mesa completa.' },
     Carreras: { href: 'carreras.html', icon: '🏇', desc: 'Elige tu caballo.' },
     Bingo: { href: 'bingo.html', icon: '🎱', desc: 'Completa líneas y gana.' },
+    Aviator: { href: 'aviator.html', icon: '✈️', desc: 'Retira antes de que despegue.' },
+    Spaceman: { href: 'spaceman.html', icon: '🧑‍🚀', desc: 'Crash con retiro del 50 %.' },
+    JetX: { href: 'jetx.html', icon: '🛩️', desc: 'Crash clásico de aviones.' },
+    'Cricket X': { href: 'cricketx.html', icon: '🏏', desc: 'Crash con tema de cricket.' },
+    Aero: { href: 'aero.html', icon: '🛫', desc: 'Crash con estadísticas en vivo.' },
+    Zeppelin: { href: 'zeppelin.html', icon: '🎈', desc: 'Crash con dos apuestas a la vez.' },
+    'Space XY': { href: 'spacexy.html', icon: '🚀', desc: 'Crash minimalista y veloz.' },
+    'Big Bass Crash': { href: 'bigbasscrash.html', icon: '🎣', desc: 'Crash de pesca.' },
+    'Cash It': { href: 'cashit.html', icon: '💸', desc: 'Crash de Playtech.' },
+    'High Striker': { href: 'highstriker.html', icon: '📈', desc: 'Crash con curva de mercado.' },
+    'Gates of Olympus': { href: 'gatesofolympus.html', icon: '⚡', desc: 'Zeus, cascadas y multiplicadores.' },
+    'Sweet Bonanza': { href: 'sweetbonanza.html', icon: '🍭', desc: 'Dulces, cascadas y bombas.' },
+    'Book of Dead': { href: 'bookofdead.html', icon: '📖', desc: 'Egipto y símbolo expansivo.' },
+    Starburst: { href: 'starburst.html', icon: '🌟', desc: 'Gemas, comodín expansivo y respins.' },
     Torneo: { href: 'torneos.html', icon: '🏆', desc: 'Compite contra otros jugadores.' },
   };
 
@@ -86,7 +100,7 @@ const RC = (() => {
     { name: 'Mariposa', level: 9, xp: 210, week: 900, month: 3100, games: 300, won: 12000 },
     { name: 'NovatoPro', level: 5, xp: 60, week: 400, month: 1500, games: 140, won: 5000 },
   ];
-  const DEMO_COUNTS = { Tragamonedas: 420, Ruleta: 310, Blackjack: 380, Poker: 190, Dados: 150, Carreras: 120, Bingo: 60 };
+  const DEMO_COUNTS = { Tragamonedas: 420, Ruleta: 310, Blackjack: 380, Poker: 190, Dados: 150, Carreras: 120, Bingo: 60, Aviator: 140, Spaceman: 90, JetX: 80, 'Cricket X': 50, Aero: 70, Zeppelin: 60, 'Space XY': 55, 'Big Bass Crash': 65, 'Cash It': 45, 'High Striker': 40, 'Gates of Olympus': 260, 'Sweet Bonanza': 240, 'Book of Dead': 210, Starburst: 230 };
 
   const DEFAULT_NEWS = [
     { id: 1, icon: '🎰', title: 'Nuevo juego disponible', text: 'Hemos agregado el Bingo virtual. ¡Pruébalo en la sección de juegos!', date: '2026-09-27' },
@@ -286,7 +300,7 @@ const RC = (() => {
 
   /* ---------- Jugadores activos y ganadores en tiempo real (compartido entre pestañas del mismo navegador) ---------- */
 
-  const PAGE_GAME = { 'tragamonedas.html': 'Tragamonedas', 'ruleta.html': 'Ruleta', 'Blackjack.html': 'Blackjack', 'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo', 'torneos.html': 'Torneo' };
+  const PAGE_GAME = { 'tragamonedas.html': 'Tragamonedas', 'ruleta.html': 'Ruleta', 'Blackjack.html': 'Blackjack', 'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo', 'aviator.html': 'Aviator', 'spaceman.html': 'Spaceman', 'jetx.html': 'JetX', 'cricketx.html': 'Cricket X', 'aero.html': 'Aero', 'zeppelin.html': 'Zeppelin', 'spacexy.html': 'Space XY', 'bigbasscrash.html': 'Big Bass Crash', 'cashit.html': 'Cash It', 'highstriker.html': 'High Striker', 'gatesofolympus.html': 'Gates of Olympus', 'sweetbonanza.html': 'Sweet Bonanza', 'bookofdead.html': 'Book of Dead', 'starburst.html': 'Starburst', 'torneos.html': 'Torneo' };
   const ACTIVE_MS = 2 * 60 * 1000;
   let presenceTimer = null;
 
@@ -570,7 +584,7 @@ const RC = (() => {
     root.querySelector('#rc-logout').addEventListener('click', () => { if (confirm('¿Cerrar sesión?')) logout(); });
     refreshBell();
     // Flecha para volver al lobby de juegos (solo en las páginas de cada juego)
-    if (['tragamonedas.html', 'ruleta.html', 'Blackjack.html', 'poker.html', 'dados.html', 'carreras.html', 'bingo.html'].includes(current)) {
+    if (['tragamonedas.html', 'ruleta.html', 'Blackjack.html', 'poker.html', 'dados.html', 'carreras.html', 'bingo.html', 'aviator.html', 'spaceman.html', 'jetx.html', 'cricketx.html', 'aero.html', 'zeppelin.html', 'spacexy.html', 'bigbasscrash.html', 'cashit.html', 'highstriker.html', 'gatesofolympus.html', 'sweetbonanza.html', 'bookofdead.html', 'starburst.html'].includes(current)) {
       const main = document.querySelector('.rc-main');
       if (main && !main.querySelector('.rc-back-games')) main.insertAdjacentHTML('afterbegin', `<a class="rc-back-games" href="${BASE}juegos.html" title="Volver a los juegos" aria-label="Volver a los juegos"><span aria-hidden="true">←</span> Juegos</a>`);
     }

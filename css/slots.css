@@ -1,0 +1,12 @@
+/* slots.css — estilos mínimos y funcionales de los slots (mejorar después) */
+.s-panel { max-width: 640px; margin: 0 auto; }
+.s-grid { display: grid; gap: 4px; padding: 8px; margin-bottom: 12px; border: 1px solid rgba(201,162,39,.3); border-radius: 10px; background: rgba(0,0,0,.3); }
+.s-cell { display: grid; place-items: center; min-height: 52px; font-size: 1.5rem; border-radius: 6px; background: rgba(255,255,255,.05); }
+.s-cell.win { background: rgba(201,162,39,.35); outline: 2px solid var(--gold-400); }
+.s-info { text-align: center; min-height: 1.4em; font-size: .85rem; opacity: .9; margin-bottom: 8px; }
+.s-win, .s-msg { text-align: center; min-height: 1.4em; font-family: var(--font-display); color: var(--gold-300); }
+.s-actions { display: flex; justify-content: center; margin-top: 12px; }
+.s-actions .rc-btn { padding: 14px 36px; }
+.s-pay { max-width: 640px; margin: 0 auto; font-size: .85rem; }
+.s-pay table { width: 100%; }
+@media (max-width: 480px) { .s-cell { min-height: 40px; font-size: 1.15rem; } }
