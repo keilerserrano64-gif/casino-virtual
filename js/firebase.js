@@ -67,7 +67,7 @@ function syncTickets(list) {
 }
 
 /* ---- Escucha en vivo: jugadores, noticias, juegos y tickets -> localStorage ---- */
-const GAME_PAGE = /(tragamonedas|ruleta|blackjack|poker|dados|carreras|bingo|aviator|spaceman|jetx|cricketx|aero|zeppelin|spacexy|bigbasscrash|cashit|highstriker|gatesofolympus|sweetbonanza|bookofdead|starburst)\.html$/i;
+const GAME_PAGE = /(tragamonedas|ruleta|blackjack|poker|dados|carreras|bingo|aviator|spaceman|jetx|cricketx|aero|zeppelin|spacexy|bigbasscrash|cashit|highstriker)\.html$/i;
 let started = null, firstPlayers = true;
 const setLS = (k, v) => { const j = JSON.stringify(v); if (localStorage.getItem(k) !== j) { localStorage.setItem(k, j); return true; } return false; };
 function done(changed) {

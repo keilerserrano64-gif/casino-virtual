@@ -65,14 +65,6 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 - Apuesta mínima 10, retiro manual o automático (x). Spaceman permite retirar el 50 %, Zeppelin tiene dos apuestas simultáneas (la segunda es opcional) Aero muestra estadísticas en vivo y High Striker dibuja la curva del multiplicador en un `<canvas>`. Si se cierra la página a mitad de ronda cuenta como caída.
 - Para añadir otro crash: nueva entrada en `GAMES` del motor, una página copiando `aviator.html`, y registrarlo en `app.js` (GAMES, GAME_INFO), `auth.js`, `lobby.js` y el admin.
 
-## Slots populares
-`html/gatesofolympus.html`, `sweetbonanza.html`, `bookofdead.html` y `starburst.html` — versiones virtuales (símbolos emoji, sin material oficial) de cuatro slots muy jugados.
-- `js/slots_engine.js`: RNG (crypto), mecánicas y pagos de los 4 juegos. Sin DOM; se prueba en Node (`node tests/slots_engine.test.js`). `scale` de cada juego se calibró por simulación para un RTP ≈ 96 % (tope de premio 5000x la apuesta).
-- **Gates of Olympus** y **Sweet Bonanza**: cuadrícula 6x5, pago con 8+ símbolos iguales en cualquier lugar, cascadas, 4+ scatters = giros gratis. Olympus acumula multiplicadores en los giros gratis; Bonanza usa bombas de multiplicador solo en giros gratis.
-- **Book of Dead**: 5x3, 10 líneas, libro comodín/scatter y, en los giros gratis, un símbolo especial que se expande y paga en cualquier posición.
-- **Starburst**: 5x3, 10 líneas que pagan en ambos sentidos, comodín expansivo en los carretes 2-4 con hasta 3 respins, y 10 giros de bienvenida (apuesta 10, gratis) la primera vez que se juega.
-- `js/slots.js` + `css/slots.css`: lógica y estilos mínimos compartidos; cada página declara `data-slot="..."` en el `<body>`. Los giros gratis pendientes se guardan por usuario y se retoman al volver.
-
 ## Bingo
 `html/bingo.html` — dos salas: **Bingo 75** (cartón 5x5, centro libre) y **Bingo 90** (cartón 3x9 con 15 números).
 - `js/bingo_engine.js`: RNG, cartones, evaluación y premios. Sin DOM; se prueba en Node (`node tests/bingo_engine.test.js`).

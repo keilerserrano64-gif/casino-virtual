@@ -20,10 +20,6 @@ const CLASSIC = [
   ['Big Bass Crash', 'Big Bass Crash', 'linear-gradient(160deg,#1f8fe0,#052a4a)', 'Crash de pesca'],
   ['Cash It', 'Cash It', 'linear-gradient(160deg,#2fa84f,#06280f)', 'Crash · Playtech'],
   ['High Striker', 'High Striker', 'linear-gradient(160deg,#e0a21f,#3a2704)', 'Crash · curva de mercado'],
-  ['Gates of Olympus', 'Gates of Olympus', 'linear-gradient(160deg,#e8c34a,#2a1a6a)', 'Slot · Pragmatic Play'],
-  ['Sweet Bonanza', 'Sweet Bonanza', 'linear-gradient(160deg,#ff5fa8,#5a1a8a)', 'Slot · Pragmatic Play'],
-  ['Book of Dead', 'Book of Dead', 'linear-gradient(160deg,#c98a2b,#2a1204)', "Slot · Play'n GO"],
-  ['Starburst', 'Starburst', 'linear-gradient(160deg,#6a3ff0,#0a1a5a)', 'Slot · NetEnt'],
   ['Torneo', 'Torneos', 'linear-gradient(160deg,#e0b422,#4a3604)', 'Compite contra otros jugadores'],
 ].filter(c => c[0] === 'Torneo' || on(c[0]));
 const norm = t => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();

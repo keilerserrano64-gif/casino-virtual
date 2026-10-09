@@ -8,8 +8,7 @@
     'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo',
     'aviator.html': 'Aviator', 'spaceman.html': 'Spaceman', 'jetx.html': 'JetX', 'cricketx.html': 'Cricket X',
     'aero.html': 'Aero', 'zeppelin.html': 'Zeppelin', 'spacexy.html': 'Space XY', 'bigbasscrash.html': 'Big Bass Crash',
-    'cashit.html': 'Cash It', 'highstriker.html': 'High Striker',
-    'gatesofolympus.html': 'Gates of Olympus', 'sweetbonanza.html': 'Sweet Bonanza', 'bookofdead.html': 'Book of Dead', 'starburst.html': 'Starburst' };
+    'cashit.html': 'Cash It', 'highstriker.html': 'High Striker' };
 
   /* ---- Protección de rutas ---- */
   if (document.body.hasAttribute('data-public')) {
