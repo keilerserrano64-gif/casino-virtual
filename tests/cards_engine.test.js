@@ -1,0 +1,16 @@
+const assert=require('node:assert/strict'), B=require('../js/blackjack_engine'), P=require('../js/poker_engine');
+const cards=s=>s.split(' ').map(rank=>({rank}));
+const pay=(p,d,split=false)=>B.settleHand({cards:cards(p),bet:100,fromSplit:split},cards(d)).pay;
+assert.equal(pay('A K','10 9'),250);assert.equal(pay('A K','A Q'),100);assert.equal(pay('10 9','A K'),0);
+assert.equal(pay('K 9 5','10 8'),0);assert.equal(pay('10 8','K 8'),100);assert.equal(pay('A K','10 9',true),200);
+assert.deepEqual(B.evaluate(cards('A A 9')),{total:21,soft:true});assert.deepEqual(B.evaluate(cards('A 8 8')),{total:17,soft:false});
+assert.equal(B.dealerHits(cards('A 6')),false);assert.equal(B.dealerHits(cards('10 6')),true);
+const hand=s=>s.split(' ').map(x=>({rank:Number(x.slice(0,-1)),suit:x.slice(-1)}));
+const ranks=['14s 11h 8d 5c 2s','14s 14h 8d 5c 2s','14s 14h 8d 8c 2s','14s 14h 14d 5c 2s','14s 2h 3d 4c 5s','14s 11s 8s 5s 2s','14s 14h 14d 5c 5s','14s 14h 14d 14c 2s','10s 11s 12s 13s 14s'];
+ranks.forEach((h,i)=>assert.equal(P.scoreFive(hand(h))[0],i));
+assert.deepEqual(P.scoreFive(hand(ranks[4])),[4,5]);
+assert.equal(P.bestHand(hand('14s 14h 14d 13s 13h 13d 2c')).score.join(','),'6,14,13');
+assert(P.compareScores(P.scoreFive(hand('14s 14h 13d 5c 2s')),P.scoreFive(hand('14d 14c 12d 5s 2h')))>0);
+assert.equal(P.compareScores(P.bestHand(hand('2h 3d 10s 11s 12s 13s 14s')).score,P.bestHand(hand('4h 5d 10s 11s 12s 13s 14s')).score),0);
+assert.equal(P.combos5(Array(7)).length,21);
+console.log('Blackjack: naturales, split no natural, bust, push, ases/S17; Poker: nueve rangos, kickers, rueda, siete cartas y empate OK');

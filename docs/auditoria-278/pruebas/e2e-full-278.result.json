@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:e2e"
+  ],
+  "cwd": "/home/vercel-sandbox/workspace/work/casino-278",
+  "exit_code": 1,
+  "status": "FALL\u00d3",
+  "seconds": 22.0,
+  "at": "2026-10-15T00:55:32.736713+00:00"
+}

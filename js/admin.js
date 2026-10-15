@@ -48,6 +48,7 @@ if ($('userBody')) {
 
 /* ---- Juegos activos ---- */
 if ($('gameToggles')) {
+  $('gameToggles').innerHTML = RC.GAMES.map(name => `<li><span>${RC.esc(name)}</span><label class="rc-check"><input type="checkbox" data-game="${RC.esc(name)}"> Activo</label></li>`).join('');
   document.querySelectorAll('#gameToggles input[data-game]').forEach(cb => {
     cb.checked = RC.isGameEnabled(cb.dataset.game);
     cb.addEventListener('change', () => {

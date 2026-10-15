@@ -21,6 +21,8 @@ const CLASSIC = [
   ['Cash It', 'Cash It', 'linear-gradient(160deg,#2fa84f,#06280f)', 'Crash · Playtech'],
   ['High Striker', 'High Striker', 'linear-gradient(160deg,#e0a21f,#3a2704)', 'Crash · curva de mercado'],
   ['Torneo', 'Torneos', 'linear-gradient(160deg,#e0b422,#4a3604)', 'Compite contra otros jugadores'],
+  ...RC.GAMES.filter(n => ['Gates of Olympus', 'Book of Dead', 'Starburst', 'Sweet Bonanza', 'American Roulette', 'Sic Bo', 'Dragon Tiger', 'Fan-Tan'].includes(n))
+    .map(n => [n, n, 'linear-gradient(160deg,#673ab7,#180d35)', RC.GAME_INFO[n].desc]),
 ].filter(c => c[0] === 'Torneo' || on(c[0]));
 const norm = t => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 const searchEl = $('gameSearch');

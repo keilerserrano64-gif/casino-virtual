@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/package278.py", line 16, in <module>
+    assert not deleted,deleted
+AssertionError: ['test-results/.last-run.json']

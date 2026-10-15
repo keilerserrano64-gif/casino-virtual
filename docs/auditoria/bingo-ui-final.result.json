@@ -1,0 +1,5 @@
+{
+  "command": "npx playwright test -g Bingo:",
+  "exitCode": 0,
+  "seconds": 2.65
+}

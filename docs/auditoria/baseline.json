@@ -1,0 +1,42 @@
+[
+  {
+    "command": "node tests/bingo_engine.test.js",
+    "exitCode": 0,
+    "seconds": 46.62
+  },
+  {
+    "command": "node tests/carreras_engine.test.js",
+    "exitCode": 0,
+    "seconds": 0.72
+  },
+  {
+    "command": "node tests/crash_engine.test.js",
+    "exitCode": 0,
+    "seconds": 2.68
+  },
+  {
+    "command": "node tests/firebase_auth.test.js",
+    "exitCode": 0,
+    "seconds": 0.13
+  },
+  {
+    "command": "node tests/ia_engine.test.js",
+    "exitCode": 0,
+    "seconds": 0.04
+  },
+  {
+    "command": "node tests/ia_rival_engine.test.js",
+    "exitCode": 0,
+    "seconds": 0.06
+  },
+  {
+    "command": "node tests/slots_engine.test.js",
+    "exitCode": 0,
+    "seconds": 21.31
+  },
+  {
+    "command": "node tests/tragamonedas_engine.test.js",
+    "exitCode": 0,
+    "seconds": 1.21
+  }
+]

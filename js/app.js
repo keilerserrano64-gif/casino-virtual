@@ -38,7 +38,6 @@ const RC = (() => {
   const PAGES = ROOT + 'html/';          // carpeta de las páginas
   const HOME = ROOT + 'index.html';      // portada pública
   const BASE = PAGES;                    // alias histórico: prefijo para enlazar páginas de html/
-  const GAMES = ['Tragamonedas', 'Ruleta', 'Blackjack', 'Poker', 'Dados', 'Carreras', 'Bingo', 'Aviator', 'Spaceman', 'JetX', 'Cricket X', 'Aero', 'Zeppelin', 'Space XY', 'Big Bass Crash', 'Cash It', 'High Striker'];
 
   const GAME_INFO = {
     Tragamonedas: { href: 'tragamonedas.html', icon: '🎰', desc: '3 carretes y multiplicadores.' },
@@ -58,8 +57,19 @@ const RC = (() => {
     'Big Bass Crash': { href: 'bigbasscrash.html', icon: '🎣', desc: 'Crash de pesca.' },
     'Cash It': { href: 'cashit.html', icon: '💸', desc: 'Crash de Playtech.' },
     'High Striker': { href: 'highstriker.html', icon: '📈', desc: 'Crash con curva de mercado.' },
+    'Gates of Olympus': { href: 'gatesofolympus.html', icon: '⚡', desc: 'Cascadas · variante de casa.' },
+    'Book of Dead': { href: 'bookofdead.html', icon: '📖', desc: '10 líneas · variante de casa.' },
+    Starburst: { href: 'starburst.html', icon: '🌟', desc: 'Comodines expansivos · variante de casa.' },
+    'Sweet Bonanza': { href: 'sweetbonanza.html', icon: '🍭', desc: 'Cascadas · variante de casa.' },
+    'American Roulette': { href: 'american-roulette.html', icon: '🎲', desc: 'Mesa de demostración · reglas documentadas.' },
+    'Sic Bo': { href: 'sic-bo.html', icon: '🎲', desc: 'Mesa de demostración · reglas documentadas.' },
+    'Dragon Tiger': { href: 'dragon-tiger.html', icon: '🎲', desc: 'Mesa de demostración · reglas documentadas.' },
+    'Fan-Tan': { href: 'fan-tan.html', icon: '🎲', desc: 'Mesa de demostración · reglas documentadas.' },
     Torneo: { href: 'torneos.html', icon: '🏆', desc: 'Compite contra otros jugadores.' },
   };
+
+  // Los nombres existentes son las claves canónicas de historial y habilitación.
+  const GAMES = Object.keys(GAME_INFO).filter(name => name !== 'Torneo');
 
   const NAV_ITEMS = [
     { href: 'torneos.html', label: 'Torneos' }, { href: 'ranking.html', label: 'Ranking' }, { href: 'amigos.html', label: 'Amigos' },
@@ -277,7 +287,7 @@ const RC = (() => {
     const user = getUser();
     user.gamesPlayed += 1;
     if (won) { user.wins += 1; user.winStreak += 1; user.bestWinStreak = Math.max(user.bestWinStreak, user.winStreak); }
-    else { user.losses += 1; user.winStreak = 0; }
+    else if (payout < wager) { user.losses += 1; user.winStreak = 0; }
     const gname = String(game).split(' · ')[0];
     user.gameCounts[gname] = (user.gameCounts[gname] || 0) + 1;
     const net = payout - wager;
@@ -296,14 +306,14 @@ const RC = (() => {
 
   /* ---------- Jugadores activos y ganadores en tiempo real (compartido entre pestañas del mismo navegador) ---------- */
 
-  const PAGE_GAME = { 'tragamonedas.html': 'Tragamonedas', 'ruleta.html': 'Ruleta', 'Blackjack.html': 'Blackjack', 'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo', 'aviator.html': 'Aviator', 'spaceman.html': 'Spaceman', 'jetx.html': 'JetX', 'cricketx.html': 'Cricket X', 'aero.html': 'Aero', 'zeppelin.html': 'Zeppelin', 'spacexy.html': 'Space XY', 'bigbasscrash.html': 'Big Bass Crash', 'cashit.html': 'Cash It', 'highstriker.html': 'High Striker', 'torneos.html': 'Torneo' };
+  const PAGE_GAME = Object.fromEntries(GAMES.map(name => [GAME_INFO[name].href, name]));
   const ACTIVE_MS = 2 * 60 * 1000;
   let presenceTimer = null;
 
   function touchPresence() {
     const u = cu(); if (!u) return;
     const page = pageFile();
-    write(dk('p', u), { game: PAGE_GAME[page] || null, ts: Date.now() });
+    write(dk('p', u), { game: PAGE_GAME[page] || (page === 'torneos.html' ? 'Torneo' : null), ts: Date.now() });
     write(dk('l', u), Date.now());
   }
   function startPresence() {
@@ -419,7 +429,7 @@ const RC = (() => {
   function logHistory(game, won, wager, payout) {
     const u = cu(); if (!u) return;
     const list = getHistory();
-    list.unshift({ date: new Date().toISOString(), game, result: won ? 'win' : 'lose', wager, payout, balance: getUser().coins });
+    list.unshift({ date: new Date().toISOString(), game, result: payout === wager ? 'push' : (won ? 'win' : 'lose'), wager, payout, balance: getUser().coins });
     write(dk('h', u), list.slice(0, 200));
   }
   const getHistory = (u = cu()) => (u ? read(dk('h', u), []) : []);
@@ -580,7 +590,7 @@ const RC = (() => {
     root.querySelector('#rc-logout').addEventListener('click', () => { if (confirm('¿Cerrar sesión?')) logout(); });
     refreshBell();
     // Flecha para volver al lobby de juegos (solo en las páginas de cada juego)
-    if (['tragamonedas.html', 'ruleta.html', 'Blackjack.html', 'poker.html', 'dados.html', 'carreras.html', 'bingo.html', 'aviator.html', 'spaceman.html', 'jetx.html', 'cricketx.html', 'aero.html', 'zeppelin.html', 'spacexy.html', 'bigbasscrash.html', 'cashit.html', 'highstriker.html'].includes(current)) {
+    if (PAGE_GAME[current]) {
       const main = document.querySelector('.rc-main');
       if (main && !main.querySelector('.rc-back-games')) main.insertAdjacentHTML('afterbegin', `<a class="rc-back-games" href="${BASE}juegos.html" title="Volver a los juegos" aria-label="Volver a los juegos"><span aria-hidden="true">←</span> Juegos</a>`);
     }
@@ -1070,7 +1080,7 @@ const RC = (() => {
     getUser, saveUser, addCoins, canBet, addXP, registerGameResult, checkAchievements, resetAccount,
     getHistory, logHistory, clearHistory, getMovements, logMove,
     // datos
-    ACHIEVEMENTS, GAMES, GAME_INFO, NAV_ITEMS, DEMO,
+    ACHIEVEMENTS, GAMES, GAME_INFO, PAGE_GAME, NAV_ITEMS, DEMO,
     getRanking, globalStats, getNews, addNews, deleteNews, getTickets, addTicket, setTicketStatus, deleteTicket, markTicketRead, replyTicket, getEvents,
     isGameEnabled, setGameEnabled, notify, getNotifications, unreadCount, markAllRead, clearNotifications,
     getSettings, saveSettings, applySettings,

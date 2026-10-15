@@ -2,6 +2,10 @@
 
 Casino virtual hecho con HTML, CSS y JavaScript. **Monedas 100% ficticias, sin dinero real.**
 
+## Reglas auditadas
+
+Consulta [variantes, fuentes y límites](docs/REGLAS_Y_FUENTES.md), la página `html/reglas.html` y `INFORME_CAMBIOS.md`. Esta revisión recibida contenía 17 juegos y cuatro slots ocultos, no Gonzo’s Quest ni Book of Ra.
+
 ## Cómo usarlo
 Abre **`index.html`** (la portada, en la raíz del proyecto) en el navegador, o usa la extensión Live Server de VS Code.
 Desde ahí se llega a todo: *Registrarse*, *Iniciar sesión* y el resto de páginas.
@@ -45,7 +49,7 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 - **RTP teórico**: 95,96 % (ventaja de la casa 4,04 %), calculado de forma exacta recorriendo las 40³ combinaciones.
 - **Volatilidad**: media (desviación típica ≈ 2,7 apuestas). Hay premio en el 57,6 % de los giros; 7️⃣ 7️⃣ 7️⃣ sale 1 de cada 2 370.
 - **Tabla de pagos**: 7️⃣ ×100 · 💎 ×30 · ⭐ ×15 · 🍊 ×10 · 🍋 ×6 · 🍒 ×4 · dos iguales ×1. Los pesos de cada símbolo en la tira virtual están en `WEIGHTS`.
-- El resultado se decide y se guarda antes de animar: si se cierra la página durante el giro, el premio se acredita al volver.
+- El resultado se decide y se guarda antes de animar: el premio y el historial se liquidan antes de animar; los pendientes de versiones anteriores se recuperan al volver.
 - `js/tragamonedas_fx.js`: capa visual y sonora (`SlotFX`). Solo anima y suena; nunca decide resultados. Incluye cabina con luces de marquesina, marcadores (saldo, apuesta, último premio), carretes que giran con desenfoque y frenan uno a uno, línea de pago que se ilumina, Big Win / Mega Win / Jackpot con lluvia de monedas, sonidos sintetizados (WebAudio) y botón de sonido.
 - Controles: apuesta −/+ (escalones 10 · 20 · 50 · 100 · 200 · 500 · 1000 · 2000 · 5000 · 10000), **AUTO** (10 giros; se detiene con JACKPOT, sin saldo o al cambiar de pestaña).
 - Los símbolos de arriba y abajo de la línea central son decorativos y nunca forman pares ni triples, para que no parezcan un premio.
@@ -60,10 +64,10 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 
 ## Crash Games
 `html/aviator.html`, `spaceman.html`, `jetx.html`, `cricketx.html`, `aero.html`, `zeppelin.html`, `spacexy.html`, `bigbasscrash.html`, `cashit.html` y `highstriker.html` — el multiplicador sube desde 1,00x y hay que retirar antes de que caiga.
-- `js/crash_engine.js`: RNG (crypto), punto de caída con ventaja de la casa 3 % (RTP 97 %), multiplicador e^(k·t) y pagos. Sin DOM; se prueba en Node (`node tests/crash_engine.test.js`).
+- `js/crash_engine.js`: RNG (crypto), punto de caída con distribución propia con parámetro de ventaja 3 % (retorno efectivo depende del retiro y redondeo), multiplicador e^(k·t) y pagos. Sin DOM; se prueba en Node (`node tests/crash_engine.test.js`).
 - `js/crash.js` + `css/crash.css`: lógica y estilos compartidos; cada página declara `data-crash="..."` en el `<body>` y uno o más bloques `.cx-slot` (una apuesta cada uno). Los juegos se diferencian por velocidad (`k`) e icono en `GAMES` del motor.
-- Apuesta mínima 10, retiro manual o automático (x). Spaceman permite retirar el 50 %, Zeppelin tiene dos apuestas simultáneas (la segunda es opcional) Aero muestra estadísticas en vivo y High Striker dibuja la curva del multiplicador en un `<canvas>`. Si se cierra la página a mitad de ronda cuenta como caída.
-- Para añadir otro crash: nueva entrada en `GAMES` del motor, una página copiando `aviator.html`, y registrarlo en `app.js` (GAMES, GAME_INFO), `auth.js`, `lobby.js` y el admin.
+- Apuesta mínima 10, retiro manual o automático (x). Spaceman y Big Bass permiten retirar el 50 %, Zeppelin y Space XY tienen dos apuestas simultáneas (la segunda es opcional) Aero muestra estadísticas en vivo y High Striker dibuja la curva del multiplicador en un `<canvas>`. Si se cierra la página a mitad de ronda, la parte pendiente cuenta como pérdida y se registra el cobro previo.
+- Para añadir otro crash: nueva entrada en `GAMES` del motor, una página copiando `aviator.html`, y registrarlo en `app.js` (GAME_INFO); las rutas de acceso y el admin se derivan del catálogo. Añadir la presentación al lobby y sus pruebas.
 
 ## Bingo
 `html/bingo.html` — dos salas: **Bingo 75** (cartón 5x5, centro libre) y **Bingo 90** (cartón 3x9 con 15 números).
@@ -105,9 +109,24 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 | `tests/unit`, `tests/e2e` | **Vitest + Playwright** | `npm run test:unit` y `npm run test:e2e` (tras `npm install`) |
 
 ## IA que aprende cómo juegas (Poker)
-`js/ia_engine.js` (`RCIA`) crea un modelo de ti: cuenta cuántas veces te retiras cuando la banca **sube** y cuántas cuando no, olvidando poco a poco lo viejo (se adapta si cambias de estilo). La banca decide subir comparando el valor esperado: sube con manos fuertes y hace **faroles** si aprendió que te retiras mucho; si nunca te retiras, deja de farolear. Calcula su probabilidad de ganar con sus propias cartas y el tablero; **nunca ve tus cartas**. El modelo se guarda por usuario en `localStorage` (`rc_ia_poker_<usuario>`). Pruebas: `node tests/ia_engine.test.js`.
+`js/ia_engine.js` (`RCIA`) crea un modelo de ti: cuenta cuántas veces te retiras cuando la banca **sube** y cuántas cuando no, olvidando poco a poco lo viejo (se adapta si cambias de estilo). La banca decide subir comparando el valor esperado: sube con manos fuertes y hace **faroles** si aprendió que te retiras mucho; si nunca te retiras, deja de farolear. Calcula su probabilidad de ganar con sus propias cartas y el tablero; su función de decisión no recibe tus cartas. El modelo se guarda por usuario en `localStorage` (`rc_ia_poker_<usuario>`). Pruebas: `node tests/ia_engine.test.js`.
 
 Esta IA no cambia las probabilidades de tragamonedas, ruleta, dados ni bingo: son azar (RNG) y su RTP publicado debe mantenerse.
 
 ## Rival IA en todos los juegos (menos Tragamonedas)
 Ruleta, Blackjack, Dados, Carreras y Bingo tienen un **Rival IA** (`js/ia_rival_engine.js` + `js/ia_rival.js`). Aprende de cada jugada tuya cuánto apuestas y cuánto riesgo tomas (con memoria que se desvanece, así se adapta si cambias de estilo) y juega sus propias rondas **como tú**, con su propio saldo, para que compitas contra tu sombra. Un panel abajo a la izquierda compara tu neto con el de la IA. El Poker usa además la IA que sube y hace faroles (`js/ia_engine.js`). **Nada de esto altera los resultados del juego**: el rival usa su propio azar con la misma ventaja de la casa. Pruebas: `node tests/ia_rival_engine.test.js`.
+
+## Ampliación de 278 nombres (avance parcial, 15-10-2026)
+
+Esta copia incorpora cuatro mesas nuevas: American Roulette, Sic Bo, Dragon Tiger y Fan-Tan. Hay 25 juegos jugables en total (21 heredados más cuatro nuevos); Torneos sigue aparte. El objetivo de 278 incorporaciones **no está terminado**.
+
+`html/catalogo278.html` conserva los 278 nombres y sus estados: cuatro implementados localmente, dos alias de títulos pendientes y 272 pendientes. El registro no presenta entradas pendientes como juegos disponibles.
+
+- Reglas/documentación: `REGLAS_REALES_TODOS_LOS_JUEGOS.md`, `catalogo_reglas.json`, `MATRIZ_CATALOGO.md`. Las fichas incompletas están identificadas.
+- Regenerar desde investigación guardada: `node scripts/build-rules-catalog.js`.
+- Completitud nombre por nombre: `node scripts/check-catalog278.js --require-complete` (actualmente sale con código 1: faltan 274 nombres jugables).
+- Matemática nueva: `node scripts/audit-table-rtp.js`; enumeración exacta, sin RTP comercial atribuido.
+- Pruebas: `npm test`, `npm run test:unit`, `npm run test:e2e`, `npm run build:ts`.
+- Servir mediante HTTP como indica la instalación existente; las mesas nuevas cargan el registro JSON y no funcionan desde `file://`.
+
+Véase `INFORME_CAMBIOS.md` para resultados observados, respaldo, límites de persistencia y alcance pendiente.

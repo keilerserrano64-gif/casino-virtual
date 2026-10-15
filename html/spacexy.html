@@ -17,7 +17,7 @@
 
 <main class="rc-main">
   <h1>🚀 Space XY</h1>
-  <p>Versión minimalista y muy rápida: el multiplicador sube veloz, retira a tiempo. <small>(BGaming · versión virtual, monedas ficticias · RTP 97 %)</small></p>
+  <p>Versión minimalista y muy rápida: el multiplicador sube veloz, retira a tiempo. <small>(BGaming · demostración no oficial · variante de casa · monedas ficticias)</small></p>
 
   <section class="rc-panel cx-panel">
     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
@@ -42,11 +42,27 @@
       </div>
       <div class="cx-smsg"></div>
     </div>
+    <div class="cx-slot">
+      <div class="rc-bet-row" style="justify-content:center;">
+        <label>Apuesta</label>
+        <input type="number" class="rc-bet-input cx-bet" value="0" min="10" step="10" aria-label="Segunda apuesta (opcional)">
+        <button class="rc-chip-btn" data-add="100" type="button">+100</button>
+        <button class="rc-chip-btn" data-add="500" type="button">+500</button>
+        <label>Retiro auto (x)</label>
+        <input type="number" class="rc-bet-input cx-auto" placeholder="ej. 2" min="1.01" step="0.01" aria-label="Retiro automático segunda apuesta">
+      </div>
+      <div class="cx-actions">
+        <button class="rc-btn cx-cash" type="button">RETIRAR</button>
+      </div>
+      <div class="cx-smsg"></div>
+    </div>
 
     <div class="cx-actions">
       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
     </div>
   </section>
+<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+<p>Dos apuestas independientes con retiro automático. El límite de dos es propio de esta demostración; la página oficial confirma apuestas múltiples sin concretar este límite.</p>
 </main>
 
 <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>

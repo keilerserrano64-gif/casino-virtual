@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "/tmp/package278.py"
+  ],
+  "cwd": "/home/vercel-sandbox/workspace/work/casino-278",
+  "exit_code": 1,
+  "status": "FALL\u00d3",
+  "seconds": 0.17,
+  "at": "2026-10-15T01:02:02.047455+00:00"
+}

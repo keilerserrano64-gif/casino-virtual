@@ -1,0 +1,24 @@
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:05] "GET /index.html HTTP/1.1" 200 -
+
+Running 1 test using 1 worker
+
+(node:6604) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /index.html HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /css/base.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /css/inicio.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /css/rendimiento.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /js/app.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /js/auth.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /js/inicio.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /html/historial.html HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /css/base.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /css/historial.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /css/vegas.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /css/rendimiento.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /js/app.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /js/auth.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:56:06] "GET /js/historial.js HTTP/1.1" 200 -
+  ✓  1 tests/e2e/games.spec.ts:173:5 › regresión de liquidación compartida: push no se registra como derrota, filtro e historial (418ms)
+
+  1 passed (1.5s)

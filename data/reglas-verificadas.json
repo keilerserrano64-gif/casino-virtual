@@ -1,0 +1,338 @@
+[
+  {
+    "implementation_status": "implementado",
+    "documentation_ready": true,
+    "existence_status": "confirmado",
+    "provider": "Juego de mesa tradicional; motor original de Casino Virtual",
+    "genre_and_objective": "Mesa de apuestas con resultado aleatorio fijado antes de mostrarlo.",
+    "bet_limits_and_options": "Límites propios de la demostración: 60–60.000 monedas ficticias por ronda, múltiplos de 60. Una apuesta seleccionada por ronda. No son límites de proveedor.",
+    "round_flow": [
+      "1. Elegir tipo/selección y cantidad antes de iniciar.",
+      "2. Validar sesión, habilitación, cantidad y saldo. Un error no consume RNG ni monedas.",
+      "3. Crear el resultado completo con RNG de producción y calcular el retorno.",
+      "4. Aplicar una vez saldo final = saldo inicial − apuesta + retorno; registrar nombre canónico y resultado antes de cualquier animación.",
+      "5. Mostrar resultado y permitir una nueva ronda. Recargar no vuelve a liquidar la ronda ya resuelta."
+    ],
+    "setup_and_round_steps": [
+      "1. Abrir la mesa con sesión permitida.",
+      "2. Leer reglas y tabla de esta variante; elegir la apuesta.",
+      "3. Resolver y liquidar antes de mostrar resultado.",
+      "4. Revisar el retorno total y el saldo."
+    ],
+    "settlement": "payout es retorno total, incluida la parte de apuesta que corresponde devolver. Ganancia neta = payout − wager. Importes enteros; los múltiplos de 60 permiten todos los pagos fraccionarios de estas cuatro mesas sin redondear. No hay apuestas activas entre páginas. En este repositorio el identificador canónico de historial y administración es el nombre estable (igual a canonical_game_id); engine_config_id es solo la clave técnica de configuración, como bonanza/Sweet Bonanza en los slots existentes.",
+    "randomness_and_rng": "RNG criptográfico del navegador, sin semilla fija. Selección uniforme discreta; RNG inyectable solo desde pruebas del motor. No es certificación ni un protocolo provably fair. La simulación local no reproduce un algoritmo comercial.",
+    "unconfirmed": [
+      "No se afirma equivalencia con el software ni con el RNG de ningún proveedor.",
+      "Firebase actual no ofrece transacción de saldo e historial, confirmación de guardado ni protección entre pestañas; estas garantías remotas siguen pendientes."
+    ],
+    "confidence": {
+      "level": "media",
+      "reason": "Reglas visibles contrastadas; límites y modelo de muestreo de la demostración explícitos. Persistencia remota no transaccional."
+    },
+    "original_index": 231,
+    "canonical_game_id": "American Roulette",
+    "official_title": "American Roulette",
+    "exact_version": "Doble cero, sin devolución parcial en cero; apuestas clásicas, sin apuestas anunciadas ni promociones.",
+    "rules_summary_es": "Rueda de 38 casillas: 0, 00 y 1–36. Se selecciona una apuesta antes del giro y se paga si el número pertenece a su conjunto. Cero y doble cero pierden en todas las apuestas externas. Split/calle/cuadro/seisena solo permiten posiciones contiguas de la mesa. No se interpreta 00 como 0.",
+    "components": "38 casillas equiprobables. Rojos: 1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36; el resto 1–36 negro. 0 y 00 verdes.",
+    "win_conditions": "Coincidencia con uno de los números seleccionados gana; cualquier otra casilla pierde. No hay empates ni recuperación al cero.",
+    "payout_table": {
+      "convention": "retorno total × apuesta",
+      "straight": 36,
+      "split": 18,
+      "street": 12,
+      "corner": 9,
+      "basket_0_00_1_2_3": 7,
+      "sixline": 6,
+      "dozen": 3,
+      "column": 3,
+      "red_black_odd_even_low_high": 2,
+      "loss": 0
+    },
+    "special_features": "Sin bonus, multiplicadores aleatorios ni jackpot. Pleno, split, calle, cuadro, seisena, cesta de cinco, columna, docena y seis apuestas de dinero parejo. Una selección por ronda; no apuestas simultáneas.",
+    "edge_cases": [
+      "0 y 00 nunca ganan par/impar, rojo/negro, bajo/alto, docena o columna.",
+      "La cesta paga 6:1 neto, retorno 7×; no 36/5.",
+      "Se rechazan combinaciones inexistentes aunque contengan números válidos."
+    ],
+    "RTP_volatility_max_win": "Con muestreo uniforme propio: retorno esperado 36/38 = 94,7368421053 % salvo cesta, 35/38 = 92,1052631579 %. Enumeración exacta de las 38 casillas requerida. Máximo de la mesa 36× por ronda.",
+    "sources": [
+      {
+        "url": "https://www.nj.gov/oag/ge/docs/Regulations/CHAPTER69F.pdf",
+        "title": "Documento público",
+        "author": "www.nj.gov",
+        "consulted_at_utc": "2026-10-15T00:34:57.259819+00:00",
+        "http_status": 200,
+        "error": null,
+        "sha256": "832c1e21fa7d06abc4e0f465b253befa294109242affd2fbf8bf660f73785b78",
+        "kind": "primaria",
+        "supports": "13:69F-5.1 y 5.2, páginas PDF 223–232: posiciones y pagos; se elige pérdida completa en 0/00, opción permitida en 5.2(b)."
+      },
+      {
+        "url": "https://wizardofodds.com/games/roulette/",
+        "title": "Online Roulette Guide 2026 - Best Advice On How To Play",
+        "author": "wizardofodds.com",
+        "consulted_at_utc": "2026-10-15T00:39:02.111612+00:00",
+        "http_status": 200,
+        "error": null,
+        "sha256": "76229a177ee8fdbaf182c2698332f1fa0ca30025af8fc0d5825827fd570a126a",
+        "kind": "secundaria",
+        "supports": "Contraste de reglas de ruleta de doble cero y ventaja por tipo de apuesta."
+      }
+    ],
+    "route": "american-roulette.html",
+    "engine_config_id": "american-roulette"
+  },
+  {
+    "implementation_status": "implementado",
+    "documentation_ready": true,
+    "existence_status": "confirmado",
+    "provider": "Juego de mesa tradicional; motor original de Casino Virtual",
+    "genre_and_objective": "Mesa de apuestas con resultado aleatorio fijado antes de mostrarlo.",
+    "bet_limits_and_options": "Límites propios de la demostración: 60–60.000 monedas ficticias por ronda, múltiplos de 60. Una apuesta seleccionada por ronda. No son límites de proveedor.",
+    "round_flow": [
+      "1. Elegir tipo/selección y cantidad antes de iniciar.",
+      "2. Validar sesión, habilitación, cantidad y saldo. Un error no consume RNG ni monedas.",
+      "3. Crear el resultado completo con RNG de producción y calcular el retorno.",
+      "4. Aplicar una vez saldo final = saldo inicial − apuesta + retorno; registrar nombre canónico y resultado antes de cualquier animación.",
+      "5. Mostrar resultado y permitir una nueva ronda. Recargar no vuelve a liquidar la ronda ya resuelta."
+    ],
+    "setup_and_round_steps": [
+      "1. Abrir la mesa con sesión permitida.",
+      "2. Leer reglas y tabla de esta variante; elegir la apuesta.",
+      "3. Resolver y liquidar antes de mostrar resultado.",
+      "4. Revisar el retorno total y el saldo."
+    ],
+    "settlement": "payout es retorno total, incluida la parte de apuesta que corresponde devolver. Ganancia neta = payout − wager. Importes enteros; los múltiplos de 60 permiten todos los pagos fraccionarios de estas cuatro mesas sin redondear. No hay apuestas activas entre páginas. En este repositorio el identificador canónico de historial y administración es el nombre estable (igual a canonical_game_id); engine_config_id es solo la clave técnica de configuración, como bonanza/Sweet Bonanza en los slots existentes.",
+    "randomness_and_rng": "RNG criptográfico del navegador, sin semilla fija. Selección uniforme discreta; RNG inyectable solo desde pruebas del motor. No es certificación ni un protocolo provably fair. La simulación local no reproduce un algoritmo comercial.",
+    "unconfirmed": [
+      "No se afirma equivalencia con el software ni con el RNG de ningún proveedor.",
+      "Firebase actual no ofrece transacción de saldo e historial, confirmación de guardado ni protección entre pestañas; estas garantías remotas siguen pendientes."
+    ],
+    "confidence": {
+      "level": "media",
+      "reason": "Reglas visibles contrastadas; límites y modelo de muestreo de la demostración explícitos. Persistencia remota no transaccional."
+    },
+    "original_index": 242,
+    "canonical_game_id": "Sic Bo",
+    "official_title": "Sic Bo",
+    "exact_version": "Tres dados, tabla de Atlantic City; doble específico incluye triple del mismo número.",
+    "rules_summary_es": "Se fijan tres dados independientes 1–6 antes de mostrarlos. Small gana con suma 4–10 salvo triples; Big con 11–17 salvo triples. Se ofrecen también total exacto 4–17, triple específico, cualquier triple, doble específico, dos caras distintas y número individual. Los triples pueden ganar apuestas de suma y otras selecciones; solo quedan excluidos de Small/Big.",
+    "components": "Tres dados distinguibles de seis caras; 216 resultados ordenados equiprobables.",
+    "win_conditions": "Triple específico: tres iguales al número elegido. Doble: al menos dos. Pareja de caras: ambas aparecen. Individual: paga según una/dos/tres apariciones. Total exacto incluye triples. Toda selección no satisfecha pierde.",
+    "payout_table": {
+      "convention": "retorno total × apuesta",
+      "small_big": 2,
+      "specific_triple": 151,
+      "any_triple": 25,
+      "specific_double": 9,
+      "two_distinct_faces": 6,
+      "single_face_1_2_3_occurrences": [
+        2,
+        3,
+        4
+      ],
+      "total_4_17": 51,
+      "total_5_16": 19,
+      "total_6_15": 15,
+      "total_7_14": 13,
+      "total_8_13": 9,
+      "total_9_10_11_12": 7,
+      "loss": 0
+    },
+    "special_features": "Sin bonus ni rondas adicionales. Cada apuesta se resuelve con los mismos tres dados de esa ronda.",
+    "edge_cases": [
+      "Triples 2-2-2 y 3-3-3 pierden Small; 4-4-4 y 5-5-5 pierden Big.",
+      "Un triple también satisface su doble específico.",
+      "Una apuesta individual solo paga una vez, usando la cantidad de apariciones.",
+      "El PDF tiene texto ambiguo «1 to 10» para una aparición. La tabla elegida fija explícitamente 1:1 neto y se contrasta con la tabla Atlantic City de la fuente secundaria; no se oculta la discrepancia."
+    ],
+    "RTP_volatility_max_win": "RTP depende de la selección; se enumerarán exactamente los 216 resultados en el informe matemático. No se atribuye un RTP único a Sic Bo. Máximo 151× por ronda.",
+    "sources": [
+      {
+        "url": "https://www.nj.gov/oag/ge/docs/Regulations/CHAPTER69F.pdf",
+        "title": "Documento público",
+        "author": "www.nj.gov",
+        "consulted_at_utc": "2026-10-15T00:34:57.259819+00:00",
+        "http_status": 200,
+        "error": null,
+        "sha256": "832c1e21fa7d06abc4e0f465b253befa294109242affd2fbf8bf660f73785b78",
+        "kind": "primaria",
+        "supports": "13:69F-9.1 a 9.4, páginas PDF 297–302: dados, definición de ocho tipos y pagos mínimos. Discrepancia de transcripción para una aparición señalada en casos límite."
+      },
+      {
+        "url": "https://wizardofodds.com/games/sic-bo/",
+        "title": "Sic Bo - Wizard of Odds",
+        "author": "wizardofodds.com",
+        "consulted_at_utc": "2026-10-15T00:39:34.607195+00:00",
+        "http_status": 200,
+        "error": null,
+        "sha256": "d775ab1106e9b943f0478fa4c0929a732159ed1cfbafc143af162690dc61050f",
+        "kind": "secundaria",
+        "supports": "Tabla Atlantic City: individual 1/2/3 netos y pagos por tipo; contraste de la discrepancia del PDF."
+      }
+    ],
+    "route": "sic-bo.html",
+    "engine_config_id": "sic-bo"
+  },
+  {
+    "implementation_status": "implementado",
+    "documentation_ready": true,
+    "existence_status": "confirmado",
+    "provider": "Juego de mesa tradicional; motor original de Casino Virtual",
+    "genre_and_objective": "Mesa de apuestas con resultado aleatorio fijado antes de mostrarlo.",
+    "bet_limits_and_options": "Límites propios de la demostración: 60–60.000 monedas ficticias por ronda, múltiplos de 60. Una apuesta seleccionada por ronda. No son límites de proveedor.",
+    "round_flow": [
+      "1. Elegir tipo/selección y cantidad antes de iniciar.",
+      "2. Validar sesión, habilitación, cantidad y saldo. Un error no consume RNG ni monedas.",
+      "3. Crear el resultado completo con RNG de producción y calcular el retorno.",
+      "4. Aplicar una vez saldo final = saldo inicial − apuesta + retorno; registrar nombre canónico y resultado antes de cualquier animación.",
+      "5. Mostrar resultado y permitir una nueva ronda. Recargar no vuelve a liquidar la ronda ya resuelta."
+    ],
+    "setup_and_round_steps": [
+      "1. Abrir la mesa con sesión permitida.",
+      "2. Leer reglas y tabla de esta variante; elegir la apuesta.",
+      "3. Resolver y liquidar antes de mostrar resultado.",
+      "4. Revisar el retorno total y el saldo."
+    ],
+    "settlement": "payout es retorno total, incluida la parte de apuesta que corresponde devolver. Ganancia neta = payout − wager. Importes enteros; los múltiplos de 60 permiten todos los pagos fraccionarios de estas cuatro mesas sin redondear. No hay apuestas activas entre páginas. En este repositorio el identificador canónico de historial y administración es el nombre estable (igual a canonical_game_id); engine_config_id es solo la clave técnica de configuración, como bonanza/Sweet Bonanza en los slots existentes.",
+    "randomness_and_rng": "RNG criptográfico del navegador, sin semilla fija. Selección uniforme discreta; RNG inyectable solo desde pruebas del motor. No es certificación ni un protocolo provably fair. La simulación local no reproduce un algoritmo comercial.",
+    "unconfirmed": [
+      "No se afirma equivalencia con el software ni con el RNG de ningún proveedor.",
+      "Firebase actual no ofrece transacción de saldo e historial, confirmación de guardado ni protección entre pestañas; estas garantías remotas siguen pendientes."
+    ],
+    "confidence": {
+      "level": "media",
+      "reason": "Reglas visibles contrastadas; límites y modelo de muestreo de la demostración explícitos. Persistencia remota no transaccional."
+    },
+    "original_index": 241,
+    "canonical_game_id": "Dragon Tiger",
+    "official_title": "Dragon Tiger",
+    "exact_version": "Mesa de ocho barajas, As bajo, empate 11:1 y empate del mismo palo 50:1; barajado por ronda de la demostración.",
+    "rules_summary_es": "Se extraen sin reemplazo dos cartas de ocho barajas: primero Dragón y luego Tigre. El As vale 1 y el Rey 13. Dragón/Tigre pagan 1:1 neto si su carta es mayor y pierden la mitad en empate. Empate paga 11:1; empate de rango y palo paga 50:1. No se ofrecen otras apuestas laterales.",
+    "components": "416 cartas distinguibles por baraja, palo y rango. Dos copias de rango/palo iguales son posibles entre barajas, pero nunca se usa dos veces la misma carta física.",
+    "win_conditions": "Comparar únicamente rango para Dragón/Tigre/Empate; para empate del mismo palo también coincide palo. No hay desempate por palo.",
+    "payout_table": {
+      "convention": "retorno total × apuesta",
+      "dragon_or_tiger_win": 2,
+      "dragon_or_tiger_tie": 0.5,
+      "tie_win": 12,
+      "suited_tie_win": 51,
+      "loss": 0
+    },
+    "special_features": "Sin bonus. Se modela una baraja nueva de ocho mazos en cada ronda; no simula una mesa en vivo ni sus estadísticas de zapato persistente.",
+    "edge_cases": [
+      "El As pierde contra 2 y K; no vale 14.",
+      "Mismo rango distinto palo gana Empate y pierde Suited Tie.",
+      "Mismo rango y palo satisface ambos tipos de empate si se evalúan por separado; el jugador selecciona uno por ronda."
+    ],
+    "RTP_volatility_max_win": "Bajo este muestreo propio, empates de rango 31/415 y de palo+rango 7/415. RTP Dragón/Tigre = 1−31/830; Empate = 372/415; Suited Tie = 357/415. No se importa un RTP comercial.",
+    "sources": [
+      {
+        "url": "https://games.evolution.com/live-casino/dragon-tiger/",
+        "title": "Dragon Tiger | Best Live Casino Games | Evolution Games",
+        "author": "games.evolution.com",
+        "consulted_at_utc": "2026-10-15T00:43:32.366235+00:00",
+        "http_status": 200,
+        "error": null,
+        "sha256": "6ad672a229bb5117aeb0d59e21c4a79d34f2b8af600ff8a6a35cb7b9e70ed929",
+        "kind": "primaria",
+        "supports": "Página oficial: dos cartas, comparación, empate 11:1 y del mismo palo 50:1."
+      },
+      {
+        "url": "https://wizardofodds.com/games/dragon-tiger/",
+        "title": "Dragon Tiger Game Guide - Rules, Strategy, and Tips - Wizard of Odds",
+        "author": "wizardofodds.com",
+        "consulted_at_utc": "2026-10-15T00:39:03.741347+00:00",
+        "http_status": 200,
+        "error": null,
+        "sha256": "8a99eb30b054b7a015484e9d6d8593f5487ae585cfdfab1f1693522c77c61be7",
+        "kind": "secundaria",
+        "supports": "Ocho barajas, As bajo, pérdida de mitad en empate y análisis según pagos de cada versión."
+      }
+    ],
+    "route": "dragon-tiger.html",
+    "engine_config_id": "dragon-tiger"
+  },
+  {
+    "implementation_status": "implementado",
+    "documentation_ready": true,
+    "existence_status": "confirmado",
+    "provider": "Juego de mesa tradicional; motor original de Casino Virtual",
+    "genre_and_objective": "Mesa de apuestas con resultado aleatorio fijado antes de mostrarlo.",
+    "bet_limits_and_options": "Límites propios: 120–60.000 monedas ficticias, múltiplos de 120, una selección por ronda. Garantiza pagos enteros incluso para Nga Tan.",
+    "round_flow": [
+      "1. Elegir tipo/selección y cantidad antes de iniciar.",
+      "2. Validar sesión, habilitación, cantidad y saldo. Un error no consume RNG ni monedas.",
+      "3. Crear el resultado completo con RNG de producción y calcular el retorno.",
+      "4. Aplicar una vez saldo final = saldo inicial − apuesta + retorno; registrar nombre canónico y resultado antes de cualquier animación.",
+      "5. Mostrar resultado y permitir una nueva ronda. Recargar no vuelve a liquidar la ronda ya resuelta."
+    ],
+    "setup_and_round_steps": [
+      "1. Abrir la mesa con sesión permitida.",
+      "2. Leer reglas y tabla de esta variante; elegir la apuesta.",
+      "3. Resolver y liquidar antes de mostrar resultado.",
+      "4. Revisar el retorno total y el saldo."
+    ],
+    "settlement": "payout es retorno total, incluida la parte de apuesta que corresponde devolver. Ganancia neta = payout − wager. Importes enteros; los múltiplos de 60 permiten todos los pagos fraccionarios de estas cuatro mesas sin redondear. No hay apuestas activas entre páginas. En este repositorio el identificador canónico de historial y administración es el nombre estable (igual a canonical_game_id); engine_config_id es solo la clave técnica de configuración, como bonanza/Sweet Bonanza en los slots existentes.",
+    "randomness_and_rng": "RNG criptográfico del navegador, sin semilla fija. Selección uniforme discreta; RNG inyectable solo desde pruebas del motor. No es certificación ni un protocolo provably fair. La simulación local no reproduce un algoritmo comercial.",
+    "unconfirmed": [
+      "No se afirma equivalencia con el software ni con el RNG de ningún proveedor.",
+      "Firebase actual no ofrece transacción de saldo e historial, confirmación de guardado ni protección entre pestañas; estas garantías remotas siguen pendientes."
+    ],
+    "confidence": {
+      "level": "media",
+      "reason": "Reglas visibles contrastadas; límites y modelo de muestreo de la demostración explícitos. Persistencia remota no transaccional."
+    },
+    "original_index": 243,
+    "canonical_game_id": "Fan-Tan",
+    "official_title": "Fan-Tan",
+    "exact_version": "Tabla convencional con comisión del 5 % sobre beneficio; cinco tipos de apuesta. Simulación discreta propia.",
+    "rules_summary_es": "El resultado es la última fila de 1–4 fichas después de retirar grupos de cuatro. Se apuesta Fan a un número; Nim a un ganador y otro de devolución; Kwok a dos ganadores; Nga Tan a dos ganadores y un tercero de devolución; o Sheh-Sam-Hong a tres ganadores. Ganancia neta sujeta al 5 % de comisión, no el principal ni las devoluciones.",
+    "components": "Cuatro resultados 1,2,3,4. La demostración genera un conteo uniforme entre 40 y 79 y toma resto cuatro, interpretando resto cero como cuatro. Ese muestreo es propio; no reproduce la extracción física de un casino.",
+    "win_conditions": "Si el resultado está entre los ganadores, se acredita principal más beneficio después de comisión. En la selección de devolución Nim/Nga Tan se devuelve toda la apuesta. Resto pierde.",
+    "payout_table": {
+      "convention": "retorno total × apuesta, después de comisión",
+      "fan": "77/20",
+      "nim": "29/10",
+      "kwok": "39/20",
+      "nga_tan": "59/40",
+      "sheh_sam_hong": "79/60",
+      "push": 1,
+      "loss": 0
+    },
+    "special_features": "No bonus. Fan, Nim, Kwok, Nga Tan y Sheh-Sam-Hong; sin añadir apuestas de otras versiones comerciales.",
+    "edge_cases": [
+      "Resto cero significa resultado 4.",
+      "Selecciones ganadoras y de devolución distintas, sin repeticiones ni números fuera de 1–4.",
+      "La comisión se aplica solo a beneficio. Apuesta múltiplo de 60: incluso retorno 59/40 produce mitad de moneda para 60; se fija múltiplo de 120 en esta mesa para evitar fracciones."
+    ],
+    "RTP_volatility_max_win": "Con cuatro resultados uniformes: Fan 96,25 %; Nim/Kwok 97,5 %; Nga Tan/Sheh-Sam-Hong 98,75 %. Máximo 77/20 de la apuesta. Probabilidades propias verificables por enumeración.",
+    "sources": [
+      {
+        "url": "https://games.evolution.com/live-casino/fan-tan/",
+        "title": "Fan Tan | Live Casino Games | Evolution Games",
+        "author": "games.evolution.com",
+        "consulted_at_utc": "2026-10-15T00:40:22.633254+00:00",
+        "http_status": 200,
+        "error": null,
+        "sha256": "308b9c4103f634bc36b0067ee085e0d23dacc3ce3dc2a5a1e2d5112a513f335d",
+        "kind": "primaria",
+        "supports": "Fuente primaria para conteo de fichas, resultados 1–4 y existencia de familias Fan/Nim/Kwok/Ssh; no proporciona la tabla completa."
+      },
+      {
+        "url": "https://wizardofodds.com/games/fan-tan/",
+        "title": "Fan Tan - Wizard of Odds",
+        "author": "wizardofodds.com",
+        "consulted_at_utc": "2026-10-15T00:39:34.871407+00:00",
+        "http_status": 200,
+        "error": null,
+        "sha256": "779ef652ebc362ed32d5ea3efdfca5d171cbd600a241a70573424ce5a97a67dd",
+        "kind": "secundaria",
+        "supports": "Tabla convencional y comisión 5 %, atribuida por el autor al folleto Venetian Macau. Fuente secundaria; no se afirma equivalencia con la tabla Evolution."
+      }
+    ],
+    "route": "fan-tan.html",
+    "engine_config_id": "fan-tan"
+  }
+]

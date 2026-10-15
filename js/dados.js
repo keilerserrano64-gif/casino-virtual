@@ -432,18 +432,24 @@ RC.initHeader();
     $('resultList').innerHTML = ''; msg(''); $('sumDisplay').textContent = 'Suma: …';
     refresh();
     const a = E.rollDie(), b = E.rollDie();            // el resultado se decide aquí, antes de animar
-    if (S.prefs.turbo) { placeAtRest([a, b]); Snd.dieHit(0.6); }
-    else await animateRoll([a, b]);
-    resolveRoll(a, b);
-  }
-
-  function resolveRoll(a, b) {
-    const s = a + b, was = S.point;
+    const s = a + b;
     const r = E.settleRoll(S.bets, S.point, s);
     S.bets = r.bets; S.point = r.point;
     S.history.unshift({ a, b, s }); S.history = S.history.slice(0, 50);
     S.counts[s] = (S.counts[s] || 0) + 1; S.rolls++;
     if (r.ret > 0) RC.addCoins(r.ret);
+    // Place mantiene el principal en mesa: registra solo su ganancia en esta tirada.
+    if (r.wager > 0 || r.ret > 0) RC.registerGameResult('Dados', r.ret > r.wager, r.wager, r.ret);
+    save();
+    try {
+      if (S.prefs.turbo) { placeAtRest([a, b]); Snd.dieHit(0.6); }
+      else await animateRoll([a, b]);
+    } finally { resolveRoll(a, b, r); }
+  }
+
+  function resolveRoll(a, b, r) {
+    const s = a + b;
+
     const net = r.ret - r.wager;
 
     $('sumDisplay').textContent = `Suma: ${s}`;
@@ -471,7 +477,6 @@ RC.initHeader();
       if (net > 0) RC.result({ type: net >= 500 ? 'big' : 'win', title: '¡GANASTE!', amount: net, text: c[0], sound: false, duration: q });
       else if (net < 0) RC.result({ type: 'lose', title: 'PERDISTE', amount: -net, text: c[0], sound: false, duration: q });
       else RC.result({ type: 'push', title: 'SIN GANANCIA', text: 'Tirada sin ganancia neta.', sound: false, duration: q });
-      RC.registerGameResult('Dados', net > 0, r.wager, r.ret);
     }
     if (net > 0) { Snd.win(); if (net >= 500) Snd.cheer(); } else if (net < 0 || r.event === 'sevenOut') Snd.lose();
 

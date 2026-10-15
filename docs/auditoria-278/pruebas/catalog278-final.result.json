@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "tests/catalog278.test.js"
+  ],
+  "cwd": "/home/vercel-sandbox/workspace/work/casino-278",
+  "exit_code": 0,
+  "status": "PAS\u00d3",
+  "seconds": 0.12,
+  "at": "2026-10-15T00:56:54.687182+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "npm run test:unit": {
+    "js/tragamonedas_engine.js": {
+      "hash": "8fc2f5e4cb75d32752e3550d7ebe81400f3f681b3be1be66f5758d2dd53d939c",
+      "prior": "8fc2f5e4cb75d32752e3550d7ebe81400f3f681b3be1be66f5758d2dd53d939c"
+    },
+    "backend/src/slots.ts": {
+      "hash": "22f5667ba3799062633aef363c345b8bca2a4b8d3e1c31b3335656a90c0b8155",
+      "prior": "22f5667ba3799062633aef363c345b8bca2a4b8d3e1c31b3335656a90c0b8155"
+    },
+    "tests/unit/slots.test.ts": {
+      "hash": "b1dd541da2813f76c7e8e34495826c5ab83257d6837a3ce1e54385c2601b1771",
+      "prior": "b1dd541da2813f76c7e8e34495826c5ab83257d6837a3ce1e54385c2601b1771"
+    },
+    "tests/unit/slots-parity.test.ts": {
+      "hash": "3715a332eaf6afe891768c40aafc131cb592443fe6490710d270322e28abe942",
+      "prior": "3715a332eaf6afe891768c40aafc131cb592443fe6490710d270322e28abe942"
+    },
+    "vitest.config.ts": {
+      "hash": "29b431c77dda2c0e612f42a4785e598036817af1f3c67c5c6e9f2a936b8aaa69",
+      "prior": "29b431c77dda2c0e612f42a4785e598036817af1f3c67c5c6e9f2a936b8aaa69"
+    }
+  },
+  "npm run build:ts": {
+    "ts/api.ts": {
+      "hash": "1d6c73bf8d357c68cd661e9612cf5578bedb320728361200c371b0ba23880c2c",
+      "prior": "1d6c73bf8d357c68cd661e9612cf5578bedb320728361200c371b0ba23880c2c"
+    },
+    "ts/tsconfig.json": {
+      "hash": "9cf2cab690fb9312dbe1071e29f62d3540358dfa9483bc860e817319bd96abdf",
+      "prior": "9cf2cab690fb9312dbe1071e29f62d3540358dfa9483bc860e817319bd96abdf"
+    },
+    "types/globals.d.ts": {
+      "hash": "e4fb0b5849e1ada99a9662584e226d6caefbf3b38f2a23289fabacb55b9fb38f",
+      "prior": "e4fb0b5849e1ada99a9662584e226d6caefbf3b38f2a23289fabacb55b9fb38f"
+    }
+  }
+}

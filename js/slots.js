@@ -5,6 +5,9 @@ const KEY = document.body.dataset.slot, G = SE.GAMES[KEY];
 const money = n => RC.formatNumber(n);
 const gridEl = $('sGrid'), betEl = $('sBet'), spinBtn = $('sSpin'), msgEl = $('sMsg'), infoEl = $('sInfo'), winEl = $('sWin');
 let busy = false;
+// Promoción de Royal Casino; ajena a las reglas de Starburst.
+const PROMOTIONS = { starburst: { welcomeSpins: 10 } };
+const promotion = PROMOTIONS[KEY];
 
 gridEl.style.gridTemplateColumns = `repeat(${G.cols}, 1fr)`;
 const cells = Array.from({ length: G.cols * G.rows }, () => { const d = document.createElement('div'); d.className = 's-cell'; gridEl.appendChild(d); return d; });
@@ -43,14 +46,14 @@ const drop = k => { try { RCMem.removeItem(k); } catch (e) {} };
 let fs = load(fsKey());
 if (fs && (fs.game !== KEY || !(fs.left > 0) || !Number.isInteger(fs.bet))) { drop(fsKey()); fs = null; }
 let welcome = 0;
-if (G.welcomeSpins) {                              // Starburst: 10 giros de bienvenida la primera vez
-  const w = load(wKey()); welcome = w === null ? G.welcomeSpins : (Number.isInteger(w) && w > 0 ? w : 0);
+if (promotion && promotion.welcomeSpins) {                              // Starburst: 10 giros de bienvenida la primera vez
+  const w = load(wKey()); welcome = w === null ? promotion.welcomeSpins : (Number.isInteger(w) && w > 0 ? w : 0);
   save(wKey(), welcome);
 }
 function refreshInfo() {
   const parts = [];
   if (fs) parts.push(`Giros gratis: ${fs.left}` + (fs.special ? ` · Símbolo especial: ${fs.special}` : '') + (G.accumMult && fs.mult ? ` · Multiplicador: ×${fs.mult}` : '') + ` · Acumulado: ${money(fs.acc)}`);
-  if (welcome > 0) parts.push(`🎁 Giros de bienvenida: ${welcome} (apuesta ${SE.MIN_BET}, gratis)`);
+  if (welcome > 0) parts.push(`🎁 Promoción propia: giros de bienvenida: ${welcome} (apuesta ${SE.MIN_BET}, gratis)`);
   infoEl.textContent = parts.join(' | ');
   spinBtn.textContent = fs ? 'CONTINUAR GIROS GRATIS' : (welcome > 0 ? 'GIRO DE BIENVENIDA' : 'GIRAR');
 }
@@ -59,42 +62,47 @@ async function play(res) {                         // anima los pasos de un giro
   for (const s of res.steps) {
     show(s.cells, s.win);
     if (s.amount > 0) winEl.textContent = `+${money(s.amount)}`;
-    await sleep(s.win.length ? 700 : 450);
+    if (RC.getSettings().anim !== false && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) await sleep(s.win.length ? 700 : 450);
   }
 }
 
 async function round() {
   if (busy) return;
-  let bet, free = false, welcomeSpin = false;
-  if (fs) { bet = fs.bet; free = true; }
-  else if (welcome > 0) { bet = SE.MIN_BET; welcomeSpin = true; welcome--; save(wKey(), welcome); }
+  let bet, welcomeSpin = false;
+  const resumed = !!fs;
+  if (fs) bet = fs.bet;
+  else if (welcome > 0) { bet = SE.MIN_BET; welcomeSpin = true; }
   else {
     bet = Number(betEl.value);
-    if (!Number.isInteger(bet) || bet < SE.MIN_BET) { RC.toast('lose', `La apuesta mínima es ${SE.MIN_BET} monedas (número entero).`); betEl.value = SE.normalizeBet(betEl.value); return; }
+    if (!Number.isSafeInteger(bet) || bet < SE.MIN_BET || bet > Number.MAX_SAFE_INTEGER / SE.MAX_WIN) { RC.toast('lose', `La apuesta mínima es ${SE.MIN_BET} monedas (entero válido).`); return; }
     if (bet > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
-    RC.addCoins(-bet);
   }
-  busy = true; spinBtn.disabled = betEl.disabled = true; msgEl.textContent = ''; winEl.textContent = '';
-  let total = 0, state = fs;
-  for (;;) {
-    const res = SE.spin(KEY, bet, state);
-    RC.addCoins(res.payout);                       // el premio se acredita al decidirse el giro (antes de animar)
-    state = res.fs;
-    total = state ? state.acc : res.payout;
-    if (state && state.left > 0) save(fsKey(), state); else drop(fsKey());
-    fs = state && state.left > 0 ? state : null;
-    refreshInfo();
-    await play(res);
-    if (res.scatterWin) msgEl.textContent = `Scatter: +${money(res.scatterWin)}`;
-    if (res.mult > 1 && res.payout > 0) msgEl.textContent += ` Multiplicador ×${res.mult}`;
-    if (res.respins) msgEl.textContent = `${res.respins} respin${res.respins > 1 ? 's' : ''} con comodín expandido`;
-    if (!fs) break;
-    if (!free) { free = true; msgEl.textContent = `¡${fs.left} giros gratis!`; await sleep(1200); }
-    else await sleep(700);
+  busy = true; spinBtn.disabled = betEl.disabled = true;
+  msgEl.textContent = ''; winEl.textContent = '';
+  let outcome;
+  try { outcome = SE.session(KEY, bet, fs); }
+  catch (error) {
+    RC.toast('lose', 'No se pudo decidir la ronda. No se descontó la apuesta.');
+    busy = false; spinBtn.disabled = betEl.disabled = false; return;
   }
-  const wager = welcomeSpin ? 0 : bet, won = total > wager;
-  winEl.textContent = total ? `Total: ${money(total)}` : '';
+  const wager = welcomeSpin || resumed ? 0 : bet, total = outcome.payout, won = total > wager;
+  if (wager) RC.addCoins(-wager);
+  if (welcomeSpin) { welcome--; save(wKey(), welcome); }
+  drop(fsKey()); fs = null;
+  if (total) RC.addCoins(total);
+  // Historial y saldo se completan una sola vez antes de mostrar las animaciones.
   RC.registerGameResult(G.name, won, wager, total);
+  refreshInfo();
+  try {
+    for (const res of outcome.rounds) {
+      await play(res);
+      if (res.scatterWin) msgEl.textContent = `Scatter: +${money(res.scatterWin)}`;
+      if (res.mult > 1 && res.payout > 0) msgEl.textContent += ` Multiplicador ×${res.mult}`;
+      if (res.respins) msgEl.textContent = `${res.respins} respins con comodín expandido`;
+    }
+  } finally { busy = false; spinBtn.disabled = betEl.disabled = false; refreshInfo(); }
+  winEl.textContent = total ? `Total: ${money(total)}` : '';
+
   const text = total ? `Ganaste ${money(total)} monedas en ${G.name}.` : `Sin premio en ${G.name}.`;
   if (won) RC.result({ type: total >= bet * 25 ? 'big' : 'win', title: '¡GANASTE!', amount: total - wager, text });
   else if (total === wager) RC.result({ type: 'push', title: 'EMPATE', amount: 0, text });

@@ -2,11 +2,7 @@
 
 RC.initHeader();
 
-const RED_NUMBERS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
-function colorOf(n) {
-  if (n === 0) return 'green';
-  return RED_NUMBERS.has(n) ? 'red' : 'black';
-}
+const colorOf = RouletteEngine.colorOf;
 
 /* ================= Dibujo de la ruleta (SVG) ================= */
 
@@ -250,16 +246,21 @@ const historyStrip = document.getElementById('historyStrip');
 let history = [];
 
 spinBtn.addEventListener('click', () => {
-  const bet = Math.max(10, Math.floor(Number(betInput.value) || 0));
+  if (spinBtn.disabled) return;
+  const bet = Number(betInput.value);
+  if (!Number.isSafeInteger(bet) || bet < 10 || bet > Number.MAX_SAFE_INTEGER / 36) { RC.toast('lose', 'Apuesta inválida: entero desde 10.'); return; }
   const user = RC.getUser();
   if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
   if (currentMode === 'number' && selectedNumber === null) { RC.toast('info', 'Elige un número primero.'); return; }
 
+  const outcome = RouletteEngine.spin({ mode: currentMode, value: currentMode === 'number' ? selectedNumber : currentValue, bet });
+  const { landing, won, mult, payout } = outcome;
   betInput.value = bet;
   spinBtn.disabled = true;
   RC.addCoins(-bet);
 
-  const landing = Math.floor(Math.random() * 37);
+  if (payout > 0) RC.addCoins(payout);
+  RC.registerGameResult('Ruleta', won, bet, payout);
 
   spinTo(landing, () => {
     const c = colorOf(landing);
@@ -267,20 +268,9 @@ spinBtn.addEventListener('click', () => {
     resultNumber.className = 'result-number ' + c;
     wheel.setAttribute('aria-label', `Ruleta europea. Salió el ${landing}, ${c === 'red' ? 'rojo' : c === 'black' ? 'negro' : 'verde'}.`);
 
-    let won = false, mult = 0;
-    if (currentMode === 'color' && c === currentValue) { won = true; mult = 2; }
-    if (currentMode === 'parity') {
-      const isEven = landing !== 0 && landing % 2 === 0;
-      if ((currentValue === 'par' && isEven) || (currentValue === 'impar' && !isEven)) { won = true; mult = 2; }
-    }
-    if (currentMode === 'number' && selectedNumber === landing) { won = true; mult = 35; }
-
-    const payout = won ? bet * mult : 0;
-    if (payout > 0) RC.addCoins(payout);
     RC.result(won
       ? { type: mult >= 35 ? 'big' : 'win', title: mult >= 35 ? '¡PLENO!' : '¡GANASTE!', amount: payout, text: `Salió el ${landing}.` }
       : { type: 'lose', title: 'SIN PREMIO', amount: bet, text: `Salió el ${landing}.` });
-    RC.registerGameResult('Ruleta', won, bet, payout);
 
     history.unshift(landing);
     history = history.slice(0, 10);
