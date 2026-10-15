@@ -27,8 +27,9 @@ const clearPending = () => { try { RCMem.removeItem(pendKey()); } catch (e) {} }
     const p = JSON.parse(RCMem.getItem(pendKey()));
     clearPending();
     if (!p || !CE.GAMES[p.game] || !Number.isInteger(p.bet) || p.bet < CE.MIN_BET) return;
-    RC.registerGameResult(CE.GAMES[p.game].name, false, p.bet, 0);
-    RC.toast('lose', `La ronda de ${CE.GAMES[p.game].name} terminó mientras no estabas: perdiste ${money(p.bet)} monedas.`);
+    const payout = Number.isSafeInteger(p.payout) && p.payout >= 0 ? p.payout : 0;
+    RC.registerGameResult(CE.GAMES[p.game].name, payout > p.bet, p.bet, payout);
+    RC.toast('lose', `La ronda de ${CE.GAMES[p.game].name} terminó mientras no estabas: retorno total ${money(payout)} de ${money(p.bet)} monedas.`);
   } catch (e) {}
 })();
 
@@ -76,13 +77,13 @@ function finalize() {                            // un solo resultado por ronda,
 function cashOut(i, part, atMult) {
   if (!st || st.over) return;
   const r = st.slots[i]; if (!r || r.remaining <= 0) return;
-  const m = atMult || st.m;
-  const stake = part === 'half' ? CE.halfStake(r.bet) : r.remaining;
-  const pay = CE.payoutFor(stake, m);
-  r.remaining -= stake; r.payout += pay;
-  if (part === 'half') r.halfUsed = true;
+  const m = atMult || CE.multAt((performance.now() - st.t0) / 1000, G.k);
+  if (m >= st.crash) { tick(performance.now()); return; }
+  const pay = CE.withdraw(st, i, part, m);
+  if (!pay) return;
   RC.addCoins(pay);
-  slots[i].msg.textContent = `Retiraste ${money(stake)} a ${fmtM(m)}: +${money(pay)} monedas.`;
+  savePending({ game: KEY, bet: st.slots.reduce((a, x) => a + x.bet, 0), payout: st.slots.reduce((a, x) => a + x.payout, 0) });
+  slots[i].msg.textContent = `Retiraste a ${fmtM(m)}: +${money(pay)} monedas.`;
   if (st.slots.every(x => x.remaining <= 0)) finalize();
   setButtons();
 }
@@ -102,10 +103,10 @@ function end() {                                 // la ronda cayó
 function tick(now) {
   if (!st) return;
   const t = (now - st.t0) / 1000, m = CE.multAt(t, G.k);
+  CE.autoDue(st, m).forEach(x => cashOut(x.i, 'all', x.m));
   if (m >= st.crash) return end();
   st.m = m; multEl.textContent = fmtM(m); renderStats(m, t);
   pts.push([t, m]); drawChart(false);
-  st.slots.forEach((r, i) => { if (r.auto > 1 && r.remaining > 0 && m >= r.auto) cashOut(i, 'all', r.auto); });
   requestAnimationFrame(tick);
 }
 
@@ -115,14 +116,16 @@ startBtn.addEventListener('click', () => {
   for (let i = 0; i < slots.length; i++) {
     const raw = slots[i].bet.value, v = Number(raw);
     if (i > 0 && (raw === '' || v === 0)) { bets.push(null); continue; }   // las apuestas extra son opcionales
-    if (!Number.isInteger(v) || v < CE.MIN_BET) { RC.toast('lose', `La apuesta mínima es ${CE.MIN_BET} monedas (número entero).`); slots[i].bet.value = CE.normalizeBet(raw); return; }
+    if (!Number.isSafeInteger(v) || v < CE.MIN_BET || v > Number.MAX_SAFE_INTEGER / CE.MAX_MULT / slots.length) { RC.toast('lose', `La apuesta mínima es ${CE.MIN_BET} monedas (número entero).`); slots[i].bet.value = CE.normalizeBet(raw); return; }
+    const auto = Number(slots[i].auto.value);
+    if (!Number.isFinite(auto) || (auto !== 0 && (auto <= 1 || auto >= CE.MAX_MULT || Math.abs(auto * 100 - Math.round(auto * 100)) > 1e-8))) { RC.toast('lose', 'Retiro automático inválido: mayor que 1 y menor que 1000.'); return; }
     bets.push(v);
   }
   const total = bets.reduce((a, b) => a + (b || 0), 0);
   if (total > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
   RC.addCoins(-total);
   rounds++; pts = [];
-  st = { crash: CE.crashPoint(), over: false, done: false, m: 1,
+  st = { half: G.half, crash: CE.crashPoint(), over: false, done: false, m: 1,
     slots: bets.map((b, i) => ({ bet: b || 0, auto: Number(slots[i].auto.value) || 0, remaining: b || 0, payout: 0, halfUsed: false })) };
   savePending({ game: KEY, bet: total });
   screen.classList.remove('crashed'); iconEl.textContent = G.icon;

@@ -4,11 +4,7 @@
   const isHome = page === 'index.html';
   const go = url => { document.documentElement.style.display = 'none'; location.replace(url); };
 
-  const GAME_PAGES = { 'tragamonedas.html': 'Tragamonedas', 'ruleta.html': 'Ruleta', 'Blackjack.html': 'Blackjack',
-    'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo',
-    'aviator.html': 'Aviator', 'spaceman.html': 'Spaceman', 'jetx.html': 'JetX', 'cricketx.html': 'Cricket X',
-    'aero.html': 'Aero', 'zeppelin.html': 'Zeppelin', 'spacexy.html': 'Space XY', 'bigbasscrash.html': 'Big Bass Crash',
-    'cashit.html': 'Cash It', 'highstriker.html': 'High Striker' };
+  const GAME_PAGES = RC.PAGE_GAME;
 
   /* ---- Protección de rutas ---- */
   if (document.body.hasAttribute('data-public')) {

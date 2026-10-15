@@ -185,19 +185,7 @@ new MutationObserver(() => { msgEl.classList.remove('msg-in'); reflow(msgEl); ms
   .observe(msgEl, { childList: true, characterData: true, subtree: true });
 
 // ---- Puntajes ----
-function cardValue(card) {
-  if (card.rank === 'A') return 11;
-  if (['J', 'Q', 'K'].includes(card.rank)) return 10;
-  return Number(card.rank);
-}
-
-// El As vale 11 mientras no te pases; si te pasas, vale 1.
-function evaluate(cards) {
-  let total = cards.reduce((s, c) => s + cardValue(c), 0);
-  let aces = cards.filter(c => c.rank === 'A').length;
-  while (total > 21 && aces > 0) { total -= 10; aces--; }
-  return { total, soft: aces > 0 };
-}
+const { cardValue, evaluate } = BlackjackEngine;
 const isDealerBJ = () => dealerHand.length === 2 && evaluate(dealerHand).total === 21;
 const isNatural = h => !h.fromSplit && h.cards.length === 2 && evaluate(h.cards).total === 21;
 
@@ -317,8 +305,8 @@ function refresh(hideHole = true) {
 // ---- Flujo de la ronda ----
 function deal() {
   if (phase !== 'idle') return;
-  const b = Math.floor(Number(betInput.value) || 0);
-  if (b < MIN_BET) { RC.toast('info', 'La apuesta mínima es ' + MIN_BET + ' monedas.'); return; }
+  const b = Number(betInput.value);
+  if (!Number.isSafeInteger(b) || b < MIN_BET || b > Number.MAX_SAFE_INTEGER / 10) { RC.toast('info', 'La apuesta mínima es ' + MIN_BET + ' monedas.'); return; }
   if (b > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
   betInput.value = b;
 
@@ -394,34 +382,22 @@ async function dealerTurn() {
   const live = hands.some(h => evaluate(h.cards).total <= 21 && !isNatural(h));
   if (live && !isDealerBJ()) {
     msgEl.textContent = 'Turno del repartidor…';
-    await sleep(DEALER_DELAY);
-    while (evaluate(dealerHand).total < 17) {   // pide con 16 o menos, se planta con 17 o más
+    while (BlackjackEngine.dealerHits(dealerHand)) {   // pide con 16 o menos, se planta con 17 o más
       dealerHand.push(draw());
       renderDealer(false);
-      await sleep(DEALER_DELAY);
     }
   }
   settle();
 }
 
 function settle() {
+  if (phase !== 'dealer') return;
   const d = evaluate(dealerHand).total, dBJ = isDealerBJ();
   let wager = 0, payout = 0;
 
   hands.forEach(h => {
-    const p = evaluate(h.cards).total;
-    let pay = 0, label;
-    if (p > 21) label = `Bust: te pasaste con ${p}`;
-    else if (isNatural(h)) {
-      if (dBJ) { pay = h.bet; label = 'Push: Blackjack para ambos'; }
-      else { pay = Math.round(h.bet * 2.5); label = '¡Blackjack! Paga 3:2'; }
-    }
-    else if (dBJ) label = 'El repartidor tiene Blackjack';
-    else if (d > 21) { pay = h.bet * 2; label = `Gana: el repartidor se pasa con ${d}`; }
-    else if (p > d) { pay = h.bet * 2; label = `Gana ${p} contra ${d}`; }
-    else if (p === d) { pay = h.bet; label = `Push: empate en ${p}`; }
-    else label = `Pierde ${p} contra ${d}`;
-    h.result = { pay, net: pay - h.bet, label };
+    h.result = BlackjackEngine.settleHand(h, dealerHand);
+    const pay = h.result.pay;
     wager += h.bet;
     payout += pay;
   });

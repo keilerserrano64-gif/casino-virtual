@@ -1,0 +1,5 @@
+{
+  "command": "npm run test:e2e",
+  "exitCode": 0,
+  "seconds": 11.01
+}

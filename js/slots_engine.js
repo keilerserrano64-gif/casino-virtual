@@ -21,7 +21,7 @@
   /* ---------------- Configuración de cada juego ----------------
      cluster: pay[símbolo] = [8-9, 10-11, 12+] veces la apuesta (se multiplica por scale).
      lines:   pay[símbolo] = { n: veces la apuesta de línea (apuesta/10) } (se multiplica por scale).
-     scale se calibró por simulación para un RTP ≈ 96 % (ver tests/slots_engine.test.js). */
+     scale y pesos son parámetros de la variante de casa, no tablas ni RTP oficiales. */
   const GAMES = {
     gates: {
       name: 'Gates of Olympus', studio: 'Pragmatic Play', icon: '⚡', type: 'cluster', cols: 6, rows: 5,
@@ -46,7 +46,7 @@
     },
     starburst: {
       name: 'Starburst', studio: 'NetEnt', icon: '🌟', type: 'lines', cols: 5, rows: 3, lines: 10,
-      scale: 0.255, wild: '🌟', wildReels: [1, 2, 3], wildW: 1.8, bothWays: true, maxRespins: 3, welcomeSpins: 10, topSym: '7️⃣',
+      scale: 0.255, wild: '🌟', wildReels: [1, 2, 3], wildW: 1.8, bothWays: true, maxRespins: 3, topSym: '7️⃣',
       symbols: [['7️⃣', 5], ['🎰', 6], ['🟣', 9], ['🔵', 10], ['🟢', 11], ['🟠', 12], ['🔴', 13]],
       pay: { '7️⃣': { 3: 50, 4: 200, 5: 250 }, '🎰': { 3: 25, 4: 100, 5: 120 }, '🟣': { 3: 10, 4: 50, 5: 100 }, '🔵': { 3: 10, 4: 50, 5: 100 },
         '🟢': { 3: 5, 4: 20, 5: 50 }, '🟠': { 3: 3, 4: 12, 5: 30 }, '🔴': { 3: 2, 4: 10, 5: 25 } },
@@ -59,7 +59,8 @@
   const idxOf = (c, r, cols) => r * cols + c;
 
   /* ================= Pago por grupos con cascadas (Olympus, Bonanza) ================= */
-  function spinCluster(cfg, bet, fs) {
+  function spinCluster(cfg, bet, fs, random) {
+    const { rand, randInt, pick } = random;
     const { cols, rows } = cfg, inFS = !!fs;
     const bag = cfg.symbols.concat([[cfg.scatter, cfg.scatterW]]);
     const cell = () => ({ s: pick(bag) });
@@ -100,7 +101,7 @@
     let mult = 1, fsOut = null;
     if (total > 0 && orbSum > 0) {
       if (inFS && cfg.accumMult) { fs = { ...fs, mult: fs.mult + orbSum }; mult = fs.mult; } else mult = orbSum;
-    } else if (inFS && cfg.accumMult && total > 0 && fs.mult > 0) mult = fs.mult;
+    }
     let payout = Math.floor(total * mult);
     const sp = scatters >= 6 ? cfg.scatterPay[6] : cfg.scatterPay[scatters] || 0;
     const scatterWin = Math.floor(sp * bet);
@@ -128,7 +129,7 @@
   }
   function evalLines(cfg, grid, bet, wild) {         // devuelve { win, cells }
     let win = 0; const cells = new Set(), lb = bet / cfg.lines;
-    for (const line of LINES) {
+    for (const line of LINES.slice(0, cfg.lines)) {
       const seq = line.map((r, c) => grid[c][r]);
       const dirs = cfg.bothWays ? [false, true] : [false];
       let leftN = 0;
@@ -147,7 +148,8 @@
     return { win, cells: [...cells] };
   }
 
-  function spinBook(cfg, bet, fs) {
+  function spinBook(cfg, bet, fs, random) {
+    const { rand, randInt, pick } = random;
     const bag = cfg.symbols.concat([[cfg.book, cfg.bookW]]);
     const grid = Array.from({ length: cfg.cols }, () => Array.from({ length: cfg.rows }, () => pick(bag)));
     const show = () => flat(grid, cfg.cols, cfg.rows, x => x === BLOCK ? '' : x);
@@ -185,7 +187,8 @@
     return { steps, payout, scatters: books, scatterWin, mult: 1, orbSum: 0, fs: fsOut, retrigger: !!fs && books >= 3 };
   }
 
-  function spinStarburst(cfg, bet) {
+  function spinStarburst(cfg, bet, random) {
+    const { pick } = random;
     const mk = c => cfg.wildReels.includes(c) ? cfg.symbols.concat([[cfg.wild, cfg.wildW]]) : cfg.symbols;
     const roll = c => Array.from({ length: cfg.rows }, () => pick(mk(c)));
     const grid = Array.from({ length: cfg.cols }, (_, c) => roll(c));
@@ -205,16 +208,46 @@
   }
 
   // spin(juego, apuesta, fs): fs = estado de giros gratis (o null en un giro normal). Devuelve { steps, payout, fs, ... }.
-  function spin(key, bet, fs) {
+  function spin(key, bet, fs, rng = rand) {
     const cfg = GAMES[key];
+    if (!cfg) throw new RangeError('Juego desconocido');
+    if (!Number.isSafeInteger(bet) || bet < MIN_BET || bet > Number.MAX_SAFE_INTEGER / MAX_WIN) throw new RangeError('Apuesta inválida');
+    if (fs && (fs.game !== key || !Number.isSafeInteger(fs.left) || fs.left <= 0 || fs.bet !== bet ||
+      !Number.isSafeInteger(fs.acc) || fs.acc < 0 || fs.acc >= MAX_WIN * bet ||
+      !Number.isFinite(fs.mult) || fs.mult < 0 || (key === 'bod' && !cfg.pay[fs.special]))) throw new RangeError('Bonificación inválida');
+    const random = {
+      rand: () => { const u = rng(); if (!Number.isFinite(u) || u < 0 || u >= 1) throw new RangeError('RNG inválido'); return u; },
+      randInt: n => Math.floor(random.rand() * n),
+      pick: list => {
+        let r = random.rand() * list.reduce((sum, e) => sum + e[1], 0);
+        for (const e of list) if ((r -= e[1]) < 0) return e[0];
+        return list[list.length - 1][0];
+      },
+    };
     let r;
-    if (cfg.type === 'cluster') r = spinCluster(cfg, bet, fs || null);
-    else if (key === 'bod') r = spinBook(cfg, bet, fs || null);
-    else r = spinStarburst(cfg, bet);
-    if (r.fs) r.fs.game = key;
+    if (cfg.type === 'cluster') r = spinCluster(cfg, bet, fs || null, random);
+    else if (key === 'bod') r = spinBook(cfg, bet, fs || null, random);
+    else r = spinStarburst(cfg, bet, random);
+    r.payout = Math.min(r.payout, MAX_WIN * bet - (fs ? fs.acc : 0));
+    if (r.fs) {
+      r.fs.game = key;
+      r.fs.acc = (fs ? fs.acc : 0) + r.payout;
+      if (r.fs.acc >= MAX_WIN * bet) r.fs.left = 0;
+    }
     return r;
   }
 
-  root.SlotEngine = { GAMES, LINES, MIN_BET, MAX_WIN, rand, randInt, pick, normalizeBet, spin };
+  // Decide toda la bonificación antes del débito o de cualquier animación.
+  function session(key, bet, fs = null, rng = rand) {
+    const rounds = []; let state = fs, payout = 0;
+    do {
+      if (rounds.length >= 10000) throw new Error('Secuencia excesiva; apuesta no iniciada');
+      const r = spin(key, bet, state, rng);
+      rounds.push(r); payout += r.payout; state = r.fs;
+    } while (state && state.left > 0);
+    return { rounds, payout };
+  }
+
+  root.SlotEngine = { GAMES, LINES, MIN_BET, MAX_WIN, rand, randInt, pick, normalizeBet, spin, session, evalLines };
   if (typeof module !== 'undefined') module.exports = root.SlotEngine;
 })(typeof window !== 'undefined' ? window : globalThis);

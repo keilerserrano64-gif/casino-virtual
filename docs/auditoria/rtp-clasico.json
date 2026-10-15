@@ -1,0 +1,10 @@
+{
+  "combinations": 64000,
+  "rtp": 0.959640625,
+  "houseEdge": 0.040359374999999975,
+  "hitFrequency": 0.57625,
+  "tripleFrequency": 0.085,
+  "pairFrequency": 0.49125,
+  "stdDev": 2.735001004725521,
+  "jackpotOdds": 2370.3703703703704
+}

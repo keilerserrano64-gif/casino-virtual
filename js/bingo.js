@@ -94,7 +94,8 @@ function renderCards() {
 function toggle(el, n) {
   if (!playing) return;
   if (!game.called.has(n)) { RC.toast('info', 'Ese número todavía no ha salido.'); return; }
-  el.classList.toggle('marked');
+  if (autoDaub.checked) el.classList.add('marked');
+  else el.classList.toggle('marked');
 }
 const markNumber = n => cardCells.forEach(cells => cells.forEach(c => { if (c.n === n) c.el.classList.add('marked'); }));
 const markAllCalled = () => game.called.forEach(markNumber);
@@ -106,17 +107,20 @@ modeSel.addEventListener('change', () => { if (playing) { modeSel.value = String
 buyBtn.addEventListener('click', () => {
   if (playing) return;
   const mode = curMode();
-  price = BE.normalizeBet(betInput.value); betInput.value = price;
+  price = Number(betInput.value);
+  if (!Number.isSafeInteger(price) || price < 10 || price > Number.MAX_SAFE_INTEGER / 15 / BE.MAX_CARDS) { RC.toast('lose', 'Apuesta inválida: entero desde 10.'); return; }
+  betInput.value = price;
   const count = BE.normalizeCount(countInput.value); countInput.value = count;
   const u = RC.getUser();
   const free = Math.min(u.bingoFreeCards || 0, count);
   const cost = (count - free) * price;
   if (cost > u.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+  const nextGame = BE.newGame(mode, count);
   if (cost > 0) RC.addCoins(-cost);
   if (free > 0) { const v = RC.getUser(); v.bingoFreeCards = (v.bingoFreeCards || 0) - free; RC.saveUser(v); }
   setJackpot(mode, BE.jackpotAfterPurchase(getJackpot(mode), cost));
   paidStake = cost; payout = 0; jackpotPaid = false;
-  game = BE.newGame(mode, count);
+  game = nextGame;
   calledEl.innerHTML = ''; ballEl.textContent = '—'; delete ballEl.dataset.g;
   renderCards();
   playing = true;
@@ -166,12 +170,13 @@ drawBtn.addEventListener('click', () => {
 });
 
 function finish() {
+  if (!playing) return;
   playing = false;
   const won = payout > 0;
   if (!won) msgEl.textContent = 'Se acabaron las bolas sin premio.';
   else if (game.fullCards.length === 0) msgEl.textContent += ` Total de la partida: +${RC.formatNumber(payout)} monedas.`;
   if (!won) RC.result({ type: 'lose', title: 'SIN PREMIO', amount: paidStake, text: 'Se acabaron las bolas.', sound: false });
-  RC.registerGameResult('Bingo · ' + game.mode + ' bolas', won, paidStake, payout);
+  RC.registerGameResult('Bingo · ' + game.mode + ' bolas', payout > paidStake, paidStake, payout);
   // Lealtad: 1 cartón gratis cada LOYALTY_EVERY partidas
   const u = RC.getUser();
   u.bingoGames = (u.bingoGames || 0) + 1;
