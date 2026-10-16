@@ -1,0 +1,45 @@
+/* catalogo.css — portadas de juego (lobby y portada): arte con rayos de luz, insignias y botón ▶ al pasar el ratón */
+.gt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; }
+.gt { position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 16px; overflow: hidden; isolation: isolate; color: #fff; text-decoration: none;
+  background: radial-gradient(120% 70% at 50% 30%, var(--c1), var(--c2) 70%); border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 10px 24px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.25); transition: transform .22s cubic-bezier(.2,1.2,.4,1), box-shadow .22s; }
+.gt::before { content: ''; position: absolute; inset: -40%; z-index: -1; opacity: .35; background: repeating-conic-gradient(from 0deg at 50% 45%, rgba(255,255,255,.22) 0 7deg, transparent 7deg 20deg); transition: transform 1.2s; }
+.gt::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.35) 50%, transparent 60%) -150% 0 / 250% 100% no-repeat; }
+.gt-art { position: absolute; inset: 0 0 34% 0; display: grid; place-items: center; }
+.gt-art::before { content: ''; position: absolute; width: 62%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.55), transparent 65%); filter: blur(6px); }
+.gt-ico { position: relative; font-size: clamp(3.6rem, 7vw, 4.8rem); line-height: 1; filter: drop-shadow(0 10px 10px rgba(0,0,0,.55)); transition: transform .3s cubic-bezier(.2,1.4,.4,1); }
+.gt-meta { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 12px 12px; display: flex; flex-direction: column; gap: 2px; background: linear-gradient(transparent, rgba(0,0,0,.82) 45%); }
+.gt-meta b { font: 400 1.55rem/1 'Bebas Neue', Impact, sans-serif; letter-spacing: .04em; text-shadow: 0 2px 0 rgba(0,0,0,.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gt-meta small { font-size: .72rem; color: rgba(255,255,255,.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gt-tag { position: absolute; top: 10px; left: 10px; z-index: 3; padding: 3px 9px; border-radius: 6px; font: 900 .64rem/1.2 system-ui, sans-serif; letter-spacing: .08em; color: #fff; background: #b8434d; box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+.gt-tag.t-hot::before { content: '🔥 '; }
+.gt-tag.t-nuevo { background: #3a8f60; }
+.gt-tag.t-top { background: linear-gradient(#d8bd7a, #a8843c); color: #17130b; }
+.gt-tag.t-jackpot { background: linear-gradient(90deg, #c9a24a, #8a8f98); }
+.gt-tag.t-vivo { background: rgba(0,0,0,.6); border: 1px solid #b8434d; }
+.gt-tag.t-vivo::before { content: '● '; color: #b8434d; }
+.gt-play { position: absolute; left: 50%; top: 40%; z-index: 3; display: grid; place-items: center; width: 62px; height: 62px; padding-left: 4px; border-radius: 50%; font-size: 1.5rem; color: #17130b;
+  background: radial-gradient(circle at 50% 30%, #e8dcb8, #c9a24a 60%, #8a6d2c); box-shadow: 0 0 0 4px rgba(255,255,255,.25); transform: translate(-50%, -50%) scale(.4); opacity: 0; transition: transform .25s cubic-bezier(.2,1.6,.4,1), opacity .2s; }
+.gt:hover, .gt:focus-visible { transform: translateY(-6px); box-shadow: 0 18px 36px rgba(0,0,0,.55), 0 0 0 2px #c9a24a; }
+.gt:hover::before { transform: rotate(40deg); }
+.gt:hover::after { animation: gtshine .8s ease-out; }
+.gt:hover .gt-ico, .gt:focus-visible .gt-ico { transform: scale(.82) translateY(-6px); filter: drop-shadow(0 10px 10px rgba(0,0,0,.55)) blur(1px) brightness(.7); }
+.gt:hover .gt-play, .gt:focus-visible .gt-play { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+@keyframes gtshine { to { background-position: 150% 0; } }
+
+/* filtros por categoría */
+.gt-cats { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: none; }
+.gt-cats::-webkit-scrollbar { display: none; }
+.gt-cat { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 999px; cursor: pointer; font: 700 .9rem system-ui, sans-serif; color: #cfd2d8; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); transition: background .15s, border-color .15s, transform .15s; text-decoration: none; }
+.gt-cat:hover { border-color: #c9a24a; transform: translateY(-1px); }
+.gt-cat[aria-pressed="true"] { color: #17130b; background: linear-gradient(#d8bd7a, #a8843c); border-color: #d8bd7a; box-shadow: none; }
+.gt-cat em { font-style: normal; font-size: .72rem; padding: 1px 7px; border-radius: 999px; background: rgba(0,0,0,.25); }
+
+.gt-sec { margin-top: 26px; }
+.gt-sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.gt-sec-head h2 { margin: 0; font: 400 1.9rem/1 'Bebas Neue', Impact, sans-serif; letter-spacing: .04em; color: #d8bd7a; text-shadow: none; }
+.gt-sec-head a, .gt-sec-head button { font: 700 .85rem system-ui, sans-serif; color: #c9a24a; background: none; border: 0; cursor: pointer; text-decoration: none; }
+.gt-sec-head a:hover, .gt-sec-head button:hover { text-decoration: underline; }
+
+@media (max-width: 520px) { .gt-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .gt-meta b { font-size: 1.3rem; } .gt-play { display: none; } }
+@media (prefers-reduced-motion: reduce) { .gt, .gt::before, .gt-ico, .gt-play { transition: none; } .gt:hover::after { animation: none; } }

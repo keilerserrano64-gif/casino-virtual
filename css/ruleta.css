@@ -1,8 +1,8 @@
 /* === BASE COMÚN (variables y componentes rc-*) — repetida en cada CSS para que funcione sin archivos extra === */
 :root {
-  --gold-300: #e6cf7a;
-  --gold-400: #d6b64a;
-  --gold-500: #c9a227;
+  --gold-300: #d8bd7a;
+  --gold-400: #c9a24a;
+  --gold-500: #b8913f;
   --cream-050: #fbf6e9;
   --cream-100: #efe6cc;
   --ink-900: #14110f;
@@ -48,7 +48,7 @@ a {
 
 .rc-panel {
   background: rgba(0, 0, 0, .22);
-  border: 1px solid rgba(201, 162, 39, .25);
+  border: 1px solid rgba(201,162,74,0.25);
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
@@ -84,7 +84,7 @@ a {
 .rc-btn-ghost {
   background: transparent;
   color: var(--cream-050);
-  border-color: rgba(201, 162, 39, .4);
+  border-color: rgba(201,162,74,0.4);
 }
 
 .rc-bet-row {
@@ -103,7 +103,7 @@ a {
   width: 110px;
   padding: 8px 10px;
   border-radius: 4px;
-  border: 1px solid rgba(201, 162, 39, .4);
+  border: 1px solid rgba(201,162,74,0.4);
   background: rgba(0, 0, 0, .3);
   color: var(--cream-050);
   font-weight: 700;
@@ -113,7 +113,7 @@ a {
   padding: 7px 12px;
   border-radius: 999px;
   border: 1px solid var(--gold-500);
-  background: rgba(201, 162, 39, .12);
+  background: rgba(201,162,74,0.12);
   color: var(--gold-300);
   font-weight: 700;
   font-size: .78rem;
@@ -130,7 +130,7 @@ a {
 .rc-table td {
   padding: 9px 10px;
   text-align: left;
-  border-bottom: 1px solid rgba(201, 162, 39, .15);
+  border-bottom: 1px solid rgba(201,162,74,0.15);
 }
 
 .rc-table th {
@@ -150,7 +150,7 @@ a {
 .rc-stat {
   padding: 14px;
   text-align: center;
-  border: 1px solid rgba(201, 162, 39, .25);
+  border: 1px solid rgba(201,162,74,0.25);
   border-radius: 8px;
   background: rgba(0, 0, 0, .18);
 }
@@ -203,7 +203,7 @@ a {
   gap: 6px;
   padding: 18px;
   border-radius: 8px;
-  border: 1px solid rgba(201, 162, 39, .25);
+  border: 1px solid rgba(201,162,74,0.25);
   background: rgba(0, 0, 0, .18);
 }
 
@@ -419,7 +419,7 @@ a {
 .choice-row button.active,
 .choice-row button.selected {
   border-color: var(--gold-400);
-  background: rgba(201, 162, 39, .25);
+  background: rgba(201,162,74,0.25);
 }
 
 .center {

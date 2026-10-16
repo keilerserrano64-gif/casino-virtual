@@ -4,10 +4,7 @@ node_modules/
 .vscode/
 backend/node_modules/
 backend/dist/
-rust/target/
-rust/pkg/
 __pycache__/
 node_modules/
-web-next/.next/
 test-results/
 playwright-report/

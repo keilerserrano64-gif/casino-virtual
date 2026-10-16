@@ -1,0 +1,5 @@
+{
+  "command": "node tests/catalog.test.js",
+  "exitCode": 0,
+  "seconds": 0.08
+}

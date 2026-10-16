@@ -1,19 +1,67 @@
-/* crash.css — estilos mínimos y funcionales de los Crash Games (mejorar después) */
-.cx-panel { max-width: 640px; margin: 0 auto; }
-.cx-hist { min-height: 30px; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.cx-chip { padding: 3px 9px; border-radius: 999px; font-size: .8rem; font-weight: 700; background: rgba(0,0,0,.35); }
-.cx-chip.hi { color: #5be08f; }
-.cx-chip.lo { color: #ff7a7a; }
-.cx-screen { text-align: center; padding: 28px 10px; margin-bottom: 14px; border: 1px solid rgba(201,162,39,.3); border-radius: 10px; background: rgba(0,0,0,.3); }
-.cx-screen.crashed { border-color: #c0392b; }
-#cxIcon { font-size: 2.6rem; }
-#cxMult { font-family: var(--font-display); font-size: 3.4rem; color: var(--gold-300); }
-.cx-screen.crashed #cxMult { color: #ff6b6b; }
-#cxStatus { min-height: 1.4em; opacity: .85; }
-.cx-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
-.cx-actions .rc-btn { padding: 12px 24px; }
-.cx-slot { margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(201,162,39,.2); }
-.cx-slot:first-of-type { border-top: 0; }
-.cx-smsg { text-align: center; margin-top: 8px; min-height: 1.3em; font-family: var(--font-display); color: var(--gold-400); }
-.cx-stats { text-align: center; font-size: .82rem; opacity: .85; margin-bottom: 8px; }
-.cx-chart { display: block; width: 100%; max-width: 600px; height: 140px; margin: 0 auto 10px; background: rgba(0,0,0,.25); border-radius: 6px; }
+/* crash.css — Crash Games: escenario animado (lienzo .cx-stage creado por crash.js), historial por colores y paneles de apuesta.
+   Cada juego tiene su color con body[data-crash] → --cx-a (acento, hex de 6 cifras: el lienzo le añade transparencia) y --cx-sky (fondo). */
+body.crash-page { --cx-a: #b8434d; --cx-b: #ff8a3d; --cx-sky: radial-gradient(120% 90% at 20% 110%, #3a0716, transparent 60%), linear-gradient(#12030a, #050208); }
+body[data-crash="spaceman"] { --cx-a: #8a8f98; --cx-b: #8a8f98; --cx-sky: radial-gradient(90% 80% at 80% 10%, #2a1460, transparent 60%), linear-gradient(#08051c, #020109); }
+body[data-crash="jetx"] { --cx-a: #8a8f98; --cx-b: #ffd23d; --cx-sky: radial-gradient(120% 90% at 50% 120%, #06325a, transparent 60%), linear-gradient(#020c1c, #01050c); }
+body[data-crash="cricketx"] { --cx-a: #3f9a68; --cx-b: #ffd23d; --cx-sky: radial-gradient(120% 80% at 50% 120%, #0b4a1c, transparent 60%), linear-gradient(#03140a, #010603); }
+body[data-crash="aero"] { --cx-a: #9fb4c8; --cx-b: #ff6b3d; --cx-sky: radial-gradient(120% 80% at 50% 120%, #233544, transparent 60%), linear-gradient(#0a1119, #03060a); }
+body[data-crash="zeppelin"] { --cx-a: #ffae2b; --cx-b: #b8434d; --cx-sky: radial-gradient(120% 90% at 30% 120%, #4a2a06, transparent 60%), linear-gradient(#140b02, #060301); }
+body[data-crash="spacexy"] { --cx-a: #8a8f98; --cx-b: #c9a24a; --cx-sky: radial-gradient(90% 80% at 70% 0, #06364a, transparent 60%), linear-gradient(#020b14, #010307); }
+body[data-crash="bigbass"] { --cx-a: #2b9bff; --cx-b: #7cc49a; --cx-sky: linear-gradient(#0a3a6a, #041a33 40%, #020a16); }
+body[data-crash="cashit"] { --cx-a: #4caf78; --cx-b: #c9a24a; --cx-sky: radial-gradient(120% 90% at 50% 120%, #0b4a24, transparent 60%), linear-gradient(#03140a, #010604); }
+body[data-crash="highstriker"] { --cx-a: #c9a24a; --cx-b: #b8434d; --cx-sky: radial-gradient(120% 90% at 50% 120%, #4a3606, transparent 60%), linear-gradient(#140f02, #060401); }
+
+.crash-page .rc-main { max-width: 1040px; }
+.cx-panel { max-width: 980px; margin: 0 auto; padding: 16px !important; }
+
+/* historial: azul < 2x, morado 2-10x, rosa ≥ 10x */
+.cx-hist { display: flex; gap: 6px; min-height: 30px; margin-bottom: 12px; overflow: hidden; mask-image: linear-gradient(90deg, #000 85%, transparent); }
+.cx-hist:empty::before { content: 'Últimas rondas aparecerán aquí'; color: var(--vg-dim, #8b8f98); font-size: .8rem; align-self: center; }
+.cx-chip { flex: none; padding: 4px 11px; border-radius: 999px; font: 800 .8rem/1.2 system-ui, sans-serif; font-variant-numeric: tabular-nums; background: rgba(255,255,255,.06); border: 1px solid currentColor; }
+.cx-chip.lo { color: #4fb8ff; }
+.cx-chip.hi { color: #b07dff; }
+.cx-chip.top { color: #ff5ce0; box-shadow: none; }
+.cx-chip:first-child { animation: cxpop .4s cubic-bezier(.2,1.6,.4,1); }
+@keyframes cxpop { from { transform: scale(.4); opacity: 0; } }
+
+/* escenario */
+.cx-screen { position: relative; overflow: hidden; height: clamp(260px, 42vw, 420px); margin-bottom: 14px; border-radius: 16px; border: 1px solid rgba(255,255,255,.1); background: var(--cx-sky); box-shadow: inset 0 0 80px rgba(0,0,0,.7), 0 10px 30px rgba(0,0,0,.4); isolation: isolate; text-align: center; }
+.cx-screen::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(60% 50% at 50% 45%, color-mix(in srgb, var(--cx-a) 22%, transparent), transparent 70%); opacity: 0; transition: opacity .4s; }
+.cx-screen.flying::after { opacity: 1; }
+.cx-stage { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+#cxIcon { position: absolute; left: 4%; top: 88%; z-index: 2; font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1; transform: translate(-50%, -70%) rotate(-12deg); filter: drop-shadow(0 6px 6px rgba(0,0,0,.6)); pointer-events: none; }
+.cx-screen:not(.flying):not(.crashed) #cxIcon { animation: cxbob 2.4s ease-in-out infinite; }
+@keyframes cxbob { 50% { transform: translate(-50%, -85%) rotate(-6deg); } }
+.cx-screen.crashed #cxIcon { animation: cxboom .6s ease-out both; }
+@keyframes cxboom { 0% { transform: translate(-50%, -70%) scale(1); } 40% { transform: translate(-50%, -70%) scale(1.8); } 100% { transform: translate(-50%, -70%) scale(1.3); } }
+#cxMult { position: relative; z-index: 3; margin-top: clamp(50px, 11vw, 120px); font: 400 clamp(4rem, 12vw, 7.5rem)/1 var(--vg-marq, 'Bebas Neue', Impact, sans-serif); letter-spacing: .02em; color: #fff; font-variant-numeric: tabular-nums; text-shadow: 0 6px 0 rgba(0,0,0,.4); }
+.cx-screen.crashed #cxMult { color: #ece8de; text-shadow: none; animation: cxshake .45s; }
+@keyframes cxshake { 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(4px); } }
+.cx-screen.crashed { border-color: rgba(184,67,77,0.48); box-shadow: inset 0 0 90px rgba(184,67,77,0.28); }
+#cxStatus { position: relative; z-index: 3; display: inline-block; min-height: 1.4em; margin-top: 10px; padding: 4px 16px; border-radius: 999px; background: rgba(0,0,0,.45); backdrop-filter: blur(4px); color: #f0eaff; font-weight: 600; font-size: .92rem; }
+.cx-stats { margin: -4px 0 12px; padding: 8px 12px; border-radius: 10px; background: rgba(0,0,0,.35); text-align: center; font-size: .82rem; color: var(--vg-dim, #8b8f98); font-variant-numeric: tabular-nums; }
+.cx-chart { display: none; }                      /* High Striker: su curva ya se ve en el escenario */
+
+/* paneles de apuesta: uno o dos lado a lado */
+.cx-panel:has(.cx-slot ~ .cx-slot) { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+.cx-panel:has(.cx-slot ~ .cx-slot) > :not(.cx-slot) { grid-column: 1 / -1; }
+.cx-slot { margin-top: 0; padding: 14px; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; background: linear-gradient(rgba(255,255,255,.04), rgba(0,0,0,.25)); box-sizing: border-box; }
+.cx-slot .rc-bet-row { flex-wrap: wrap; gap: 8px; }
+.cx-slot .rc-bet-row label { color: var(--vg-dim, #8b8f98); font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.cx-slot .rc-bet-input { width: 96px; text-align: center; font-weight: 800; font-size: 1rem; border-radius: 999px; }
+.cx-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 12px; }
+.cx-actions .rc-btn { min-width: 220px; padding: 14px 28px; border-radius: 14px; font-size: 1.35rem; }
+.cx-cash { background: linear-gradient(#ffb547, #e86a00); color: #2b1300; border: 2px solid #ffcf7a; box-shadow: 0 4px 0 #6b3000; font-variant-numeric: tabular-nums; }
+.cx-cash:not(:disabled) { animation: cxpulse 1s ease-in-out infinite; }
+@keyframes cxpulse { 50% { box-shadow: 0 4px 0 #6b3000; } }
+.cx-cash:disabled { background: rgba(255,255,255,.06); color: rgba(255,255,255,.35); border-color: rgba(255,255,255,.12); box-shadow: none; }
+.cx-half { background: linear-gradient(#b9bec6, #2b8fd6); color: #032038; border: 2px solid #c4f1ff; }
+#startBtn { min-width: 300px; background: linear-gradient(#4dff9a, #0a9a52); color: #022a14; border: 2px solid #a8ffcf; box-shadow: 0 5px 0 #04351d; font-size: 1.6rem; }
+#startBtn:disabled { background: rgba(255,255,255,.06); color: rgba(255,255,255,.35); border-color: rgba(255,255,255,.12); box-shadow: none; }
+.cx-smsg { text-align: center; margin-top: 8px; min-height: 1.3em; font: 400 1.2rem var(--vg-marq, 'Bebas Neue', sans-serif); letter-spacing: .04em; color: #7cc49a; text-shadow: none; }
+
+@media (max-width: 640px) {
+  .cx-panel:has(.cx-slot ~ .cx-slot) { grid-template-columns: 1fr; gap: 10px; }
+  .cx-actions .rc-btn, #startBtn { min-width: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { #cxIcon, .cx-cash, .cx-chip, #cxMult { animation: none !important; } }

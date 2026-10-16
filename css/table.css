@@ -1,0 +1,14 @@
+.table-panel { max-width: 800px; margin: 1.5rem auto; padding: 1.25rem; border: 1px solid #8c7540; border-radius: 16px; background: #171225; }
+.table-panel form { display: grid; gap: .75rem; }
+.table-panel select, .table-panel input, .table-panel button { padding: .8rem; max-width: 100%; min-width: 0; font: inherit; }
+.table-panel select { width: 100%; }
+.table-panel button { cursor: pointer; }
+.table-panel button:disabled { cursor: wait; opacity: .6; }
+.table-panel :focus-visible { outline: 3px solid #ffd76a; outline-offset: 3px; }
+.table-panel table { width: 100%; border-collapse: collapse; }
+.table-panel th, .table-panel td { padding: .4rem; text-align: left; border-bottom: 1px solid #54465c; }
+.table-panel summary { cursor: pointer; font-weight: bold; padding: .8rem 0; }
+.table-result { min-height: 4rem; font-size: 1.25rem; }
+.catalog-list details { margin: .8rem 0; border-bottom: 1px solid #54465c; padding: .5rem; overflow-wrap: anywhere; }
+.catalog-list summary { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .table-panel * { animation: none !important; transition: none !important; } }

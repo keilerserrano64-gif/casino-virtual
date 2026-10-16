@@ -1,37 +1,36 @@
-// lobby.js — página de juegos con buscador (usa RC de app.js)
+// lobby.js — página de juegos: categorías, buscador y secciones (usa RC de app.js y RCCatalog de catalogo.js)
 RC.initHeader();
 const $ = id => document.getElementById(id);
-const on = n => RC.isGameEnabled(n);
-const CLASSIC = [
-  ['Tragamonedas', 'Slots', 'linear-gradient(160deg,#d6218a,#3a0a4a)', '3 carretes y multiplicadores'],
-  ['Ruleta', 'Ruleta', 'linear-gradient(160deg,#c4162e,#3b0710)', 'Ruleta europea'],
-  ['Blackjack', 'Blackjack', 'linear-gradient(160deg,#0f9d58,#053a20)', 'Pide o plántate'],
-  ['Poker', 'Póker', 'linear-gradient(160deg,#2a64d6,#0a1a4a)', "Texas Hold'em"],
-  ['Dados', 'Dados', 'linear-gradient(160deg,#f28c1a,#4a1f04)', 'Craps con mesa completa'],
-  ['Carreras', 'Carreras', 'linear-gradient(160deg,#12b5b0,#053a3a)', 'Elige tu caballo'],
-  ['Bingo', 'Bingo', 'linear-gradient(160deg,#8a3ff0,#25094f)', 'Completa líneas y gana'],
-  ['Aviator', 'Aviator', 'linear-gradient(160deg,#e0243a,#3a0710)', 'Crash · Spribe'],
-  ['Spaceman', 'Spaceman', 'linear-gradient(160deg,#6a3ff0,#120a4f)', 'Crash · retiro del 50 %'],
-  ['JetX', 'JetX', 'linear-gradient(160deg,#1a8fd6,#04243a)', 'Crash · Smartsoft'],
-  ['Cricket X', 'Cricket X', 'linear-gradient(160deg,#2fb34a,#073a12)', 'Crash · Smartsoft'],
-  ['Aero', 'Aero', 'linear-gradient(160deg,#5a6b7a,#0d1a26)', 'Crash · Turbo Games'],
-  ['Zeppelin', 'Zeppelin', 'linear-gradient(160deg,#c98a2b,#3a2204)', 'Crash · doble apuesta'],
-  ['Space XY', 'Space XY', 'linear-gradient(160deg,#16c7c7,#06203a)', 'Crash · BGaming'],
-  ['Big Bass Crash', 'Big Bass Crash', 'linear-gradient(160deg,#1f8fe0,#052a4a)', 'Crash de pesca'],
-  ['Cash It', 'Cash It', 'linear-gradient(160deg,#2fa84f,#06280f)', 'Crash · Playtech'],
-  ['High Striker', 'High Striker', 'linear-gradient(160deg,#e0a21f,#3a2704)', 'Crash · curva de mercado'],
-  ['Torneo', 'Torneos', 'linear-gradient(160deg,#e0b422,#4a3604)', 'Compite contra otros jugadores'],
-].filter(c => c[0] === 'Torneo' || on(c[0]));
-const norm = t => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-const searchEl = $('gameSearch');
+const { CATS, list, tile } = RCCatalog;
+const ALL = list();
+const norm = t => String(t).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const searchEl = $('gameSearch'), catsEl = $('lbCats');
+const inCat = (g, c) => c === 'todos' || (c === 'populares' ? g.pop : g.cat === c);
+let cat = CATS.some(c => c.id === location.hash.slice(1)) ? location.hash.slice(1) : 'todos';
+
+$('lbCount').textContent = ALL.filter(g => g.key !== 'Torneo').length;
+catsEl.innerHTML = CATS.map(c => `<button type="button" class="gt-cat" data-cat="${c.id}">${c.icon} ${c.label} <em>${ALL.filter(g => inCat(g, c.id)).length}</em></button>`).join('');
+
+const section = (title, games, more) => `<section class="gt-sec"><div class="gt-sec-head"><h2>${title}</h2>${more ? `<button type="button" data-go="${more}">Ver todos →</button>` : ''}</div><div class="gt-grid">${games.map(tile).join('')}</div></section>`;
 
 function render() {
   const q = norm(searchEl.value.trim());
-  const hit = (...t) => !q || norm(t.join(' ')).includes(q);
-  const big = CLASSIC.filter(([n, t, , d]) => hit(n, t, d));
-  $('lbGrid').innerHTML = big.map(([n, t, bg, d]) => `<a class="lb-tile" href="${RC.GAME_INFO[n].href}" style="--bg:${bg}"><span class="ico">${RC.GAME_INFO[n].icon}</span><b>${t}</b><span>${d}</span><span class="go">JUGAR</span></a>`).join('');
-  $('lbEmpty').hidden = big.length > 0;
+  catsEl.querySelectorAll('.gt-cat').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === cat));
+  let html = '', n = 0;
+  if (q) {                                              // búsqueda: una sola cuadrícula con todo lo que coincide
+    const hit = ALL.filter(g => inCat(g, cat) && norm([g.key, g.title, g.sub, g.cat].join(' ')).includes(q));
+    n = hit.length; if (n) html = section(`Resultados para “${RC.esc(searchEl.value.trim())}”`, hit);
+  } else if (cat === 'todos') {                         // vista general: una fila por categoría (cada juego aparece una sola vez)
+    html = CATS.slice(2).map(c => { const g = ALL.filter(x => inCat(x, c.id)); n += g.length; return g.length ? section(c.label, g, c.id) : ''; }).join('');
+  } else {
+    const g = ALL.filter(x => inCat(x, cat)), c = CATS.find(x => x.id === cat);
+    n = g.length; if (n) html = section(c.label, g);
+  }
+  $('lbGrid').innerHTML = html;
+  $('lbEmpty').hidden = n > 0;
 }
+const setCat = c => { cat = c; history.replaceState(null, '', c === 'todos' ? location.pathname : '#' + c); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+catsEl.addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (b) setCat(b.dataset.cat); });
+$('lbGrid').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) setCat(b.dataset.go); });
 searchEl.addEventListener('input', render);
 render();
-searchEl.focus({ preventScroll: true });

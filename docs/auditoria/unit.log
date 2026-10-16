@@ -1,0 +1,17 @@
+
+> test:unit
+> vitest run
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /home/vercel-sandbox/workspace/work/casino-virtual
+
+ ✓ tests/unit/slots.test.ts (2 tests) 196ms
+ ✓ tests/unit/slots-parity.test.ts (1 test) 1998ms
+   ✓ cliente y backend coinciden en las 40³ paradas: pesos, retorno y RTP exactos 1997ms
+
+ Test Files  2 passed (2)
+      Tests  3 passed (3)
+   Start at  00:01:35
+   Duration  2.78s (transform 99ms, setup 0ms, collect 147ms, tests 2.19s, environment 0ms, prepare 470ms)
+

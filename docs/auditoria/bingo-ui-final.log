@@ -1,0 +1,28 @@
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:50] "GET /index.html HTTP/1.1" 200 -
+
+Running 1 test using 1 worker
+
+(node:8848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /index.html HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /css/base.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /css/rendimiento.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /css/inicio.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/auth.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/app.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/inicio.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /html/bingo.html HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /css/base.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /css/juegos.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /css/vegas.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /css/bingo.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /css/rendimiento.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/app.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/ia_rival_engine.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/ia_rival.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/auth.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/bingo_engine.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:07:51] "GET /js/bingo.js HTTP/1.1" 200 -
+  ✓  1 tests/e2e/games.spec.ts:186:5 › Bingo: marcado manual/auto, apuesta inválida y premio parcial registrado como pérdida neta (544ms)
+
+  1 passed (1.6s)

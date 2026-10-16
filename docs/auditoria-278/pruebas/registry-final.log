@@ -1,0 +1,40 @@
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:01] "GET /index.html HTTP/1.1" 200 -
+
+Running 1 test using 1 worker
+
+(node:6935) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /index.html HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /css/base.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /css/rendimiento.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /css/inicio.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /js/app.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /js/auth.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /js/inicio.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /html/juegos.html HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /css/base.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /css/vegas.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /css/rendimiento.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /css/lobby.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /js/app.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /js/auth.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:02] "GET /js/lobby.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /html/catalogo278.html HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /css/base.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /js/app.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /js/auth.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /css/table.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /js/catalog278.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /catalogo_reglas.json HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /html/sic-bo.html HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /css/base.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /css/table.css HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /js/table.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /js/app.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /js/auth.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /js/table_engine.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /js/table_settlement.js HTTP/1.1" 200 -
+[WebServer] 127.0.0.1 - - [15/Oct/2026 00:57:03] "GET /catalogo_reglas.json HTTP/1.1" 200 -
+  ✓  1 tests/e2e/catalog278.spec.ts:52:5 › registro visible conserva exactamente los 278 nombres, alias y pendientes (895ms)
+
+  1 passed (1.8s)

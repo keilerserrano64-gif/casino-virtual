@@ -6,13 +6,18 @@
   const getCrypto = () => (typeof globalThis !== 'undefined' && globalThis.crypto && globalThis.crypto.getRandomValues)
     ? globalThis.crypto : require('crypto').webcrypto;
 
+  const randomBuffer = new Uint32Array(1024);
+  let randomIndex = randomBuffer.length;
+
   // Entero uniforme en [0, n) por muestreo con rechazo.
   function randInt(n) {
     if (!Number.isInteger(n) || n <= 0 || n > 0xFFFFFFFF) throw new RangeError('n fuera de rango');
     const limit = 0x100000000 - (0x100000000 % n);
-    const buf = new Uint32Array(1);
     let x;
-    do { getCrypto().getRandomValues(buf); x = buf[0]; } while (x >= limit);
+    do {
+      if (randomIndex === randomBuffer.length) { getCrypto().getRandomValues(randomBuffer); randomIndex = 0; }
+      x = randomBuffer[randomIndex++];
+    } while (x >= limit);
     return x % n;
   }
 
@@ -47,22 +52,22 @@
 
   // 90 bolas: 3 filas x 9 columnas, 5 números por fila, 15 en total, 1-3 números por columna.
   function buildCard90() {
-    for (;;) {
+    {
       const counts = Array(9).fill(1);                         // cada columna al menos 1
       let extra = 15 - 9;
-      while (extra > 0) { const c = randInt(9); if (counts[c] < 3) { counts[c]++; extra--; } }
+      while (extra > 0) { const available = counts.map((n, c) => n < 3 ? c : -1).filter(c => c >= 0); counts[available[randInt(available.length)]]++; extra--; }
       // reparte las posiciones por fila: cada fila debe tener exactamente 5
       const grid = Array.from({ length: 3 }, () => Array(9).fill(false));
       const rowLoad = [0, 0, 0];
       let ok = true;
-      const order = shuffle(range(0, 8));
+      const order = shuffle(range(0, 8)).sort((a, b) => counts[b] - counts[a]);
       for (const c of order) {
         const rowsOrder = shuffle([0, 1, 2]).sort((a, b) => rowLoad[a] - rowLoad[b]);
         const chosen = rowsOrder.filter(r => rowLoad[r] < 5).slice(0, counts[c]);
         if (chosen.length < counts[c]) { ok = false; break; }
         chosen.forEach(r => { grid[r][c] = true; rowLoad[r]++; });
       }
-      if (!ok || rowLoad.some(v => v !== 5)) continue;
+      if (!ok || rowLoad.some(v => v !== 5)) throw new Error('Distribución de cartón inválida');
       const cells = Array(27).fill(null);
       for (let c = 0; c < 9; c++) {
         const lo = c === 0 ? 1 : c * 10, hi = c === 8 ? 90 : c * 10 + 9;
@@ -101,18 +106,24 @@
     return L;
   }
 
+  const LINES_75 = linesOf(75);
+
   // ¿Está cubierta una casilla? (libre o número ya cantado). Las casillas vacías del 90 no cuentan.
   const covered = (v, called) => v === 0 || called.has(v);
 
   function lineDone(card, called) {
     if (card.mode === 90) {
       for (let r = 0; r < 3; r++) {
-        const nums = card.cells.slice(r * 9, r * 9 + 9).filter(v => v !== null);
-        if (nums.every(v => called.has(v))) return true;
+        let complete = true;
+        for (let c = 0; c < 9; c++) {
+          const value = card.cells[r * 9 + c];
+          if (value !== null && !called.has(value)) { complete = false; break; }
+        }
+        if (complete) return true;
       }
       return false;
     }
-    return linesOf(75).some(l => l.every(i => covered(card.cells[i], called)));
+    return LINES_75.some(l => l.every(i => covered(card.cells[i], called)));
   }
 
   function fullDone(card, called) {

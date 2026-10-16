@@ -2,11 +2,7 @@
 
 RC.initHeader();
 
-const RED_NUMBERS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
-function colorOf(n) {
-  if (n === 0) return 'green';
-  return RED_NUMBERS.has(n) ? 'red' : 'black';
-}
+const colorOf = RouletteEngine.colorOf;
 
 /* ================= Dibujo de la ruleta (SVG) ================= */
 
@@ -66,11 +62,11 @@ function buildWheelSVG() {
 <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" focusable="false">
   <defs>
     <linearGradient id="gWood" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#5a1f8a"/><stop offset=".35" stop-color="#1d1450"/>
-      <stop offset=".65" stop-color="#0a0720"/><stop offset="1" stop-color="#3a1a70"/>
+      <stop offset="0" stop-color="#5a3b24"/><stop offset=".35" stop-color="#3a2516"/>
+      <stop offset=".65" stop-color="#22160d"/><stop offset="1" stop-color="#4a3020"/>
     </linearGradient>
     <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f7e39b"/><stop offset=".5" stop-color="#c9a227"/><stop offset="1" stop-color="#7a5d10"/>
+      <stop offset="0" stop-color="#e3cf9a"/><stop offset=".5" stop-color="#b8954a"/><stop offset="1" stop-color="#6e5526"/>
     </linearGradient>
     <radialGradient id="gTrack" gradientUnits="userSpaceOnUse" cx="${C}" cy="${C}" r="462">
       <stop offset=".84" stop-color="#0a0807"/><stop offset=".90" stop-color="#2b231d"/>
@@ -81,11 +77,11 @@ function buildWheelSVG() {
       <stop offset="1" stop-color="rgba(0,0,0,.40)"/>
     </radialGradient>
     <radialGradient id="gCone" gradientUnits="userSpaceOnUse" cx="${C}" cy="${C}" r="${R_NUM_IN}">
-      <stop offset="0" stop-color="#1a0a3a"/><stop offset=".45" stop-color="#3a1a70"/>
-      <stop offset=".8" stop-color="#5a2a9a"/><stop offset="1" stop-color="#1a0a3a"/>
+      <stop offset="0" stop-color="#1c130c"/><stop offset=".45" stop-color="#3a2618"/>
+      <stop offset=".8" stop-color="#4e3421"/><stop offset="1" stop-color="#1c130c"/>
     </radialGradient>
     <radialGradient id="gHubDark" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#2a1a60"/><stop offset="1" stop-color="#07050d"/>
+      <stop offset="0" stop-color="#2a1c12"/><stop offset="1" stop-color="#0b0806"/>
     </radialGradient>
     <linearGradient id="gShine" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="rgba(255,255,255,.20)"/><stop offset=".45" stop-color="rgba(255,255,255,0)"/>
@@ -250,16 +246,21 @@ const historyStrip = document.getElementById('historyStrip');
 let history = [];
 
 spinBtn.addEventListener('click', () => {
-  const bet = Math.max(10, Math.floor(Number(betInput.value) || 0));
+  if (spinBtn.disabled) return;
+  const bet = Number(betInput.value);
+  if (!Number.isSafeInteger(bet) || bet < 10 || bet > Number.MAX_SAFE_INTEGER / 36) { RC.toast('lose', 'Apuesta inválida: entero desde 10.'); return; }
   const user = RC.getUser();
   if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
   if (currentMode === 'number' && selectedNumber === null) { RC.toast('info', 'Elige un número primero.'); return; }
 
+  const outcome = RouletteEngine.spin({ mode: currentMode, value: currentMode === 'number' ? selectedNumber : currentValue, bet });
+  const { landing, won, mult, payout } = outcome;
   betInput.value = bet;
   spinBtn.disabled = true;
   RC.addCoins(-bet);
 
-  const landing = Math.floor(Math.random() * 37);
+  if (payout > 0) RC.addCoins(payout);
+  RC.registerGameResult('Ruleta', won, bet, payout);
 
   spinTo(landing, () => {
     const c = colorOf(landing);
@@ -267,20 +268,9 @@ spinBtn.addEventListener('click', () => {
     resultNumber.className = 'result-number ' + c;
     wheel.setAttribute('aria-label', `Ruleta europea. Salió el ${landing}, ${c === 'red' ? 'rojo' : c === 'black' ? 'negro' : 'verde'}.`);
 
-    let won = false, mult = 0;
-    if (currentMode === 'color' && c === currentValue) { won = true; mult = 2; }
-    if (currentMode === 'parity') {
-      const isEven = landing !== 0 && landing % 2 === 0;
-      if ((currentValue === 'par' && isEven) || (currentValue === 'impar' && !isEven)) { won = true; mult = 2; }
-    }
-    if (currentMode === 'number' && selectedNumber === landing) { won = true; mult = 35; }
-
-    const payout = won ? bet * mult : 0;
-    if (payout > 0) RC.addCoins(payout);
     RC.result(won
       ? { type: mult >= 35 ? 'big' : 'win', title: mult >= 35 ? '¡PLENO!' : '¡GANASTE!', amount: payout, text: `Salió el ${landing}.` }
       : { type: 'lose', title: 'SIN PREMIO', amount: bet, text: `Salió el ${landing}.` });
-    RC.registerGameResult('Ruleta', won, bet, payout);
 
     history.unshift(landing);
     history = history.slice(0, 10);

@@ -5,32 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Juegos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/vegas.css">
 <link rel="stylesheet" href="../css/lobby.css">
+<link rel="stylesheet" href="../css/catalogo.css">
 <link rel="stylesheet" href="../css/rendimiento.css">
+<link rel="stylesheet" href="../css/tema.css">
 </head>
 <body class="vg lobby-page">
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-  <h1>Juegos</h1>
-  <div class="lb-search">
-    <span aria-hidden="true">🔍</span>
-    <input type="search" id="gameSearch" placeholder="Buscar juego: ruleta, bingo, dados…" aria-label="Buscar juegos" autocomplete="off">
-  </div>
-  <div class="lb-grid" id="lbGrid"></div>
+  <section class="lb-hero">
+    <div>
+      <p class="lb-kicker">Royal Casino · monedas virtuales</p>
+      <h1>Casino</h1>
+      <p class="lb-sub"><b id="lbCount">0</b> juegos: slots, crash, mesas y más.</p>
+    </div>
+    <div class="lb-search">
+      <span aria-hidden="true">🔍</span>
+      <input type="search" id="gameSearch" placeholder="Buscar juego: ruleta, bingo, dados…" aria-label="Buscar juegos" autocomplete="off">
+    </div>
+  </section>
+  <nav class="gt-cats" id="lbCats" aria-label="Categorías"></nav>
+  <div id="lbGrid"></div>
   <p class="lb-empty" id="lbEmpty" hidden>No hay juegos con ese nombre.</p>
 </main>
 
-<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+<footer class="rc-footer"><p><span class="rc-18" title="Solo mayores de edad">18+</span> © Royal Casino · Juego responsable · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
 
 <script src="../js/nube.js"></script>
+<script src="../js/iconos.js"></script>
 <script src="../js/app.js"></script>
 <script src="../js/firebase_auth.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/catalogo.js"></script>
 <script src="../js/lobby.js"></script>
 </body>
 </html>

@@ -4,4 +4,4 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 npx -y -p typescript tsc -p ts
 (cd backend && npm install && npm run build)
-echo "Listo. Sube index.html, html/, css/, js/, img/ al hosting y ejecuta: node backend/dist/server.js"
+echo "Listo. Sube index.html, html/, css/, js/ al hosting y ejecuta: node backend/dist/server.js"

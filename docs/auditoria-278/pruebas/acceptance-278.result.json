@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "scripts/check-catalog278.js",
+    "--require-complete"
+  ],
+  "cwd": "/home/vercel-sandbox/workspace/work/casino-278",
+  "exit_code": 1,
+  "status": "FALL\u00d3",
+  "seconds": 0.17,
+  "at": "2026-10-15T00:57:00.433379+00:00"
+}

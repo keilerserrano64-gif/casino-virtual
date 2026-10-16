@@ -1,0 +1,1463 @@
+diff --git a/README.md b/README.md
+index f2174b2..b4dd351 100644
+--- a/README.md
++++ b/README.md
+@@ -2,6 +2,10 @@
+ 
+ Casino virtual hecho con HTML, CSS y JavaScript. **Monedas 100% ficticias, sin dinero real.**
+ 
++## Reglas auditadas
++
++Consulta [variantes, fuentes y límites](docs/REGLAS_Y_FUENTES.md), la página `html/reglas.html` y `INFORME_CAMBIOS.md`. Esta revisión recibida contenía 17 juegos y cuatro slots ocultos, no Gonzo’s Quest ni Book of Ra.
++
+ ## Cómo usarlo
+ Abre **`index.html`** (la portada, en la raíz del proyecto) en el navegador, o usa la extensión Live Server de VS Code.
+ Desde ahí se llega a todo: *Registrarse*, *Iniciar sesión* y el resto de páginas.
+@@ -45,7 +49,7 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
+ - **RTP teórico**: 95,96 % (ventaja de la casa 4,04 %), calculado de forma exacta recorriendo las 40³ combinaciones.
+ - **Volatilidad**: media (desviación típica ≈ 2,7 apuestas). Hay premio en el 57,6 % de los giros; 7️⃣ 7️⃣ 7️⃣ sale 1 de cada 2 370.
+ - **Tabla de pagos**: 7️⃣ ×100 · 💎 ×30 · ⭐ ×15 · 🍊 ×10 · 🍋 ×6 · 🍒 ×4 · dos iguales ×1. Los pesos de cada símbolo en la tira virtual están en `WEIGHTS`.
+-- El resultado se decide y se guarda antes de animar: si se cierra la página durante el giro, el premio se acredita al volver.
++- El resultado se decide y se guarda antes de animar: el premio y el historial se liquidan antes de animar; los pendientes de versiones anteriores se recuperan al volver.
+ - `js/tragamonedas_fx.js`: capa visual y sonora (`SlotFX`). Solo anima y suena; nunca decide resultados. Incluye cabina con luces de marquesina, marcadores (saldo, apuesta, último premio), carretes que giran con desenfoque y frenan uno a uno, línea de pago que se ilumina, Big Win / Mega Win / Jackpot con lluvia de monedas, sonidos sintetizados (WebAudio) y botón de sonido.
+ - Controles: apuesta −/+ (escalones 10 · 20 · 50 · 100 · 200 · 500 · 1000 · 2000 · 5000 · 10000), **AUTO** (10 giros; se detiene con JACKPOT, sin saldo o al cambiar de pestaña).
+ - Los símbolos de arriba y abajo de la línea central son decorativos y nunca forman pares ni triples, para que no parezcan un premio.
+@@ -60,10 +64,10 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
+ 
+ ## Crash Games
+ `html/aviator.html`, `spaceman.html`, `jetx.html`, `cricketx.html`, `aero.html`, `zeppelin.html`, `spacexy.html`, `bigbasscrash.html`, `cashit.html` y `highstriker.html` — el multiplicador sube desde 1,00x y hay que retirar antes de que caiga.
+-- `js/crash_engine.js`: RNG (crypto), punto de caída con ventaja de la casa 3 % (RTP 97 %), multiplicador e^(k·t) y pagos. Sin DOM; se prueba en Node (`node tests/crash_engine.test.js`).
++- `js/crash_engine.js`: RNG (crypto), punto de caída con distribución propia con parámetro de ventaja 3 % (retorno efectivo depende del retiro y redondeo), multiplicador e^(k·t) y pagos. Sin DOM; se prueba en Node (`node tests/crash_engine.test.js`).
+ - `js/crash.js` + `css/crash.css`: lógica y estilos compartidos; cada página declara `data-crash="..."` en el `<body>` y uno o más bloques `.cx-slot` (una apuesta cada uno). Los juegos se diferencian por velocidad (`k`) e icono en `GAMES` del motor.
+-- Apuesta mínima 10, retiro manual o automático (x). Spaceman permite retirar el 50 %, Zeppelin tiene dos apuestas simultáneas (la segunda es opcional) Aero muestra estadísticas en vivo y High Striker dibuja la curva del multiplicador en un `<canvas>`. Si se cierra la página a mitad de ronda cuenta como caída.
+-- Para añadir otro crash: nueva entrada en `GAMES` del motor, una página copiando `aviator.html`, y registrarlo en `app.js` (GAMES, GAME_INFO), `auth.js`, `lobby.js` y el admin.
++- Apuesta mínima 10, retiro manual o automático (x). Spaceman y Big Bass permiten retirar el 50 %, Zeppelin y Space XY tienen dos apuestas simultáneas (la segunda es opcional) Aero muestra estadísticas en vivo y High Striker dibuja la curva del multiplicador en un `<canvas>`. Si se cierra la página a mitad de ronda, la parte pendiente cuenta como pérdida y se registra el cobro previo.
++- Para añadir otro crash: nueva entrada en `GAMES` del motor, una página copiando `aviator.html`, y registrarlo en `app.js` (GAME_INFO); las rutas de acceso y el admin se derivan del catálogo. Añadir la presentación al lobby y sus pruebas.
+ 
+ ## Bingo
+ `html/bingo.html` — dos salas: **Bingo 75** (cartón 5x5, centro libre) y **Bingo 90** (cartón 3x9 con 15 números).
+@@ -105,7 +109,7 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
+ | `tests/unit`, `tests/e2e` | **Vitest + Playwright** | `npm run test:unit` y `npm run test:e2e` (tras `npm install`) |
+ 
+ ## IA que aprende cómo juegas (Poker)
+-`js/ia_engine.js` (`RCIA`) crea un modelo de ti: cuenta cuántas veces te retiras cuando la banca **sube** y cuántas cuando no, olvidando poco a poco lo viejo (se adapta si cambias de estilo). La banca decide subir comparando el valor esperado: sube con manos fuertes y hace **faroles** si aprendió que te retiras mucho; si nunca te retiras, deja de farolear. Calcula su probabilidad de ganar con sus propias cartas y el tablero; **nunca ve tus cartas**. El modelo se guarda por usuario en `localStorage` (`rc_ia_poker_<usuario>`). Pruebas: `node tests/ia_engine.test.js`.
++`js/ia_engine.js` (`RCIA`) crea un modelo de ti: cuenta cuántas veces te retiras cuando la banca **sube** y cuántas cuando no, olvidando poco a poco lo viejo (se adapta si cambias de estilo). La banca decide subir comparando el valor esperado: sube con manos fuertes y hace **faroles** si aprendió que te retiras mucho; si nunca te retiras, deja de farolear. Calcula su probabilidad de ganar con sus propias cartas y el tablero; su función de decisión no recibe tus cartas. El modelo se guarda por usuario en `localStorage` (`rc_ia_poker_<usuario>`). Pruebas: `node tests/ia_engine.test.js`.
+ 
+ Esta IA no cambia las probabilidades de tragamonedas, ruleta, dados ni bingo: son azar (RNG) y su RTP publicado debe mantenerse.
+ 
+diff --git a/html/Blackjack.html b/html/Blackjack.html
+index 2ddface..4d60ff0 100644
+--- a/html/Blackjack.html
++++ b/html/Blackjack.html
+@@ -95,6 +95,7 @@
+       <li>El mazo se mezcla automáticamente al llegar al porcentaje elegido (se aplica en la siguiente mano).</li>
+     </ul>
+   </section>
++<p>Mesa S17: la banca se planta en 17 blando. Natural de dos cartas paga 3:2 (retorno redondeado a moneda entera más cercana). Doblar: una carta; hasta cuatro manos; ases divididos: una carta, sin redividir ases. Sin seguro ni rendición. <a href="reglas.html">Reglas</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+@@ -105,6 +106,7 @@
+ <script src="../js/ia_rival.js"></script>
+ <script src="../js/firebase_auth.js"></script>
+ <script src="../js/auth.js"></script>
++<script src="../js/blackjack_engine.js"></script>
+ <script src="../js/Blackjack.js"></script>
+ </body>
+ </html>
+diff --git a/html/admin/juegos.html b/html/admin/juegos.html
+index 60b5064..fb8a4fc 100644
+--- a/html/admin/juegos.html
++++ b/html/admin/juegos.html
+@@ -20,7 +20,7 @@
+ <nav class="admin-nav"><a href="admin.html" class="">Panel</a><a href="usuarios.html" class="">Usuarios</a><a href="juegos.html" class="active">Juegos</a><a href="estadisticas.html" class="">Estadísticas</a><a href="noticias.html" class="">Noticias</a><a href="soporte.html" class="">Soporte</a><a href="../../index.html">← Volver al casino</a></nav>
+ <section class="rc-panel" >
+ <h2>Activar o desactivar juegos</h2>
+-<ul class="toggle-list" id="gameToggles"><li><span>Tragamonedas</span><label class="rc-check"><input type="checkbox" data-game="Tragamonedas" checked> Activo</label></li><li><span>Ruleta</span><label class="rc-check"><input type="checkbox" data-game="Ruleta" checked> Activo</label></li><li><span>Blackjack</span><label class="rc-check"><input type="checkbox" data-game="Blackjack" checked> Activo</label></li><li><span>Poker</span><label class="rc-check"><input type="checkbox" data-game="Poker" checked> Activo</label></li><li><span>Dados</span><label class="rc-check"><input type="checkbox" data-game="Dados" checked> Activo</label></li><li><span>Carreras</span><label class="rc-check"><input type="checkbox" data-game="Carreras" checked> Activo</label></li><li><span>Bingo</span><label class="rc-check"><input type="checkbox" data-game="Bingo" checked> Activo</label></li><li><span>Aviator</span><label class="rc-check"><input type="checkbox" data-game="Aviator" checked> Activo</label></li><li><span>Spaceman</span><label class="rc-check"><input type="checkbox" data-game="Spaceman" checked> Activo</label></li><li><span>JetX</span><label class="rc-check"><input type="checkbox" data-game="JetX" checked> Activo</label></li><li><span>Cricket X</span><label class="rc-check"><input type="checkbox" data-game="Cricket X" checked> Activo</label></li><li><span>Aero</span><label class="rc-check"><input type="checkbox" data-game="Aero" checked> Activo</label></li><li><span>Zeppelin</span><label class="rc-check"><input type="checkbox" data-game="Zeppelin" checked> Activo</label></li><li><span>Space XY</span><label class="rc-check"><input type="checkbox" data-game="Space XY" checked> Activo</label></li><li><span>Big Bass Crash</span><label class="rc-check"><input type="checkbox" data-game="Big Bass Crash" checked> Activo</label></li><li><span>Cash It</span><label class="rc-check"><input type="checkbox" data-game="Cash It" checked> Activo</label></li><li><span>High Striker</span><label class="rc-check"><input type="checkbox" data-game="High Striker" checked> Activo</label></li></ul>
++<ul class="toggle-list" id="gameToggles"></ul>
+ </section>
+ </main>
+ 
+diff --git a/html/aero.html b/html/aero.html
+index 2753dc8..97c606e 100644
+--- a/html/aero.html
++++ b/html/aero.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🛫 Aero</h1>
+-  <p>Pilota tu caza: el multiplicador sube mientras vuelas, retira antes de que te derriben. Incluye estadísticas en tiempo real. <small>(Turbo Games · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Pilota tu caza: el multiplicador sube mientras vuelas, retira antes de que te derriben. Incluye estadísticas en tiempo real. <small>(Turbo Games · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -48,6 +48,7 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/aviator.html b/html/aviator.html
+index 54d64ea..62f0fd3 100644
+--- a/html/aviator.html
++++ b/html/aviator.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>✈️ Aviator</h1>
+-  <p>Sube el multiplicador y retira antes de que el avión desaparezca. <small>(Spribe · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Sube el multiplicador y retira antes de que el avión desaparezca. <small>(Spribe · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -47,6 +47,7 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/bigbasscrash.html b/html/bigbasscrash.html
+index e34ef1a..3fd373f 100644
+--- a/html/bigbasscrash.html
++++ b/html/bigbasscrash.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🎣 Big Bass Crash</h1>
+-  <p>Pesca multiplicadores: retira antes de que el pez se suelte del anzuelo. <small>(Pragmatic Play · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Pesca multiplicadores: retira antes de que el pez se suelte del anzuelo. <small>(Pragmatic Play · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -39,6 +39,7 @@
+       </div>
+       <div class="cx-actions">
+         <button class="rc-btn cx-cash" type="button">RETIRAR</button>
++        <button class="rc-btn cx-half" type="button">Retirar 50 %</button>
+       </div>
+       <div class="cx-smsg"></div>
+     </div>
+@@ -47,6 +48,7 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/bookofdead.html b/html/bookofdead.html
+index 0c6089f..bf09331 100644
+--- a/html/bookofdead.html
++++ b/html/bookofdead.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>📖 Book of Dead</h1>
+-  <p>Aventura en Egipto: 5x3 con 10 líneas, libro comodín/scatter y símbolo especial que se expande en los giros gratis. <small>(Play'n GO · versión virtual, monedas ficticias · RTP ≈ 96 %)</small></p>
++  <p>Aventura en Egipto: 5x3 con 10 líneas, libro comodín/scatter y símbolo especial que se expande en los giros gratis. <small>(Play'n GO · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel s-panel">
+     <div class="s-info" id="sInfo" aria-live="polite"></div>
+@@ -40,6 +40,7 @@
+     <summary>Tabla de pagos y reglas</summary>
+     <div id="sPay"></div>
+   </details>
++<p>Pesos, tabla de pagos y límite de 5000× por ronda completa son propios del proyecto. RTP estimado por simulación con intervalo de error en el informe; no certificado. <a href="reglas.html">Variante y fuentes</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/cashit.html b/html/cashit.html
+index 0bf0ef1..df2f221 100644
+--- a/html/cashit.html
++++ b/html/cashit.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>💸 Cash It</h1>
+-  <p>Sube el multiplicador y cobra antes de que se acabe el efectivo. <small>(Playtech · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Sube el multiplicador y cobra antes de que se acabe el efectivo. <small>(Playtech · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -47,6 +47,7 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/cricketx.html b/html/cricketx.html
+index 6051adb..3eb791b 100644
+--- a/html/cricketx.html
++++ b/html/cricketx.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🏏 Cricket X</h1>
+-  <p>Sube el multiplicador y retira antes de que caiga el wicket. <small>(Smartsoft Gaming · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Sube el multiplicador y retira antes de que caiga el wicket. <small>(Smartsoft Gaming · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -47,6 +47,7 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/gatesofolympus.html b/html/gatesofolympus.html
+index e29591e..2a610fd 100644
+--- a/html/gatesofolympus.html
++++ b/html/gatesofolympus.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>⚡ Gates of Olympus</h1>
+-  <p>Zeus reparte multiplicadores: 6x5, pago en cualquier lugar con 8 o más símbolos y cascadas. <small>(Pragmatic Play · versión virtual, monedas ficticias · RTP ≈ 96 %)</small></p>
++  <p>Zeus reparte multiplicadores: 6x5, pago en cualquier lugar con 8 o más símbolos y cascadas. <small>(Pragmatic Play · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel s-panel">
+     <div class="s-info" id="sInfo" aria-live="polite"></div>
+@@ -40,6 +40,7 @@
+     <summary>Tabla de pagos y reglas</summary>
+     <div id="sPay"></div>
+   </details>
++<p>Pesos, tabla de pagos y límite de 5000× por ronda completa son propios del proyecto. RTP estimado por simulación con intervalo de error en el informe; no certificado. <a href="reglas.html">Variante y fuentes</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/highstriker.html b/html/highstriker.html
+index 84e382e..0ef0bf0 100644
+--- a/html/highstriker.html
++++ b/html/highstriker.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>📈 High Striker</h1>
+-  <p>Ultra rápido: el multiplicador sube como una curva de mercado. Retira antes de que se desplome. <small>(Evoplay · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Ultra rápido: el multiplicador sube como una curva de mercado. Retira antes de que se desplome. <small>(Evoplay · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -48,6 +48,7 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/historial.html b/html/historial.html
+index ce58cf1..af08fdb 100644
+--- a/html/historial.html
++++ b/html/historial.html
+@@ -32,7 +32,7 @@
+ 
+   <section class="rc-panel hs-filters">
+     <select id="filterGame" class="rc-select" aria-label="Filtrar por juego"><option value="todos">Todos los juegos</option></select>
+-    <select id="filterResult" class="rc-select" aria-label="Filtrar por resultado"><option value="todos">Todos los resultados</option><option value="win">Ganadas</option><option value="lose">Perdidas</option></select>
++    <select id="filterResult" class="rc-select" aria-label="Filtrar por resultado"><option value="todos">Todos los resultados</option><option value="win">Ganadas</option><option value="lose">Perdidas</option><option value="push">Empates</option></select>
+     <a href="billetera.html" class="rc-btn rc-btn-ghost">💰 Ver billetera</a>
+   </section>
+ 
+diff --git a/html/jetx.html b/html/jetx.html
+index 96d6670..b4a5fbc 100644
+--- a/html/jetx.html
++++ b/html/jetx.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🛩️ JetX</h1>
+-  <p>Sube el multiplicador y retira antes de que el jet explote. <small>(Smartsoft Gaming · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Sube el multiplicador y retira antes de que el jet explote. <small>(Smartsoft Gaming · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -47,6 +47,8 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
++<p>Variante de casa con una apuesta y retiro automático. No implementa New Era JetX (hasta cuatro apuestas).</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/poker.html b/html/poker.html
+index 8d0459d..0c778e6 100644
+--- a/html/poker.html
++++ b/html/poker.html
+@@ -75,6 +75,7 @@
+       <li>Las cartas que forman la mano ganadora se iluminan. Si empatas, recuperas lo que apostaste.</li>
+     </ul>
+   </section>
++<p>Texas Hold’em heads-up simplificado con ante y decisiones reducidas. Mejor cinco de siete; empate reparte el bote. Sin ciegas, all-in, botes laterales ni rondas completas de No-Limit. La IA usa sus cartas y el tablero para decidir apuestas. <a href="reglas.html">Reglas</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+@@ -84,6 +85,7 @@
+ <script src="../js/firebase_auth.js"></script>
+ <script src="../js/auth.js"></script>
+ <script src="../js/ia_engine.js"></script>
++<script src="../js/poker_engine.js"></script>
+ <script src="../js/poker.js"></script>
+ </body>
+ </html>
+diff --git a/html/ruleta.html b/html/ruleta.html
+index ac7c510..673385a 100644
+--- a/html/ruleta.html
++++ b/html/ruleta.html
+@@ -51,6 +51,7 @@
+     </section>
+ 
+   </div>
++<p>Ruleta europea simplificada: pleno (retorno total ×36), rojo/negro y par/impar (×2). El cero pierde en dinero parejo. No se ofrecen docenas, columnas ni apuestas combinadas. <a href="reglas.html">Reglas</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+@@ -61,6 +62,7 @@
+ <script src="../js/ia_rival.js"></script>
+ <script src="../js/firebase_auth.js"></script>
+ <script src="../js/auth.js"></script>
++<script src="../js/ruleta_engine.js"></script>
+ <script src="../js/ruleta.js"></script>
+ </body>
+ </html>
+diff --git a/html/spaceman.html b/html/spaceman.html
+index a019d1e..0e69e44 100644
+--- a/html/spaceman.html
++++ b/html/spaceman.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🧑‍🚀 Spaceman</h1>
+-  <p>Sube el multiplicador y retira antes de que el astronauta se pierda. Puedes retirar solo el 50 % y dejar el resto en juego. <small>(Pragmatic Play · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Sube el multiplicador y retira antes de que el astronauta se pierda. Puedes retirar solo el 50 % y dejar el resto en juego. <small>(Pragmatic Play · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -48,6 +48,7 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/spacexy.html b/html/spacexy.html
+index 1652aae..1285bc1 100644
+--- a/html/spacexy.html
++++ b/html/spacexy.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🚀 Space XY</h1>
+-  <p>Versión minimalista y muy rápida: el multiplicador sube veloz, retira a tiempo. <small>(BGaming · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Versión minimalista y muy rápida: el multiplicador sube veloz, retira a tiempo. <small>(BGaming · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -42,11 +42,27 @@
+       </div>
+       <div class="cx-smsg"></div>
+     </div>
++    <div class="cx-slot">
++      <div class="rc-bet-row" style="justify-content:center;">
++        <label>Apuesta</label>
++        <input type="number" class="rc-bet-input cx-bet" value="0" min="10" step="10" aria-label="Segunda apuesta (opcional)">
++        <button class="rc-chip-btn" data-add="100" type="button">+100</button>
++        <button class="rc-chip-btn" data-add="500" type="button">+500</button>
++        <label>Retiro auto (x)</label>
++        <input type="number" class="rc-bet-input cx-auto" placeholder="ej. 2" min="1.01" step="0.01" aria-label="Retiro automático segunda apuesta">
++      </div>
++      <div class="cx-actions">
++        <button class="rc-btn cx-cash" type="button">RETIRAR</button>
++      </div>
++      <div class="cx-smsg"></div>
++    </div>
+ 
+     <div class="cx-actions">
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
++<p>Dos apuestas independientes con retiro automático. El límite de dos es propio de esta demostración; la página oficial confirma apuestas múltiples sin concretar este límite.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/starburst.html b/html/starburst.html
+index e4650e6..bd7da28 100644
+--- a/html/starburst.html
++++ b/html/starburst.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🌟 Starburst</h1>
+-  <p>Gemas clásicas: 5x3, 10 líneas que pagan en ambos sentidos y comodín expansivo con respin. Incluye giros de bienvenida. <small>(NetEnt · versión virtual, monedas ficticias · RTP ≈ 96 %)</small></p>
++  <p>Gemas clásicas: 5x3, 10 líneas que pagan en ambos sentidos y comodín expansivo con respin. Promoción personalizada del sitio: 10 giros de bienvenida; no forma parte de las reglas base. <small>(NetEnt · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel s-panel">
+     <div class="s-info" id="sInfo" aria-live="polite"></div>
+@@ -40,6 +40,7 @@
+     <summary>Tabla de pagos y reglas</summary>
+     <div id="sPay"></div>
+   </details>
++<p>Pesos, tabla de pagos y límite de 5000× por ronda completa son propios del proyecto. RTP estimado por simulación con intervalo de error en el informe; no certificado. <a href="reglas.html">Variante y fuentes</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/sweetbonanza.html b/html/sweetbonanza.html
+index 167c704..d138be8 100644
+--- a/html/sweetbonanza.html
++++ b/html/sweetbonanza.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🍭 Sweet Bonanza</h1>
+-  <p>Dulces y frutas: 6x5, pago en cualquier lugar, cascadas y bombas de multiplicador en los giros gratis. <small>(Pragmatic Play · versión virtual, monedas ficticias · RTP ≈ 96 %)</small></p>
++  <p>Dulces y frutas: 6x5, pago en cualquier lugar, cascadas y bombas de multiplicador en los giros gratis. <small>(Pragmatic Play · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel s-panel">
+     <div class="s-info" id="sInfo" aria-live="polite"></div>
+@@ -40,6 +40,7 @@
+     <summary>Tabla de pagos y reglas</summary>
+     <div id="sPay"></div>
+   </details>
++<p>Pesos, tabla de pagos y límite de 5000× por ronda completa son propios del proyecto. RTP estimado por simulación con intervalo de error en el informe; no certificado. <a href="reglas.html">Variante y fuentes</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/html/zeppelin.html b/html/zeppelin.html
+index 5b87b2d..dbcf0c2 100644
+--- a/html/zeppelin.html
++++ b/html/zeppelin.html
+@@ -17,7 +17,7 @@
+ 
+ <main class="rc-main">
+   <h1>🎈 Zeppelin</h1>
+-  <p>Sube con el dirigible y retira antes de que estalle. Puedes hacer dos apuestas simultáneas y retirarlas por separado. <small>(Betsolutions · versión virtual, monedas ficticias · RTP 97 %)</small></p>
++  <p>Sube con el dirigible y retira antes de que estalle. Puedes hacer dos apuestas simultáneas y retirarlas por separado. <small>(Betsolutions · demostración no oficial · variante de casa · monedas ficticias)</small></p>
+ 
+   <section class="rc-panel cx-panel">
+     <div class="cx-hist" id="cxHist" aria-label="Últimas rondas"></div>
+@@ -61,6 +61,7 @@
+       <button class="rc-btn rc-btn-gold" id="startBtn" type="button">APOSTAR</button>
+     </div>
+   </section>
++<p>Distribución propia común (parámetro de ventaja 3 %), no RTP del proveedor. Cobro antes de la caída; cada retorno se redondea hacia abajo a monedas enteras. Al desconectarse se pierde la parte en riesgo. <a href="reglas.html">Reglas y límites</a>.</p>
+ </main>
+ 
+ <footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+diff --git a/js/Blackjack.js b/js/Blackjack.js
+index 4b12a01..5a621ab 100644
+--- a/js/Blackjack.js
++++ b/js/Blackjack.js
+@@ -185,19 +185,7 @@ new MutationObserver(() => { msgEl.classList.remove('msg-in'); reflow(msgEl); ms
+   .observe(msgEl, { childList: true, characterData: true, subtree: true });
+ 
+ // ---- Puntajes ----
+-function cardValue(card) {
+-  if (card.rank === 'A') return 11;
+-  if (['J', 'Q', 'K'].includes(card.rank)) return 10;
+-  return Number(card.rank);
+-}
+-
+-// El As vale 11 mientras no te pases; si te pasas, vale 1.
+-function evaluate(cards) {
+-  let total = cards.reduce((s, c) => s + cardValue(c), 0);
+-  let aces = cards.filter(c => c.rank === 'A').length;
+-  while (total > 21 && aces > 0) { total -= 10; aces--; }
+-  return { total, soft: aces > 0 };
+-}
++const { cardValue, evaluate } = BlackjackEngine;
+ const isDealerBJ = () => dealerHand.length === 2 && evaluate(dealerHand).total === 21;
+ const isNatural = h => !h.fromSplit && h.cards.length === 2 && evaluate(h.cards).total === 21;
+ 
+@@ -317,8 +305,8 @@ function refresh(hideHole = true) {
+ // ---- Flujo de la ronda ----
+ function deal() {
+   if (phase !== 'idle') return;
+-  const b = Math.floor(Number(betInput.value) || 0);
+-  if (b < MIN_BET) { RC.toast('info', 'La apuesta mínima es ' + MIN_BET + ' monedas.'); return; }
++  const b = Number(betInput.value);
++  if (!Number.isSafeInteger(b) || b < MIN_BET || b > Number.MAX_SAFE_INTEGER / 10) { RC.toast('info', 'La apuesta mínima es ' + MIN_BET + ' monedas.'); return; }
+   if (b > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+   betInput.value = b;
+ 
+@@ -394,34 +382,22 @@ async function dealerTurn() {
+   const live = hands.some(h => evaluate(h.cards).total <= 21 && !isNatural(h));
+   if (live && !isDealerBJ()) {
+     msgEl.textContent = 'Turno del repartidor…';
+-    await sleep(DEALER_DELAY);
+-    while (evaluate(dealerHand).total < 17) {   // pide con 16 o menos, se planta con 17 o más
++    while (BlackjackEngine.dealerHits(dealerHand)) {   // pide con 16 o menos, se planta con 17 o más
+       dealerHand.push(draw());
+       renderDealer(false);
+-      await sleep(DEALER_DELAY);
+     }
+   }
+   settle();
+ }
+ 
+ function settle() {
++  if (phase !== 'dealer') return;
+   const d = evaluate(dealerHand).total, dBJ = isDealerBJ();
+   let wager = 0, payout = 0;
+ 
+   hands.forEach(h => {
+-    const p = evaluate(h.cards).total;
+-    let pay = 0, label;
+-    if (p > 21) label = `Bust: te pasaste con ${p}`;
+-    else if (isNatural(h)) {
+-      if (dBJ) { pay = h.bet; label = 'Push: Blackjack para ambos'; }
+-      else { pay = Math.round(h.bet * 2.5); label = '¡Blackjack! Paga 3:2'; }
+-    }
+-    else if (dBJ) label = 'El repartidor tiene Blackjack';
+-    else if (d > 21) { pay = h.bet * 2; label = `Gana: el repartidor se pasa con ${d}`; }
+-    else if (p > d) { pay = h.bet * 2; label = `Gana ${p} contra ${d}`; }
+-    else if (p === d) { pay = h.bet; label = `Push: empate en ${p}`; }
+-    else label = `Pierde ${p} contra ${d}`;
+-    h.result = { pay, net: pay - h.bet, label };
++    h.result = BlackjackEngine.settleHand(h, dealerHand);
++    const pay = h.result.pay;
+     wager += h.bet;
+     payout += pay;
+   });
+diff --git a/js/admin.js b/js/admin.js
+index e8ace7e..47e84e2 100644
+--- a/js/admin.js
++++ b/js/admin.js
+@@ -48,6 +48,7 @@ if ($('userBody')) {
+ 
+ /* ---- Juegos activos ---- */
+ if ($('gameToggles')) {
++  $('gameToggles').innerHTML = RC.GAMES.map(name => `<li><span>${RC.esc(name)}</span><label class="rc-check"><input type="checkbox" data-game="${RC.esc(name)}"> Activo</label></li>`).join('');
+   document.querySelectorAll('#gameToggles input[data-game]').forEach(cb => {
+     cb.checked = RC.isGameEnabled(cb.dataset.game);
+     cb.addEventListener('change', () => {
+diff --git a/js/app.js b/js/app.js
+index 4dc4458..249e1e7 100644
+--- a/js/app.js
++++ b/js/app.js
+@@ -38,7 +38,6 @@ const RC = (() => {
+   const PAGES = ROOT + 'html/';          // carpeta de las páginas
+   const HOME = ROOT + 'index.html';      // portada pública
+   const BASE = PAGES;                    // alias histórico: prefijo para enlazar páginas de html/
+-  const GAMES = ['Tragamonedas', 'Ruleta', 'Blackjack', 'Poker', 'Dados', 'Carreras', 'Bingo', 'Aviator', 'Spaceman', 'JetX', 'Cricket X', 'Aero', 'Zeppelin', 'Space XY', 'Big Bass Crash', 'Cash It', 'High Striker'];
+ 
+   const GAME_INFO = {
+     Tragamonedas: { href: 'tragamonedas.html', icon: '🎰', desc: '3 carretes y multiplicadores.' },
+@@ -58,9 +57,16 @@ const RC = (() => {
+     'Big Bass Crash': { href: 'bigbasscrash.html', icon: '🎣', desc: 'Crash de pesca.' },
+     'Cash It': { href: 'cashit.html', icon: '💸', desc: 'Crash de Playtech.' },
+     'High Striker': { href: 'highstriker.html', icon: '📈', desc: 'Crash con curva de mercado.' },
++    'Gates of Olympus': { href: 'gatesofolympus.html', icon: '⚡', desc: 'Cascadas · variante de casa.' },
++    'Book of Dead': { href: 'bookofdead.html', icon: '📖', desc: '10 líneas · variante de casa.' },
++    Starburst: { href: 'starburst.html', icon: '🌟', desc: 'Comodines expansivos · variante de casa.' },
++    'Sweet Bonanza': { href: 'sweetbonanza.html', icon: '🍭', desc: 'Cascadas · variante de casa.' },
+     Torneo: { href: 'torneos.html', icon: '🏆', desc: 'Compite contra otros jugadores.' },
+   };
+ 
++  // Los nombres existentes son las claves canónicas de historial y habilitación.
++  const GAMES = Object.keys(GAME_INFO).filter(name => name !== 'Torneo');
++
+   const NAV_ITEMS = [
+     { href: 'torneos.html', label: 'Torneos' }, { href: 'ranking.html', label: 'Ranking' }, { href: 'amigos.html', label: 'Amigos' },
+     { href: 'billetera.html', label: 'Billetera' }, { href: 'bonificasiones.html', label: 'Bonificaciones' },
+@@ -277,7 +283,7 @@ const RC = (() => {
+     const user = getUser();
+     user.gamesPlayed += 1;
+     if (won) { user.wins += 1; user.winStreak += 1; user.bestWinStreak = Math.max(user.bestWinStreak, user.winStreak); }
+-    else { user.losses += 1; user.winStreak = 0; }
++    else if (payout < wager) { user.losses += 1; user.winStreak = 0; }
+     const gname = String(game).split(' · ')[0];
+     user.gameCounts[gname] = (user.gameCounts[gname] || 0) + 1;
+     const net = payout - wager;
+@@ -296,14 +302,14 @@ const RC = (() => {
+ 
+   /* ---------- Jugadores activos y ganadores en tiempo real (compartido entre pestañas del mismo navegador) ---------- */
+ 
+-  const PAGE_GAME = { 'tragamonedas.html': 'Tragamonedas', 'ruleta.html': 'Ruleta', 'Blackjack.html': 'Blackjack', 'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo', 'aviator.html': 'Aviator', 'spaceman.html': 'Spaceman', 'jetx.html': 'JetX', 'cricketx.html': 'Cricket X', 'aero.html': 'Aero', 'zeppelin.html': 'Zeppelin', 'spacexy.html': 'Space XY', 'bigbasscrash.html': 'Big Bass Crash', 'cashit.html': 'Cash It', 'highstriker.html': 'High Striker', 'torneos.html': 'Torneo' };
++  const PAGE_GAME = Object.fromEntries(GAMES.map(name => [GAME_INFO[name].href, name]));
+   const ACTIVE_MS = 2 * 60 * 1000;
+   let presenceTimer = null;
+ 
+   function touchPresence() {
+     const u = cu(); if (!u) return;
+     const page = pageFile();
+-    write(dk('p', u), { game: PAGE_GAME[page] || null, ts: Date.now() });
++    write(dk('p', u), { game: PAGE_GAME[page] || (page === 'torneos.html' ? 'Torneo' : null), ts: Date.now() });
+     write(dk('l', u), Date.now());
+   }
+   function startPresence() {
+@@ -419,7 +425,7 @@ const RC = (() => {
+   function logHistory(game, won, wager, payout) {
+     const u = cu(); if (!u) return;
+     const list = getHistory();
+-    list.unshift({ date: new Date().toISOString(), game, result: won ? 'win' : 'lose', wager, payout, balance: getUser().coins });
++    list.unshift({ date: new Date().toISOString(), game, result: payout === wager ? 'push' : (won ? 'win' : 'lose'), wager, payout, balance: getUser().coins });
+     write(dk('h', u), list.slice(0, 200));
+   }
+   const getHistory = (u = cu()) => (u ? read(dk('h', u), []) : []);
+@@ -580,7 +586,7 @@ const RC = (() => {
+     root.querySelector('#rc-logout').addEventListener('click', () => { if (confirm('¿Cerrar sesión?')) logout(); });
+     refreshBell();
+     // Flecha para volver al lobby de juegos (solo en las páginas de cada juego)
+-    if (['tragamonedas.html', 'ruleta.html', 'Blackjack.html', 'poker.html', 'dados.html', 'carreras.html', 'bingo.html', 'aviator.html', 'spaceman.html', 'jetx.html', 'cricketx.html', 'aero.html', 'zeppelin.html', 'spacexy.html', 'bigbasscrash.html', 'cashit.html', 'highstriker.html'].includes(current)) {
++    if (PAGE_GAME[current]) {
+       const main = document.querySelector('.rc-main');
+       if (main && !main.querySelector('.rc-back-games')) main.insertAdjacentHTML('afterbegin', `<a class="rc-back-games" href="${BASE}juegos.html" title="Volver a los juegos" aria-label="Volver a los juegos"><span aria-hidden="true">←</span> Juegos</a>`);
+     }
+@@ -1070,7 +1076,7 @@ const RC = (() => {
+     getUser, saveUser, addCoins, canBet, addXP, registerGameResult, checkAchievements, resetAccount,
+     getHistory, logHistory, clearHistory, getMovements, logMove,
+     // datos
+-    ACHIEVEMENTS, GAMES, GAME_INFO, NAV_ITEMS, DEMO,
++    ACHIEVEMENTS, GAMES, GAME_INFO, PAGE_GAME, NAV_ITEMS, DEMO,
+     getRanking, globalStats, getNews, addNews, deleteNews, getTickets, addTicket, setTicketStatus, deleteTicket, markTicketRead, replyTicket, getEvents,
+     isGameEnabled, setGameEnabled, notify, getNotifications, unreadCount, markAllRead, clearNotifications,
+     getSettings, saveSettings, applySettings,
+diff --git a/js/auth.js b/js/auth.js
+index 1e71c1d..2bccb91 100644
+--- a/js/auth.js
++++ b/js/auth.js
+@@ -4,11 +4,7 @@
+   const isHome = page === 'index.html';
+   const go = url => { document.documentElement.style.display = 'none'; location.replace(url); };
+ 
+-  const GAME_PAGES = { 'tragamonedas.html': 'Tragamonedas', 'ruleta.html': 'Ruleta', 'Blackjack.html': 'Blackjack',
+-    'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo',
+-    'aviator.html': 'Aviator', 'spaceman.html': 'Spaceman', 'jetx.html': 'JetX', 'cricketx.html': 'Cricket X',
+-    'aero.html': 'Aero', 'zeppelin.html': 'Zeppelin', 'spacexy.html': 'Space XY', 'bigbasscrash.html': 'Big Bass Crash',
+-    'cashit.html': 'Cash It', 'highstriker.html': 'High Striker' };
++  const GAME_PAGES = RC.PAGE_GAME;
+ 
+   /* ---- Protección de rutas ---- */
+   if (document.body.hasAttribute('data-public')) {
+diff --git a/js/bingo.js b/js/bingo.js
+index 513d18b..075a698 100644
+--- a/js/bingo.js
++++ b/js/bingo.js
+@@ -94,7 +94,8 @@ function renderCards() {
+ function toggle(el, n) {
+   if (!playing) return;
+   if (!game.called.has(n)) { RC.toast('info', 'Ese número todavía no ha salido.'); return; }
+-  el.classList.toggle('marked');
++  if (autoDaub.checked) el.classList.add('marked');
++  else el.classList.toggle('marked');
+ }
+ const markNumber = n => cardCells.forEach(cells => cells.forEach(c => { if (c.n === n) c.el.classList.add('marked'); }));
+ const markAllCalled = () => game.called.forEach(markNumber);
+@@ -106,17 +107,20 @@ modeSel.addEventListener('change', () => { if (playing) { modeSel.value = String
+ buyBtn.addEventListener('click', () => {
+   if (playing) return;
+   const mode = curMode();
+-  price = BE.normalizeBet(betInput.value); betInput.value = price;
++  price = Number(betInput.value);
++  if (!Number.isSafeInteger(price) || price < 10 || price > Number.MAX_SAFE_INTEGER / 15 / BE.MAX_CARDS) { RC.toast('lose', 'Apuesta inválida: entero desde 10.'); return; }
++  betInput.value = price;
+   const count = BE.normalizeCount(countInput.value); countInput.value = count;
+   const u = RC.getUser();
+   const free = Math.min(u.bingoFreeCards || 0, count);
+   const cost = (count - free) * price;
+   if (cost > u.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
++  const nextGame = BE.newGame(mode, count);
+   if (cost > 0) RC.addCoins(-cost);
+   if (free > 0) { const v = RC.getUser(); v.bingoFreeCards = (v.bingoFreeCards || 0) - free; RC.saveUser(v); }
+   setJackpot(mode, BE.jackpotAfterPurchase(getJackpot(mode), cost));
+   paidStake = cost; payout = 0; jackpotPaid = false;
+-  game = BE.newGame(mode, count);
++  game = nextGame;
+   calledEl.innerHTML = ''; ballEl.textContent = '—'; delete ballEl.dataset.g;
+   renderCards();
+   playing = true;
+@@ -166,12 +170,13 @@ drawBtn.addEventListener('click', () => {
+ });
+ 
+ function finish() {
++  if (!playing) return;
+   playing = false;
+   const won = payout > 0;
+   if (!won) msgEl.textContent = 'Se acabaron las bolas sin premio.';
+   else if (game.fullCards.length === 0) msgEl.textContent += ` Total de la partida: +${RC.formatNumber(payout)} monedas.`;
+   if (!won) RC.result({ type: 'lose', title: 'SIN PREMIO', amount: paidStake, text: 'Se acabaron las bolas.', sound: false });
+-  RC.registerGameResult('Bingo · ' + game.mode + ' bolas', won, paidStake, payout);
++  RC.registerGameResult('Bingo · ' + game.mode + ' bolas', payout > paidStake, paidStake, payout);
+   // Lealtad: 1 cartón gratis cada LOYALTY_EVERY partidas
+   const u = RC.getUser();
+   u.bingoGames = (u.bingoGames || 0) + 1;
+diff --git a/js/bingo_engine.js b/js/bingo_engine.js
+index af9a6a9..fbc93bc 100644
+--- a/js/bingo_engine.js
++++ b/js/bingo_engine.js
+@@ -6,13 +6,18 @@
+   const getCrypto = () => (typeof globalThis !== 'undefined' && globalThis.crypto && globalThis.crypto.getRandomValues)
+     ? globalThis.crypto : require('crypto').webcrypto;
+ 
++  const randomBuffer = new Uint32Array(1024);
++  let randomIndex = randomBuffer.length;
++
+   // Entero uniforme en [0, n) por muestreo con rechazo.
+   function randInt(n) {
+     if (!Number.isInteger(n) || n <= 0 || n > 0xFFFFFFFF) throw new RangeError('n fuera de rango');
+     const limit = 0x100000000 - (0x100000000 % n);
+-    const buf = new Uint32Array(1);
+     let x;
+-    do { getCrypto().getRandomValues(buf); x = buf[0]; } while (x >= limit);
++    do {
++      if (randomIndex === randomBuffer.length) { getCrypto().getRandomValues(randomBuffer); randomIndex = 0; }
++      x = randomBuffer[randomIndex++];
++    } while (x >= limit);
+     return x % n;
+   }
+ 
+@@ -47,22 +52,22 @@
+ 
+   // 90 bolas: 3 filas x 9 columnas, 5 números por fila, 15 en total, 1-3 números por columna.
+   function buildCard90() {
+-    for (;;) {
++    {
+       const counts = Array(9).fill(1);                         // cada columna al menos 1
+       let extra = 15 - 9;
+-      while (extra > 0) { const c = randInt(9); if (counts[c] < 3) { counts[c]++; extra--; } }
++      while (extra > 0) { const available = counts.map((n, c) => n < 3 ? c : -1).filter(c => c >= 0); counts[available[randInt(available.length)]]++; extra--; }
+       // reparte las posiciones por fila: cada fila debe tener exactamente 5
+       const grid = Array.from({ length: 3 }, () => Array(9).fill(false));
+       const rowLoad = [0, 0, 0];
+       let ok = true;
+-      const order = shuffle(range(0, 8));
++      const order = shuffle(range(0, 8)).sort((a, b) => counts[b] - counts[a]);
+       for (const c of order) {
+         const rowsOrder = shuffle([0, 1, 2]).sort((a, b) => rowLoad[a] - rowLoad[b]);
+         const chosen = rowsOrder.filter(r => rowLoad[r] < 5).slice(0, counts[c]);
+         if (chosen.length < counts[c]) { ok = false; break; }
+         chosen.forEach(r => { grid[r][c] = true; rowLoad[r]++; });
+       }
+-      if (!ok || rowLoad.some(v => v !== 5)) continue;
++      if (!ok || rowLoad.some(v => v !== 5)) throw new Error('Distribución de cartón inválida');
+       const cells = Array(27).fill(null);
+       for (let c = 0; c < 9; c++) {
+         const lo = c === 0 ? 1 : c * 10, hi = c === 8 ? 90 : c * 10 + 9;
+@@ -101,18 +106,24 @@
+     return L;
+   }
+ 
++  const LINES_75 = linesOf(75);
++
+   // ¿Está cubierta una casilla? (libre o número ya cantado). Las casillas vacías del 90 no cuentan.
+   const covered = (v, called) => v === 0 || called.has(v);
+ 
+   function lineDone(card, called) {
+     if (card.mode === 90) {
+       for (let r = 0; r < 3; r++) {
+-        const nums = card.cells.slice(r * 9, r * 9 + 9).filter(v => v !== null);
+-        if (nums.every(v => called.has(v))) return true;
++        let complete = true;
++        for (let c = 0; c < 9; c++) {
++          const value = card.cells[r * 9 + c];
++          if (value !== null && !called.has(value)) { complete = false; break; }
++        }
++        if (complete) return true;
+       }
+       return false;
+     }
+-    return linesOf(75).some(l => l.every(i => covered(card.cells[i], called)));
++    return LINES_75.some(l => l.every(i => covered(card.cells[i], called)));
+   }
+ 
+   function fullDone(card, called) {
+diff --git a/js/crash.js b/js/crash.js
+index 60f2ec6..0aae22d 100644
+--- a/js/crash.js
++++ b/js/crash.js
+@@ -27,8 +27,9 @@ const clearPending = () => { try { RCMem.removeItem(pendKey()); } catch (e) {} }
+     const p = JSON.parse(RCMem.getItem(pendKey()));
+     clearPending();
+     if (!p || !CE.GAMES[p.game] || !Number.isInteger(p.bet) || p.bet < CE.MIN_BET) return;
+-    RC.registerGameResult(CE.GAMES[p.game].name, false, p.bet, 0);
+-    RC.toast('lose', `La ronda de ${CE.GAMES[p.game].name} terminó mientras no estabas: perdiste ${money(p.bet)} monedas.`);
++    const payout = Number.isSafeInteger(p.payout) && p.payout >= 0 ? p.payout : 0;
++    RC.registerGameResult(CE.GAMES[p.game].name, payout > p.bet, p.bet, payout);
++    RC.toast('lose', `La ronda de ${CE.GAMES[p.game].name} terminó mientras no estabas: retorno total ${money(payout)} de ${money(p.bet)} monedas.`);
+   } catch (e) {}
+ })();
+ 
+@@ -76,13 +77,13 @@ function finalize() {                            // un solo resultado por ronda,
+ function cashOut(i, part, atMult) {
+   if (!st || st.over) return;
+   const r = st.slots[i]; if (!r || r.remaining <= 0) return;
+-  const m = atMult || st.m;
+-  const stake = part === 'half' ? CE.halfStake(r.bet) : r.remaining;
+-  const pay = CE.payoutFor(stake, m);
+-  r.remaining -= stake; r.payout += pay;
+-  if (part === 'half') r.halfUsed = true;
++  const m = atMult || CE.multAt((performance.now() - st.t0) / 1000, G.k);
++  if (m >= st.crash) { tick(performance.now()); return; }
++  const pay = CE.withdraw(st, i, part, m);
++  if (!pay) return;
+   RC.addCoins(pay);
+-  slots[i].msg.textContent = `Retiraste ${money(stake)} a ${fmtM(m)}: +${money(pay)} monedas.`;
++  savePending({ game: KEY, bet: st.slots.reduce((a, x) => a + x.bet, 0), payout: st.slots.reduce((a, x) => a + x.payout, 0) });
++  slots[i].msg.textContent = `Retiraste a ${fmtM(m)}: +${money(pay)} monedas.`;
+   if (st.slots.every(x => x.remaining <= 0)) finalize();
+   setButtons();
+ }
+@@ -102,10 +103,10 @@ function end() {                                 // la ronda cayó
+ function tick(now) {
+   if (!st) return;
+   const t = (now - st.t0) / 1000, m = CE.multAt(t, G.k);
++  CE.autoDue(st, m).forEach(x => cashOut(x.i, 'all', x.m));
+   if (m >= st.crash) return end();
+   st.m = m; multEl.textContent = fmtM(m); renderStats(m, t);
+   pts.push([t, m]); drawChart(false);
+-  st.slots.forEach((r, i) => { if (r.auto > 1 && r.remaining > 0 && m >= r.auto) cashOut(i, 'all', r.auto); });
+   requestAnimationFrame(tick);
+ }
+ 
+@@ -115,14 +116,16 @@ startBtn.addEventListener('click', () => {
+   for (let i = 0; i < slots.length; i++) {
+     const raw = slots[i].bet.value, v = Number(raw);
+     if (i > 0 && (raw === '' || v === 0)) { bets.push(null); continue; }   // las apuestas extra son opcionales
+-    if (!Number.isInteger(v) || v < CE.MIN_BET) { RC.toast('lose', `La apuesta mínima es ${CE.MIN_BET} monedas (número entero).`); slots[i].bet.value = CE.normalizeBet(raw); return; }
++    if (!Number.isSafeInteger(v) || v < CE.MIN_BET || v > Number.MAX_SAFE_INTEGER / CE.MAX_MULT / slots.length) { RC.toast('lose', `La apuesta mínima es ${CE.MIN_BET} monedas (número entero).`); slots[i].bet.value = CE.normalizeBet(raw); return; }
++    const auto = Number(slots[i].auto.value);
++    if (!Number.isFinite(auto) || (auto !== 0 && (auto <= 1 || auto >= CE.MAX_MULT || Math.abs(auto * 100 - Math.round(auto * 100)) > 1e-8))) { RC.toast('lose', 'Retiro automático inválido: mayor que 1 y menor que 1000.'); return; }
+     bets.push(v);
+   }
+   const total = bets.reduce((a, b) => a + (b || 0), 0);
+   if (total > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+   RC.addCoins(-total);
+   rounds++; pts = [];
+-  st = { crash: CE.crashPoint(), over: false, done: false, m: 1,
++  st = { half: G.half, crash: CE.crashPoint(), over: false, done: false, m: 1,
+     slots: bets.map((b, i) => ({ bet: b || 0, auto: Number(slots[i].auto.value) || 0, remaining: b || 0, payout: 0, halfUsed: false })) };
+   savePending({ game: KEY, bet: total });
+   screen.classList.remove('crashed'); iconEl.textContent = G.icon;
+diff --git a/js/crash_engine.js b/js/crash_engine.js
+index 6297fc4..3010337 100644
+--- a/js/crash_engine.js
++++ b/js/crash_engine.js
+@@ -1,6 +1,6 @@
+ // crash_engine.js — motor de los Crash Games (Aviator, Spaceman, JetX, Cricket X). Sin DOM; se prueba en Node.
+ (function (root) {
+-  const MIN_BET = 10, MAX_MULT = 1000, EDGE = 0.03;      // ventaja de la casa 3 % → RTP teórico 97 %
++  const MIN_BET = 10, MAX_MULT = 1000, EDGE = 0.03;      // parámetro propio; RTP efectivo depende de retiro/redondeo
+   /* k = velocidad de crecimiento: multiplicador(t) = e^(k·t). half = permite retirar el 50 % a mitad de vuelo. */
+   const GAMES = {
+     aviator:  { name: 'Aviator',   studio: 'Spribe',            icon: '✈️', k: 0.085, half: false, slots: 1, stats: false, fall: '💥' },
+@@ -9,8 +9,8 @@
+     cricketx: { name: 'Cricket X', studio: 'Smartsoft Gaming',  icon: '🏏', k: 0.090, half: false, slots: 1, stats: false, fall: '❌' },
+     aero:     { name: 'Aero',      studio: 'Turbo Games',       icon: '🛫', k: 0.095, half: false, slots: 1, stats: true,  fall: '💥' },
+     zeppelin: { name: 'Zeppelin',  studio: 'Betsolutions',      icon: '🎈', k: 0.080, half: false, slots: 2, stats: false, fall: '💥' },
+-    spacexy:  { name: 'Space XY',  studio: 'BGaming',           icon: '🚀', k: 0.130, half: false, slots: 1, stats: false, fall: '🌌' },
+-    bigbass:  { name: 'Big Bass Crash', studio: 'Pragmatic Play', icon: '🎣', k: 0.085, half: false, slots: 1, stats: false, fall: '🦈' },
++    spacexy:  { name: 'Space XY',  studio: 'BGaming',           icon: '🚀', k: 0.130, half: false, slots: 2, stats: false, fall: '🌌' },
++    bigbass:  { name: 'Big Bass Crash', studio: 'Pragmatic Play', icon: '🎣', k: 0.085, half: true, slots: 1, stats: false, fall: '🦈' },
+     cashit:   { name: 'Cash It',   studio: 'Playtech',          icon: '💸', k: 0.090, half: false, slots: 1, stats: false, fall: '💥' },
+     highstriker: { name: 'High Striker', studio: 'Evoplay',     icon: '📈', k: 0.160, half: false, slots: 1, stats: false, chart: true, fall: '📉' },
+   };
+@@ -32,10 +32,32 @@
+ 
+   const multAt = (t, k) => Math.max(1, Math.floor(100 * Math.exp(k * t)) / 100);   // multiplicador a los t segundos
+   const timeAt = (m, k) => Math.log(m) / k;                                        // segundos hasta llegar a m
+-  const payoutFor = (stake, m) => Math.floor(stake * m);
++  const payoutFor = (stake, m) => {
++    if (!Number.isSafeInteger(stake) || stake < 0 || !Number.isFinite(m) || m < 1 || m > MAX_MULT) throw new RangeError('Cobro inválido');
++    // Multiplicador en centésimas: evita que 100 × 2.01 se trunque a 200.
++    return Number(BigInt(stake) * BigInt(Math.round(m * 100)) / 100n);
++  };
+   const halfStake = bet => Math.floor(bet / 2);
+   const normalizeBet = v => { const n = Math.floor(Number(v)); return Number.isFinite(n) && n >= MIN_BET ? n : MIN_BET; };
+ 
+-  root.CrashEngine = { GAMES, MIN_BET, MAX_MULT, EDGE, rand, crashFrom, crashPoint, multAt, timeAt, payoutFor, halfStake, normalizeBet };
++  // Transición determinista: cada fracción solo puede cobrarse una vez.
++  function withdraw(round, index, part, m) {
++    const r = round.slots[index];
++    if (round.over || !r || r.remaining <= 0 || !Number.isFinite(m) || m < 1 || m >= round.crash) return 0;
++    if (part === 'half' && (r.halfUsed || !round.half)) return 0;
++    if (!['half', 'all'].includes(part)) return 0;
++    const stake = part === 'half' ? halfStake(r.bet) : r.remaining;
++    if (stake <= 0 || stake > r.remaining) return 0;
++    const pay = payoutFor(stake, m);
++    r.remaining -= stake; r.payout += pay;
++    if (part === 'half') r.halfUsed = true;
++    return pay;
++  }
++  // El retiro automático depende del tiempo lógico, incluso al saltarse fotogramas.
++  function autoDue(round, m) {
++    return round.slots.flatMap((r, i) => r.remaining > 0 && r.auto > 1 && r.auto <= m && r.auto < round.crash ? [{ i, m: r.auto }] : []);
++  }
++
++  root.CrashEngine = { GAMES, MIN_BET, MAX_MULT, EDGE, rand, crashFrom, crashPoint, multAt, timeAt, payoutFor, halfStake, normalizeBet, withdraw, autoDue };
+   if (typeof module !== 'undefined') module.exports = root.CrashEngine;
+ })(typeof window !== 'undefined' ? window : globalThis);
+diff --git a/js/dados.js b/js/dados.js
+index 08dc51e..a55bf0c 100644
+--- a/js/dados.js
++++ b/js/dados.js
+@@ -432,18 +432,24 @@ RC.initHeader();
+     $('resultList').innerHTML = ''; msg(''); $('sumDisplay').textContent = 'Suma: …';
+     refresh();
+     const a = E.rollDie(), b = E.rollDie();            // el resultado se decide aquí, antes de animar
+-    if (S.prefs.turbo) { placeAtRest([a, b]); Snd.dieHit(0.6); }
+-    else await animateRoll([a, b]);
+-    resolveRoll(a, b);
+-  }
+-
+-  function resolveRoll(a, b) {
+-    const s = a + b, was = S.point;
++    const s = a + b;
+     const r = E.settleRoll(S.bets, S.point, s);
+     S.bets = r.bets; S.point = r.point;
+     S.history.unshift({ a, b, s }); S.history = S.history.slice(0, 50);
+     S.counts[s] = (S.counts[s] || 0) + 1; S.rolls++;
+     if (r.ret > 0) RC.addCoins(r.ret);
++    // Place mantiene el principal en mesa: registra solo su ganancia en esta tirada.
++    if (r.wager > 0 || r.ret > 0) RC.registerGameResult('Dados', r.ret > r.wager, r.wager, r.ret);
++    save();
++    try {
++      if (S.prefs.turbo) { placeAtRest([a, b]); Snd.dieHit(0.6); }
++      else await animateRoll([a, b]);
++    } finally { resolveRoll(a, b, r); }
++  }
++
++  function resolveRoll(a, b, r) {
++    const s = a + b;
++
+     const net = r.ret - r.wager;
+ 
+     $('sumDisplay').textContent = `Suma: ${s}`;
+@@ -471,7 +477,6 @@ RC.initHeader();
+       if (net > 0) RC.result({ type: net >= 500 ? 'big' : 'win', title: '¡GANASTE!', amount: net, text: c[0], sound: false, duration: q });
+       else if (net < 0) RC.result({ type: 'lose', title: 'PERDISTE', amount: -net, text: c[0], sound: false, duration: q });
+       else RC.result({ type: 'push', title: 'SIN GANANCIA', text: 'Tirada sin ganancia neta.', sound: false, duration: q });
+-      RC.registerGameResult('Dados', net > 0, r.wager, r.ret);
+     }
+     if (net > 0) { Snd.win(); if (net >= 500) Snd.cheer(); } else if (net < 0 || r.event === 'sevenOut') Snd.lose();
+ 
+diff --git a/js/historial.js b/js/historial.js
+index 3b3a029..d05610d 100644
+--- a/js/historial.js
++++ b/js/historial.js
+@@ -18,7 +18,7 @@ function render() {
+   const wins = history.filter(h => h.result === 'win').length;
+   document.getElementById('hsGames').textContent = RC.formatNumber(history.length);
+   document.getElementById('hsWins').textContent = RC.formatNumber(wins);
+-  document.getElementById('hsLosses').textContent = RC.formatNumber(history.length - wins);
++  document.getElementById('hsLosses').textContent = RC.formatNumber(history.filter(h => h.result === 'lose').length);
+   document.getElementById('hsRate').textContent = history.length ? Math.round(wins / history.length * 100) + '%' : '0%';
+   const wrap = document.getElementById('tableWrap');
+ 
+@@ -35,7 +35,7 @@ function render() {
+           <tr>
+             <td>${RC.fmtDate(h.date)}</td>
+             <td>${RC.esc(h.game)}</td>
+-            <td><span class="rc-badge ${h.result}">${h.result === 'win' ? 'Ganada' : 'Perdida'}</span></td>
++            <td><span class="rc-badge ${h.result}">${h.result === 'win' ? 'Ganada' : h.result === 'push' ? 'Empate' : 'Perdida'}</span></td>
+             <td>${RC.formatNumber(h.wager)}</td>
+             <td>${h.payout > 0 ? '+' + RC.formatNumber(h.payout) : '—'}</td>
+             <td>${RC.formatNumber(h.balance)}</td>
+diff --git a/js/lobby.js b/js/lobby.js
+index c05f8d4..ec20141 100644
+--- a/js/lobby.js
++++ b/js/lobby.js
+@@ -21,6 +21,8 @@ const CLASSIC = [
+   ['Cash It', 'Cash It', 'linear-gradient(160deg,#2fa84f,#06280f)', 'Crash · Playtech'],
+   ['High Striker', 'High Striker', 'linear-gradient(160deg,#e0a21f,#3a2704)', 'Crash · curva de mercado'],
+   ['Torneo', 'Torneos', 'linear-gradient(160deg,#e0b422,#4a3604)', 'Compite contra otros jugadores'],
++  ...RC.GAMES.filter(n => ['Gates of Olympus', 'Book of Dead', 'Starburst', 'Sweet Bonanza'].includes(n))
++    .map(n => [n, n, 'linear-gradient(160deg,#673ab7,#180d35)', RC.GAME_INFO[n].desc]),
+ ].filter(c => c[0] === 'Torneo' || on(c[0]));
+ const norm = t => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+ const searchEl = $('gameSearch');
+diff --git a/js/poker.js b/js/poker.js
+index efb1f3d..d6a6075 100644
+--- a/js/poker.js
++++ b/js/poker.js
+@@ -36,47 +36,7 @@ function freshDeck() {
+ }
+ 
+ /* ---- Evaluación de manos (7 cartas -> mejor 5) ---- */
+-function combos5(arr) {
+-  const res = [], n = arr.length;
+-  for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) for (let c = b + 1; c < n; c++)
+-    for (let d = c + 1; d < n; d++) for (let e = d + 1; e < n; e++) res.push([arr[a], arr[b], arr[c], arr[d], arr[e]]);
+-  return res;
+-}
+-function scoreFive(cards) {
+-  const ranks = cards.map(c => c.rank).sort((a, b) => b - a);
+-  const isFlush = cards.every(c => c.suit === cards[0].suit);
+-  const uniq = [...new Set(ranks)];
+-  let isStraight = false, high = 0;
+-  if (uniq.length === 5) {
+-    if (uniq[0] - uniq[4] === 4) { isStraight = true; high = uniq[0]; }
+-    else if (uniq.join() === '14,5,4,3,2') { isStraight = true; high = 5; }
+-  }
+-  const counts = {};
+-  ranks.forEach(r => counts[r] = (counts[r] || 0) + 1);
+-  const g = Object.entries(counts).map(([r, c]) => [Number(r), c]).sort((x, y) => y[1] - x[1] || y[0] - x[0]);
+-  if (isStraight && isFlush) return [8, high];
+-  if (g[0][1] === 4) return [7, g[0][0], g[1][0]];
+-  if (g[0][1] === 3 && g[1][1] === 2) return [6, g[0][0], g[1][0]];
+-  if (isFlush) return [5, ...ranks];
+-  if (isStraight) return [4, high];
+-  if (g[0][1] === 3) return [3, g[0][0], ...g.slice(1).map(x => x[0])];
+-  if (g[0][1] === 2 && g[1][1] === 2) return [2, g[0][0], g[1][0], g[2][0]];
+-  if (g[0][1] === 2) return [1, g[0][0], ...g.slice(1).map(x => x[0])];
+-  return [0, ...ranks];
+-}
+-function compareScores(a, b) {
+-  for (let i = 0; i < Math.max(a.length, b.length); i++) { const av = a[i] ?? 0, bv = b[i] ?? 0; if (av !== bv) return av - bv; }
+-  return 0;
+-}
+-// Devuelve la puntuación y las 5 cartas que forman la mejor mano
+-function bestHand(seven) {
+-  let best = null;
+-  for (const combo of combos5(seven)) {
+-    const s = scoreFive(combo);
+-    if (!best || compareScores(s, best.score) > 0) best = { score: s, cards: combo };
+-  }
+-  return best;
+-}
++const { bestHand, compareScores } = PokerEngine;
+ function handLabel(hole, board) {
+   if (board.length < 3) return hole[0].rank === hole[1].rank ? `Pareja de ${lab(hole[0].rank)}` : `Carta alta ${lab(Math.max(hole[0].rank, hole[1].rank))}`;
+   const b = bestHand([...hole, ...board]);
+@@ -222,8 +182,8 @@ const iaKey = () => 'rc_ia_poker_' + String(RC.currentUser() || 'guest').toLower
+ function iaLoad() { try { iaModel = RCIA.load(JSON.parse(RCMem.getItem(iaKey()))); } catch (e) { iaModel = RCIA.newModel(); } }
+ function iaSave() { try { RCMem.setItem(iaKey(), JSON.stringify(iaModel)); } catch (e) {} }
+ function equityVsRandom(hole, board, sims = 120) {   // probabilidad de ganar contra una mano rival al azar (no ve cartas ajenas)
+-  const known = new Set([...hole, ...board].map(c => JSON.stringify(c)));
+-  const rest = freshDeck().filter(c => !known.has(JSON.stringify(c)));
++  const known = new Set([...hole, ...board].map(c => c.rank + ':' + c.suit));
++  const rest = freshDeck().filter(c => !known.has(c.rank + ':' + c.suit));
+   let score = 0;
+   for (let i = 0; i < sims; i++) {
+     const d = rest.slice();
+@@ -246,7 +206,8 @@ function iaMaybeRaise() {                              // tras revelar flop/turn
+ 
+ function deal() {
+   if (live || busy) return;
+-  const b = Math.max(MIN_BET, Math.floor(Number(betInput.value) || 0));
++  const b = Number(betInput.value);
++  if (!Number.isSafeInteger(b) || b < MIN_BET || b > Number.MAX_SAFE_INTEGER / 20) { RC.toast('lose', 'Apuesta inválida.'); return; }
+   if (b * 2 > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes para esta apuesta.'); return; }
+   ante = b; betInput.value = b; raiseExtra = 0; iaLoad();
+   RC.addCoins(-b);
+@@ -281,16 +242,16 @@ async function bet() {
+   else { community.push(deck.pop()); msgEl.textContent = 'River revelado…'; }
+   render(false);
+   if (stage < 3) iaMaybeRaise();
+-  if (stage === 3) { await sleep(1100); await showdown(); return; }
++  if (stage === 3) { await showdown(); return; }
+   await sleep(stage === 1 ? 900 : 500);
+   busy = false; controls();
+ }
+ 
+ async function showdown() {
++  if (!live || stage === 4) return;
+   stage = 4; setStage();
+   msgEl.textContent = '¡Showdown! La banca muestra sus cartas…';
+   render(true);
+-  await sleep(1200);
+   const P = bestHand([...playerHole, ...community]), B = bestHand([...botHole, ...community]);
+   const cmp = compareScores(P.score, B.score);
+   const keys = new Set((cmp > 0 ? P.cards : cmp < 0 ? B.cards : [...P.cards, ...B.cards]).map(c => c.rank + c.suit));
+diff --git a/js/ruleta.js b/js/ruleta.js
+index 7703a4d..3d41145 100644
+--- a/js/ruleta.js
++++ b/js/ruleta.js
+@@ -2,11 +2,7 @@
+ 
+ RC.initHeader();
+ 
+-const RED_NUMBERS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+-function colorOf(n) {
+-  if (n === 0) return 'green';
+-  return RED_NUMBERS.has(n) ? 'red' : 'black';
+-}
++const colorOf = RouletteEngine.colorOf;
+ 
+ /* ================= Dibujo de la ruleta (SVG) ================= */
+ 
+@@ -250,16 +246,21 @@ const historyStrip = document.getElementById('historyStrip');
+ let history = [];
+ 
+ spinBtn.addEventListener('click', () => {
+-  const bet = Math.max(10, Math.floor(Number(betInput.value) || 0));
++  if (spinBtn.disabled) return;
++  const bet = Number(betInput.value);
++  if (!Number.isSafeInteger(bet) || bet < 10 || bet > Number.MAX_SAFE_INTEGER / 36) { RC.toast('lose', 'Apuesta inválida: entero desde 10.'); return; }
+   const user = RC.getUser();
+   if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+   if (currentMode === 'number' && selectedNumber === null) { RC.toast('info', 'Elige un número primero.'); return; }
+ 
++  const outcome = RouletteEngine.spin({ mode: currentMode, value: currentMode === 'number' ? selectedNumber : currentValue, bet });
++  const { landing, won, mult, payout } = outcome;
+   betInput.value = bet;
+   spinBtn.disabled = true;
+   RC.addCoins(-bet);
+ 
+-  const landing = Math.floor(Math.random() * 37);
++  if (payout > 0) RC.addCoins(payout);
++  RC.registerGameResult('Ruleta', won, bet, payout);
+ 
+   spinTo(landing, () => {
+     const c = colorOf(landing);
+@@ -267,20 +268,9 @@ spinBtn.addEventListener('click', () => {
+     resultNumber.className = 'result-number ' + c;
+     wheel.setAttribute('aria-label', `Ruleta europea. Salió el ${landing}, ${c === 'red' ? 'rojo' : c === 'black' ? 'negro' : 'verde'}.`);
+ 
+-    let won = false, mult = 0;
+-    if (currentMode === 'color' && c === currentValue) { won = true; mult = 2; }
+-    if (currentMode === 'parity') {
+-      const isEven = landing !== 0 && landing % 2 === 0;
+-      if ((currentValue === 'par' && isEven) || (currentValue === 'impar' && !isEven)) { won = true; mult = 2; }
+-    }
+-    if (currentMode === 'number' && selectedNumber === landing) { won = true; mult = 35; }
+-
+-    const payout = won ? bet * mult : 0;
+-    if (payout > 0) RC.addCoins(payout);
+     RC.result(won
+       ? { type: mult >= 35 ? 'big' : 'win', title: mult >= 35 ? '¡PLENO!' : '¡GANASTE!', amount: payout, text: `Salió el ${landing}.` }
+       : { type: 'lose', title: 'SIN PREMIO', amount: bet, text: `Salió el ${landing}.` });
+-    RC.registerGameResult('Ruleta', won, bet, payout);
+ 
+     history.unshift(landing);
+     history = history.slice(0, 10);
+diff --git a/js/slots.js b/js/slots.js
+index ee80243..8ea3c8e 100644
+--- a/js/slots.js
++++ b/js/slots.js
+@@ -5,6 +5,9 @@ const KEY = document.body.dataset.slot, G = SE.GAMES[KEY];
+ const money = n => RC.formatNumber(n);
+ const gridEl = $('sGrid'), betEl = $('sBet'), spinBtn = $('sSpin'), msgEl = $('sMsg'), infoEl = $('sInfo'), winEl = $('sWin');
+ let busy = false;
++// Promoción de Royal Casino; ajena a las reglas de Starburst.
++const PROMOTIONS = { starburst: { welcomeSpins: 10 } };
++const promotion = PROMOTIONS[KEY];
+ 
+ gridEl.style.gridTemplateColumns = `repeat(${G.cols}, 1fr)`;
+ const cells = Array.from({ length: G.cols * G.rows }, () => { const d = document.createElement('div'); d.className = 's-cell'; gridEl.appendChild(d); return d; });
+@@ -43,14 +46,14 @@ const drop = k => { try { RCMem.removeItem(k); } catch (e) {} };
+ let fs = load(fsKey());
+ if (fs && (fs.game !== KEY || !(fs.left > 0) || !Number.isInteger(fs.bet))) { drop(fsKey()); fs = null; }
+ let welcome = 0;
+-if (G.welcomeSpins) {                              // Starburst: 10 giros de bienvenida la primera vez
+-  const w = load(wKey()); welcome = w === null ? G.welcomeSpins : (Number.isInteger(w) && w > 0 ? w : 0);
++if (promotion && promotion.welcomeSpins) {                              // Starburst: 10 giros de bienvenida la primera vez
++  const w = load(wKey()); welcome = w === null ? promotion.welcomeSpins : (Number.isInteger(w) && w > 0 ? w : 0);
+   save(wKey(), welcome);
+ }
+ function refreshInfo() {
+   const parts = [];
+   if (fs) parts.push(`Giros gratis: ${fs.left}` + (fs.special ? ` · Símbolo especial: ${fs.special}` : '') + (G.accumMult && fs.mult ? ` · Multiplicador: ×${fs.mult}` : '') + ` · Acumulado: ${money(fs.acc)}`);
+-  if (welcome > 0) parts.push(`🎁 Giros de bienvenida: ${welcome} (apuesta ${SE.MIN_BET}, gratis)`);
++  if (welcome > 0) parts.push(`🎁 Promoción propia: giros de bienvenida: ${welcome} (apuesta ${SE.MIN_BET}, gratis)`);
+   infoEl.textContent = parts.join(' | ');
+   spinBtn.textContent = fs ? 'CONTINUAR GIROS GRATIS' : (welcome > 0 ? 'GIRO DE BIENVENIDA' : 'GIRAR');
+ }
+@@ -59,42 +62,47 @@ async function play(res) {                         // anima los pasos de un giro
+   for (const s of res.steps) {
+     show(s.cells, s.win);
+     if (s.amount > 0) winEl.textContent = `+${money(s.amount)}`;
+-    await sleep(s.win.length ? 700 : 450);
++    if (RC.getSettings().anim !== false && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) await sleep(s.win.length ? 700 : 450);
+   }
+ }
+ 
+ async function round() {
+   if (busy) return;
+-  let bet, free = false, welcomeSpin = false;
+-  if (fs) { bet = fs.bet; free = true; }
+-  else if (welcome > 0) { bet = SE.MIN_BET; welcomeSpin = true; welcome--; save(wKey(), welcome); }
++  let bet, welcomeSpin = false;
++  const resumed = !!fs;
++  if (fs) bet = fs.bet;
++  else if (welcome > 0) { bet = SE.MIN_BET; welcomeSpin = true; }
+   else {
+     bet = Number(betEl.value);
+-    if (!Number.isInteger(bet) || bet < SE.MIN_BET) { RC.toast('lose', `La apuesta mínima es ${SE.MIN_BET} monedas (número entero).`); betEl.value = SE.normalizeBet(betEl.value); return; }
++    if (!Number.isSafeInteger(bet) || bet < SE.MIN_BET || bet > Number.MAX_SAFE_INTEGER / SE.MAX_WIN) { RC.toast('lose', `La apuesta mínima es ${SE.MIN_BET} monedas (entero válido).`); return; }
+     if (bet > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes.'); return; }
+-    RC.addCoins(-bet);
+   }
+-  busy = true; spinBtn.disabled = betEl.disabled = true; msgEl.textContent = ''; winEl.textContent = '';
+-  let total = 0, state = fs;
+-  for (;;) {
+-    const res = SE.spin(KEY, bet, state);
+-    RC.addCoins(res.payout);                       // el premio se acredita al decidirse el giro (antes de animar)
+-    state = res.fs;
+-    total = state ? state.acc : res.payout;
+-    if (state && state.left > 0) save(fsKey(), state); else drop(fsKey());
+-    fs = state && state.left > 0 ? state : null;
+-    refreshInfo();
+-    await play(res);
+-    if (res.scatterWin) msgEl.textContent = `Scatter: +${money(res.scatterWin)}`;
+-    if (res.mult > 1 && res.payout > 0) msgEl.textContent += ` Multiplicador ×${res.mult}`;
+-    if (res.respins) msgEl.textContent = `${res.respins} respin${res.respins > 1 ? 's' : ''} con comodín expandido`;
+-    if (!fs) break;
+-    if (!free) { free = true; msgEl.textContent = `¡${fs.left} giros gratis!`; await sleep(1200); }
+-    else await sleep(700);
++  busy = true; spinBtn.disabled = betEl.disabled = true;
++  msgEl.textContent = ''; winEl.textContent = '';
++  let outcome;
++  try { outcome = SE.session(KEY, bet, fs); }
++  catch (error) {
++    RC.toast('lose', 'No se pudo decidir la ronda. No se descontó la apuesta.');
++    busy = false; spinBtn.disabled = betEl.disabled = false; return;
+   }
+-  const wager = welcomeSpin ? 0 : bet, won = total > wager;
+-  winEl.textContent = total ? `Total: ${money(total)}` : '';
++  const wager = welcomeSpin || resumed ? 0 : bet, total = outcome.payout, won = total > wager;
++  if (wager) RC.addCoins(-wager);
++  if (welcomeSpin) { welcome--; save(wKey(), welcome); }
++  drop(fsKey()); fs = null;
++  if (total) RC.addCoins(total);
++  // Historial y saldo se completan una sola vez antes de mostrar las animaciones.
+   RC.registerGameResult(G.name, won, wager, total);
++  refreshInfo();
++  try {
++    for (const res of outcome.rounds) {
++      await play(res);
++      if (res.scatterWin) msgEl.textContent = `Scatter: +${money(res.scatterWin)}`;
++      if (res.mult > 1 && res.payout > 0) msgEl.textContent += ` Multiplicador ×${res.mult}`;
++      if (res.respins) msgEl.textContent = `${res.respins} respins con comodín expandido`;
++    }
++  } finally { busy = false; spinBtn.disabled = betEl.disabled = false; refreshInfo(); }
++  winEl.textContent = total ? `Total: ${money(total)}` : '';
++
+   const text = total ? `Ganaste ${money(total)} monedas en ${G.name}.` : `Sin premio en ${G.name}.`;
+   if (won) RC.result({ type: total >= bet * 25 ? 'big' : 'win', title: '¡GANASTE!', amount: total - wager, text });
+   else if (total === wager) RC.result({ type: 'push', title: 'EMPATE', amount: 0, text });
+diff --git a/js/slots_engine.js b/js/slots_engine.js
+index 1fa4fb0..48c24dc 100644
+--- a/js/slots_engine.js
++++ b/js/slots_engine.js
+@@ -21,7 +21,7 @@
+   /* ---------------- Configuración de cada juego ----------------
+      cluster: pay[símbolo] = [8-9, 10-11, 12+] veces la apuesta (se multiplica por scale).
+      lines:   pay[símbolo] = { n: veces la apuesta de línea (apuesta/10) } (se multiplica por scale).
+-     scale se calibró por simulación para un RTP ≈ 96 % (ver tests/slots_engine.test.js). */
++     scale y pesos son parámetros de la variante de casa, no tablas ni RTP oficiales. */
+   const GAMES = {
+     gates: {
+       name: 'Gates of Olympus', studio: 'Pragmatic Play', icon: '⚡', type: 'cluster', cols: 6, rows: 5,
+@@ -46,7 +46,7 @@
+     },
+     starburst: {
+       name: 'Starburst', studio: 'NetEnt', icon: '🌟', type: 'lines', cols: 5, rows: 3, lines: 10,
+-      scale: 0.255, wild: '🌟', wildReels: [1, 2, 3], wildW: 1.8, bothWays: true, maxRespins: 3, welcomeSpins: 10, topSym: '7️⃣',
++      scale: 0.255, wild: '🌟', wildReels: [1, 2, 3], wildW: 1.8, bothWays: true, maxRespins: 3, topSym: '7️⃣',
+       symbols: [['7️⃣', 5], ['🎰', 6], ['🟣', 9], ['🔵', 10], ['🟢', 11], ['🟠', 12], ['🔴', 13]],
+       pay: { '7️⃣': { 3: 50, 4: 200, 5: 250 }, '🎰': { 3: 25, 4: 100, 5: 120 }, '🟣': { 3: 10, 4: 50, 5: 100 }, '🔵': { 3: 10, 4: 50, 5: 100 },
+         '🟢': { 3: 5, 4: 20, 5: 50 }, '🟠': { 3: 3, 4: 12, 5: 30 }, '🔴': { 3: 2, 4: 10, 5: 25 } },
+@@ -59,7 +59,8 @@
+   const idxOf = (c, r, cols) => r * cols + c;
+ 
+   /* ================= Pago por grupos con cascadas (Olympus, Bonanza) ================= */
+-  function spinCluster(cfg, bet, fs) {
++  function spinCluster(cfg, bet, fs, random) {
++    const { rand, randInt, pick } = random;
+     const { cols, rows } = cfg, inFS = !!fs;
+     const bag = cfg.symbols.concat([[cfg.scatter, cfg.scatterW]]);
+     const cell = () => ({ s: pick(bag) });
+@@ -100,7 +101,7 @@
+     let mult = 1, fsOut = null;
+     if (total > 0 && orbSum > 0) {
+       if (inFS && cfg.accumMult) { fs = { ...fs, mult: fs.mult + orbSum }; mult = fs.mult; } else mult = orbSum;
+-    } else if (inFS && cfg.accumMult && total > 0 && fs.mult > 0) mult = fs.mult;
++    }
+     let payout = Math.floor(total * mult);
+     const sp = scatters >= 6 ? cfg.scatterPay[6] : cfg.scatterPay[scatters] || 0;
+     const scatterWin = Math.floor(sp * bet);
+@@ -128,7 +129,7 @@
+   }
+   function evalLines(cfg, grid, bet, wild) {         // devuelve { win, cells }
+     let win = 0; const cells = new Set(), lb = bet / cfg.lines;
+-    for (const line of LINES) {
++    for (const line of LINES.slice(0, cfg.lines)) {
+       const seq = line.map((r, c) => grid[c][r]);
+       const dirs = cfg.bothWays ? [false, true] : [false];
+       let leftN = 0;
+@@ -147,7 +148,8 @@
+     return { win, cells: [...cells] };
+   }
+ 
+-  function spinBook(cfg, bet, fs) {
++  function spinBook(cfg, bet, fs, random) {
++    const { rand, randInt, pick } = random;
+     const bag = cfg.symbols.concat([[cfg.book, cfg.bookW]]);
+     const grid = Array.from({ length: cfg.cols }, () => Array.from({ length: cfg.rows }, () => pick(bag)));
+     const show = () => flat(grid, cfg.cols, cfg.rows, x => x === BLOCK ? '' : x);
+@@ -185,7 +187,8 @@
+     return { steps, payout, scatters: books, scatterWin, mult: 1, orbSum: 0, fs: fsOut, retrigger: !!fs && books >= 3 };
+   }
+ 
+-  function spinStarburst(cfg, bet) {
++  function spinStarburst(cfg, bet, random) {
++    const { pick } = random;
+     const mk = c => cfg.wildReels.includes(c) ? cfg.symbols.concat([[cfg.wild, cfg.wildW]]) : cfg.symbols;
+     const roll = c => Array.from({ length: cfg.rows }, () => pick(mk(c)));
+     const grid = Array.from({ length: cfg.cols }, (_, c) => roll(c));
+@@ -205,16 +208,46 @@
+   }
+ 
+   // spin(juego, apuesta, fs): fs = estado de giros gratis (o null en un giro normal). Devuelve { steps, payout, fs, ... }.
+-  function spin(key, bet, fs) {
++  function spin(key, bet, fs, rng = rand) {
+     const cfg = GAMES[key];
++    if (!cfg) throw new RangeError('Juego desconocido');
++    if (!Number.isSafeInteger(bet) || bet < MIN_BET || bet > Number.MAX_SAFE_INTEGER / MAX_WIN) throw new RangeError('Apuesta inválida');
++    if (fs && (fs.game !== key || !Number.isSafeInteger(fs.left) || fs.left <= 0 || fs.bet !== bet ||
++      !Number.isSafeInteger(fs.acc) || fs.acc < 0 || fs.acc >= MAX_WIN * bet ||
++      !Number.isFinite(fs.mult) || fs.mult < 0 || (key === 'bod' && !cfg.pay[fs.special]))) throw new RangeError('Bonificación inválida');
++    const random = {
++      rand: () => { const u = rng(); if (!Number.isFinite(u) || u < 0 || u >= 1) throw new RangeError('RNG inválido'); return u; },
++      randInt: n => Math.floor(random.rand() * n),
++      pick: list => {
++        let r = random.rand() * list.reduce((sum, e) => sum + e[1], 0);
++        for (const e of list) if ((r -= e[1]) < 0) return e[0];
++        return list[list.length - 1][0];
++      },
++    };
+     let r;
+-    if (cfg.type === 'cluster') r = spinCluster(cfg, bet, fs || null);
+-    else if (key === 'bod') r = spinBook(cfg, bet, fs || null);
+-    else r = spinStarburst(cfg, bet);
+-    if (r.fs) r.fs.game = key;
++    if (cfg.type === 'cluster') r = spinCluster(cfg, bet, fs || null, random);
++    else if (key === 'bod') r = spinBook(cfg, bet, fs || null, random);
++    else r = spinStarburst(cfg, bet, random);
++    r.payout = Math.min(r.payout, MAX_WIN * bet - (fs ? fs.acc : 0));
++    if (r.fs) {
++      r.fs.game = key;
++      r.fs.acc = (fs ? fs.acc : 0) + r.payout;
++      if (r.fs.acc >= MAX_WIN * bet) r.fs.left = 0;
++    }
+     return r;
+   }
+ 
+-  root.SlotEngine = { GAMES, LINES, MIN_BET, MAX_WIN, rand, randInt, pick, normalizeBet, spin };
++  // Decide toda la bonificación antes del débito o de cualquier animación.
++  function session(key, bet, fs = null, rng = rand) {
++    const rounds = []; let state = fs, payout = 0;
++    do {
++      if (rounds.length >= 10000) throw new Error('Secuencia excesiva; apuesta no iniciada');
++      const r = spin(key, bet, state, rng);
++      rounds.push(r); payout += r.payout; state = r.fs;
++    } while (state && state.left > 0);
++    return { rounds, payout };
++  }
++
++  root.SlotEngine = { GAMES, LINES, MIN_BET, MAX_WIN, rand, randInt, pick, normalizeBet, spin, session, evalLines };
+   if (typeof module !== 'undefined') module.exports = root.SlotEngine;
+ })(typeof window !== 'undefined' ? window : globalThis);
+diff --git a/js/tragamonedas.js b/js/tragamonedas.js
+index 6741b84..240dc49 100644
+--- a/js/tragamonedas.js
++++ b/js/tragamonedas.js
+@@ -62,6 +62,7 @@ function loadPending() {
+ }
+ 
+ let spinning = false;
++const settledSpins = new WeakSet();
+ let autoLeft = 0;
+ 
+ function setAuto(n) {
+@@ -84,7 +85,8 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) setAu
+ async function doSpin(fromAuto) {
+   if (spinning) return;
+   if (fromAuto && autoLeft <= 0) return;
+-  const bet = SlotEngine.normalizeBet(betInput.value);
++  const bet = Number(betInput.value);
++  if (!Number.isSafeInteger(bet) || bet < SlotEngine.MIN_BET || bet > Number.MAX_SAFE_INTEGER / 100) { RC.toast('lose', 'Apuesta inválida.'); return; }
+   const user = RC.getUser();
+   if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); setAuto(0); return; }
+ 
+@@ -98,10 +100,19 @@ async function doSpin(fromAuto) {
+   RC.addCoins(-bet);
+   fx('hud');
+ 
++  settleResult(result);
+   await fx('spin', result, { turbo: autoLeft > 0 });
+   await resolveSpin(result);
+ }
+ 
++function settleResult(result) {
++  if (settledSpins.has(result)) return;
++  settledSpins.add(result);
++  clearPending();
++  if (result.payout > 0) RC.addCoins(result.payout);
++  RC.registerGameResult('Tragamonedas', result.payout > result.bet, result.bet, result.payout);
++}
++
+ async function resolveSpin(result) {
+   const { symbols, bet, kind, mult, payout } = result;
+   const won = payout > 0;
+@@ -115,8 +126,7 @@ async function resolveSpin(result) {
+   }
+ 
+   // Primero se acredita y se registra (aunque falle un efecto), después se celebra.
+-  if (payout > 0) RC.addCoins(payout);
+-  clearPending();
++  settleResult(result);
+   // Los premios grandes (×10 o más) los celebra el Big Win propio de la máquina; el resto usa el cartel central.
+   const ownBigWin = kind === 'triple' && mult >= 10 && RC.getSettings().anim !== false;
+   if (!ownBigWin) {
+@@ -125,7 +135,6 @@ async function resolveSpin(result) {
+     else if (kind === 'pair') RC.result({ type: 'push', title: '¡CASI!', text: 'Dos iguales: recuperas tu apuesta.', sound: false, duration: quick });
+     else RC.result({ type: 'lose', title: 'SIN PREMIO', amount: bet, text: 'Sigue intentándolo.', sound: false, duration: quick });
+   }
+-  RC.registerGameResult('Tragamonedas', payout > bet, bet, payout);
+   fx('hud');
+ 
+   await fx('celebrate', result);
+diff --git a/package.json b/package.json
+index 6e7ee81..f3761fb 100644
+--- a/package.json
++++ b/package.json
+@@ -1,7 +1,7 @@
+ { "name": "royal-casino", "private": true,
+   "scripts": {
+     "build:ts": "tsc -p ts",
+-    "test": "node tests/tragamonedas_engine.test.js && node tests/bingo_engine.test.js && node tests/carreras_engine.test.js && node tests/crash_engine.test.js && node tests/ia_engine.test.js && node tests/ia_rival_engine.test.js && node tests/firebase_auth.test.js",
++    "test": "node scripts/test-games.js",
+     "test:unit": "vitest run",
+     "test:e2e": "playwright test"
+   },
+diff --git a/tests/crash_engine.test.js b/tests/crash_engine.test.js
+index d9c0c77..d0246b6 100644
+--- a/tests/crash_engine.test.js
++++ b/tests/crash_engine.test.js
+@@ -8,12 +8,12 @@ test('el punto de caída siempre está entre 1.00 y el máximo', () => {
+ });
+ test('RTP simulado ≈ 97 % retirando siempre en 2x', () => {
+   const N = 400000; let paid = 0;
+-  for (let i = 0; i < N; i++) if (E.crashPoint() >= 2) paid += 2;
++  for (let i = 0; i < N; i++) if (E.crashPoint() > 2) paid += 2;
+   const rtp = paid / N; assert(rtp > 0.94 && rtp < 1.0, 'rtp ' + rtp);
+ });
+ test('RTP simulado ≈ 97 % retirando siempre en 10x', () => {
+   const N = 600000; let paid = 0;
+-  for (let i = 0; i < N; i++) if (E.crashPoint() >= 10) paid += 10;
++  for (let i = 0; i < N; i++) if (E.crashPoint() > 10) paid += 10;
+   const rtp = paid / N; assert(rtp > 0.90 && rtp < 1.04, 'rtp ' + rtp);
+ });
+ test('multiplicador y tiempo son inversos y crecen', () => {
+diff --git a/tests/e2e/inicio.spec.ts b/tests/e2e/inicio.spec.ts
+index 21cc4e8..ce33eb0 100644
+--- a/tests/e2e/inicio.spec.ts
++++ b/tests/e2e/inicio.spec.ts
+@@ -1,4 +1,4 @@
+-import { test, expect } from '@playwright/test';
++import { test, expect } from './fixtures';
+ 
+ test('la portada carga con título y enlaces', async ({ page }) => {
+   await page.goto('/index.html');

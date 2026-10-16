@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Ayuda</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/inicio.css">
 <link rel="stylesheet" href="../css/ayuda.css">
 <link rel="stylesheet" href="../css/rendimiento.css">
+<link rel="stylesheet" href="../css/tema.css">
 </head>
 <body class="lv">
 <div id="lv-legacy"></div>
@@ -18,16 +19,16 @@
 <header class="lv-top">
   <a class="lv-sign" href="../index.html" aria-label="Royal Casino — Inicio"><span class="crown">♛</span><span class="neon">ROYAL</span><span class="gold">CASINO</span></a>
   <nav class="lv-nav" aria-label="Principal">
-    <a class="lv-casino-btn" href="juegos.html">🎰 Casino</a>
+    <a class="lv-casino-btn" href="juegos.html"><svg class="ic ic-layout-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></svg> Casino</a>
     <a href="torneos.html">Torneos</a><a href="ranking.html">Ranking</a><a href="amigos.html">Amigos</a><a href="billetera.html">Billetera</a><a href="bonificasiones.html">Bonificaciones</a><a href="noticias.html">Noticias</a><a href="historial.html">Historial</a><a href="ayuda.html" class="on" aria-current="page">Ayuda</a>
   </nav>
   <div class="lv-top-right">
-    <button class="lv-sound" id="lvSound" type="button" aria-pressed="true" title="Sonido">🔊</button>
+    <button class="lv-sound" id="lvSound" type="button" aria-pressed="true" title="Sonido"><svg class="ic ic-volume-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /><path d="M16 9a5 5 0 0 1 0 6" /><path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></svg></button>
     <div class="lv-user" id="lvUser">
-      <a class="lv-pill" href="billetera.html" title="Billetera">💰 <span id="rc-coin-display">—</span></a>
+      <a class="lv-pill" href="billetera.html" title="Billetera"><svg class="ic ic-coins" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" /><path d="M18.09 10.37A6 6 0 1 1 10.34 18" /><path d="M7 6h1v4" /><path d="m16.71 13.88.7.71-2.82 2.82" /></svg> <span id="rc-coin-display">—</span></a>
       <span class="lv-pill rc-level-pill">Nv. —</span>
-      <a class="lv-pill" href="notificaciones.html" title="Notificaciones">🔔<b id="lvBell" hidden></b></a>
-      <a class="lv-pill" href="amigos.html" title="Amigos">👥</a>
+      <a class="lv-pill" href="notificaciones.html" title="Notificaciones"><svg class="ic ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg><b id="lvBell" hidden></b></a>
+      <a class="lv-pill" href="amigos.html" title="Amigos"><svg class="ic ic-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></a>
       <a class="lv-mini" href="mi_perfil.html">Mi perfil</a>
       <button class="lv-mini" id="lvLogout" type="button">Salir</button>
     </div>
@@ -60,15 +61,15 @@
   <!-- ===== Temas (tarjetas de neón) ===== -->
   <section class="lv-sec" id="faqTopics" aria-label="Temas de ayuda">
     <div class="lv-topics">
-      <a class="lv-topic gold" href="#g-monedas"><span class="ico" aria-hidden="true">💰</span><h3>Monedas y niveles</h3><span class="amt">4</span><span class="unit">preguntas</span></a>
-      <a class="lv-topic pink" href="#g-juegos"><span class="ico" aria-hidden="true">🎰</span><h3>Juegos y amigos</h3><span class="amt">3</span><span class="unit">preguntas</span></a>
-      <a class="lv-topic blue" href="#g-cuenta"><span class="ico" aria-hidden="true">👤</span><h3>Cuenta y ajustes</h3><span class="amt">2</span><span class="unit">preguntas</span></a>
+      <a class="lv-topic gold" href="#g-monedas"><span class="ico" aria-hidden="true"><svg class="ic ic-coins" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" /><path d="M18.09 10.37A6 6 0 1 1 10.34 18" /><path d="M7 6h1v4" /><path d="m16.71 13.88.7.71-2.82 2.82" /></svg></span><h3>Monedas y niveles</h3><span class="amt">4</span><span class="unit">preguntas</span></a>
+      <a class="lv-topic pink" href="#g-juegos"><span class="ico" aria-hidden="true"><svg class="ic ic-layout-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></svg></span><h3>Juegos y amigos</h3><span class="amt">3</span><span class="unit">preguntas</span></a>
+      <a class="lv-topic blue" href="#g-cuenta"><span class="ico" aria-hidden="true"><svg class="ic ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></span><h3>Cuenta y ajustes</h3><span class="amt">2</span><span class="unit">preguntas</span></a>
     </div>
   </section>
 
   <!-- ===== Preguntas frecuentes ===== -->
   <section class="lv-sec faq-group" id="g-monedas">
-    <h2 class="lv-h2"><span class="ico" aria-hidden="true">💰</span> Monedas y niveles</h2>
+    <h2 class="lv-h2"><span class="ico" aria-hidden="true"><svg class="ic ic-coins" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6" /><path d="M18.09 10.37A6 6 0 1 1 10.34 18" /><path d="M7 6h1v4" /><path d="m16.71 13.88.7.71-2.82 2.82" /></svg></span> Monedas y niveles</h2>
     <div class="faq">
       <details><summary>¿Cómo funcionan las monedas?</summary><p>Son monedas ficticias sin valor real. Empiezas con 10.000 y las ganas o pierdes jugando. No se pueden cambiar por dinero.</p></details>
       <details><summary>¿Cómo puedo subir de nivel?</summary><p>Cada partida da XP: más si ganas. Al completar la barra de XP subes de nivel y recibes recompensas.</p></details>
@@ -78,7 +79,7 @@
   </section>
 
   <section class="lv-sec faq-group" id="g-juegos">
-    <h2 class="lv-h2"><span class="ico" aria-hidden="true">🎰</span> Juegos y amigos</h2>
+    <h2 class="lv-h2"><span class="ico" aria-hidden="true"><svg class="ic ic-layout-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></svg></span> Juegos y amigos</h2>
     <div class="faq">
       <details><summary>¿Cómo funcionan los juegos?</summary><p>Eliges tu apuesta, juegas y el resultado se calcula al azar. Cada juego explica sus reglas en su página.</p></details>
       <details><summary>¿Por qué un juego aparece desactivado?</summary><p>El administrador puede desactivar un juego de forma temporal. Cuando vuelva a estar disponible podrás entrar de nuevo.</p></details>
@@ -87,7 +88,7 @@
   </section>
 
   <section class="lv-sec faq-group" id="g-cuenta">
-    <h2 class="lv-h2"><span class="ico" aria-hidden="true">👤</span> Cuenta y ajustes</h2>
+    <h2 class="lv-h2"><span class="ico" aria-hidden="true"><svg class="ic ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></span> Cuenta y ajustes</h2>
     <div class="faq">
       <details><summary>¿Cómo cambio mi contraseña?</summary><p>Ve a Configuración, abre la sección Cuenta y escribe tu contraseña actual y la nueva.</p></details>
       <details><summary>¿Cómo desactivo el sonido o cambio el tema?</summary><p>En Configuración, sección Preferencias. Los cambios se aplican al instante.</p></details>
@@ -132,6 +133,7 @@
 </footer>
 
 <script src="../js/nube.js"></script>
+<script src="../js/iconos.js"></script>
 <script src="../js/app.js"></script>
 <script src="../js/firebase_auth.js"></script>
 <script src="../js/auth.js"></script>

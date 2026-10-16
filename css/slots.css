@@ -1,12 +1,42 @@
-/* slots.css — estilos mínimos y funcionales de los slots (mejorar después) */
-.s-panel { max-width: 640px; margin: 0 auto; }
-.s-grid { display: grid; gap: 4px; padding: 8px; margin-bottom: 12px; border: 1px solid rgba(201,162,39,.3); border-radius: 10px; background: rgba(0,0,0,.3); }
-.s-cell { display: grid; place-items: center; min-height: 52px; font-size: 1.5rem; border-radius: 6px; background: rgba(255,255,255,.05); }
-.s-cell.win { background: rgba(201,162,39,.35); outline: 2px solid var(--gold-400); }
-.s-info { text-align: center; min-height: 1.4em; font-size: .85rem; opacity: .9; margin-bottom: 8px; }
-.s-win, .s-msg { text-align: center; min-height: 1.4em; font-family: var(--font-display); color: var(--gold-300); }
-.s-actions { display: flex; justify-content: center; margin-top: 12px; }
-.s-actions .rc-btn { padding: 14px 36px; }
-.s-pay { max-width: 640px; margin: 0 auto; font-size: .85rem; }
+/* slots.css — Gates of Olympus, Sweet Bonanza, Book of Dead y Starburst: cabina temática, símbolos tipo gema y caída en cascada.
+   Cada juego elige sus colores con body[data-slot] → --s-a (acento), --s-b (segundo color), --s-bg (fondo de la cabina), --s-cell (casilla). */
+body.slots-page { --s-a: #c9a24a; --s-b: #c9a24a; --s-bg: linear-gradient(#181b21, #0f1114); --s-cell: linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.03)); }
+body[data-slot="bonanza"] { --s-a: #a8843c; --s-b: #5cd6ff; --s-bg: radial-gradient(80% 60% at 50% 0, #ff9ad9 0, transparent 70%), linear-gradient(#7a2bd6, #3a0f7a 60%, #1c0640); --s-cell: linear-gradient(160deg, rgba(255,255,255,.32), rgba(255,180,230,.08)); }
+body[data-slot="gates"] { --s-a: #ffd23d; --s-b: #8a8f98; --s-bg: radial-gradient(70% 50% at 50% 0, rgba(255,226,122,.35), transparent 70%), linear-gradient(#3a1f7a, #1c1e23 60%, #0a0520); --s-cell: linear-gradient(160deg, rgba(255,226,122,.18), rgba(139,92,255,.08)); }
+body[data-slot="bod"] { --s-a: #f0b440; --s-b: #2bd4c8; --s-bg: radial-gradient(70% 50% at 50% 0, rgba(240,180,64,.3), transparent 70%), linear-gradient(#4a2e10, #2a1806 60%, #120a02); --s-cell: linear-gradient(160deg, rgba(255,220,150,.2), rgba(120,70,20,.15)); }
+body[data-slot="starburst"] { --s-a: #8a8f98; --s-b: #8a8f98; --s-bg: radial-gradient(60% 50% at 50% 40%, rgba(200,107,255,.3), transparent 70%), linear-gradient(#120a33, #070420 60%, #02010c); --s-cell: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,0.007)); }
+
+.slots-page .rc-main { max-width: 1000px; }
+.s-panel { position: relative; max-width: 860px; margin: 0 auto; padding: 18px !important; border: 3px solid var(--s-a) !important; border-radius: 22px !important; background: var(--s-bg) !important; box-shadow: 0 0 0 6px rgba(0,0,0,.35), inset 0 0 60px rgba(0,0,0,.45) !important; }
+.s-panel::before { content: ''; position: absolute; inset: 8px; border-radius: 16px; pointer-events: none; background: radial-gradient(circle, #fff 0 1.6px, var(--s-a) 2px 3px, transparent 3.5px) 0 0 / 22px 22px; -webkit-mask: linear-gradient(#000 0 0) top / 100% 8px no-repeat, linear-gradient(#000 0 0) bottom / 100% 8px no-repeat; mask: linear-gradient(#000 0 0) top / 100% 8px no-repeat, linear-gradient(#000 0 0) bottom / 100% 8px no-repeat; opacity: .8; animation: sbulbs 1.2s steps(1) infinite; }
+@keyframes sbulbs { 50% { opacity: .35; } }
+
+.s-info { text-align: center; min-height: 1.6em; margin: 6px 0 10px; font-size: .88rem; font-weight: 700; color: #fff; }
+.s-info:not(:empty) { display: table; margin: 6px auto 10px; padding: 4px 16px; border-radius: 999px; background: rgba(0,0,0,.4); border: 1px solid var(--s-a); }
+.s-grid { position: relative; display: grid; gap: 6px; padding: 10px; max-width: 720px; margin: 0 auto 12px; border-radius: 16px; background: rgba(0,0,0,.42); border: 2px solid color-mix(in srgb, var(--s-a) 60%, transparent); box-shadow: inset 0 6px 22px rgba(0,0,0,.7); overflow: hidden; }
+.s-cell { position: relative; display: grid; place-items: center; aspect-ratio: 1 / .82; font-size: clamp(1.5rem, 4.6vw, 2.7rem); font-weight: 900; color: #fff; border-radius: 12px; background: var(--s-cell); border: 1px solid rgba(255,255,255,.12); box-shadow: inset 0 2px 0 rgba(255,255,255,.18), inset 0 -4px 10px rgba(0,0,0,.35); text-shadow: 0 2px 0 rgba(0,0,0,.5); filter: drop-shadow(0 3px 4px rgba(0,0,0,.4)); transition: opacity .25s, transform .25s; }
+.s-cell.drop { animation: sdrop .42s cubic-bezier(.3,1.5,.5,1) both; animation-delay: calc(var(--c, 0) * 55ms); }
+@keyframes sdrop { from { transform: translateY(-70%) scale(.9); opacity: 0; } }
+.s-grid.has-win .s-cell:not(.win) { opacity: .38; transform: scale(.94); }
+.s-cell.win { z-index: 1; background: radial-gradient(circle, color-mix(in srgb, var(--s-a) 55%, transparent), transparent 75%), var(--s-cell); border-color: var(--s-a); box-shadow: 0 0 0 2px var(--s-a), inset 0 0 14px rgba(255,255,255,.4); animation: swin .7s ease-in-out infinite alternate; }
+@keyframes swin { to { transform: scale(1.08); } }
+body.s-spinning .s-grid::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.18) 50%, transparent 65%) -100% 0 / 200% 100% no-repeat; animation: ssweep .9s linear infinite; }
+@keyframes ssweep { to { background-position: 200% 0; } }
+
+.s-win { text-align: center; min-height: 1.3em; font: 400 clamp(2rem, 6vw, 3rem)/1.1 var(--vg-marq, 'Bebas Neue', Impact, sans-serif); letter-spacing: .04em; color: #fff; text-shadow: 0 3px 0 rgba(0,0,0,.5); font-variant-numeric: tabular-nums; }
+.s-win:not(:empty) { animation: cxpopwin .45s cubic-bezier(.2,1.6,.4,1); }
+@keyframes cxpopwin { from { transform: scale(.5); opacity: 0; } }
+.s-msg { text-align: center; min-height: 1.3em; font: 400 1.3rem var(--vg-marq, 'Bebas Neue', sans-serif); letter-spacing: .05em; color: var(--s-a); }
+
+.s-panel .rc-bet-row { gap: 8px; padding: 10px 14px; border-radius: 999px; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.1); width: fit-content; max-width: 100%; margin: 6px auto 0; flex-wrap: wrap; }
+.s-panel .rc-bet-row label { font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: .8rem; color: #cfd2d8; }
+.s-panel .rc-bet-input { width: 100px; text-align: center; font-weight: 800; border-radius: 999px; }
+.s-actions { display: flex; justify-content: center; margin-top: 14px; }
+.s-actions .rc-btn { min-width: 260px; padding: 16px 40px; border-radius: 999px; font-size: 1.7rem; background: radial-gradient(circle at 50% 20%, #e8dcb8, var(--s-a) 55%, color-mix(in srgb, var(--s-a) 60%, #000)); color: #2a1400; border: 3px solid #e8dcb8; box-shadow: 0 6px 0 rgba(0,0,0,.45); text-shadow: none; transition: transform .12s, filter .12s; }
+.s-actions .rc-btn:hover:not(:disabled) { filter: brightness(1.12); transform: translateY(-2px); }
+.s-actions .rc-btn:disabled { filter: grayscale(.6) brightness(.7); }
+.s-pay { max-width: 860px; margin: 16px auto 0; font-size: .88rem; }
+.s-pay summary { cursor: pointer; font: 400 1.3rem var(--vg-marq, 'Bebas Neue', sans-serif); letter-spacing: .05em; color: var(--vg-gold, #c9a24a); }
 .s-pay table { width: 100%; }
-@media (max-width: 480px) { .s-cell { min-height: 40px; font-size: 1.15rem; } }
+@media (max-width: 480px) { .s-grid { gap: 4px; padding: 6px; } .s-cell { border-radius: 8px; } .s-actions .rc-btn { width: 100%; min-width: 0; } }
+@media (prefers-reduced-motion: reduce) { .s-cell, .s-cell.win, .s-panel::before, body.s-spinning .s-grid::after, .s-win { animation: none !important; } }

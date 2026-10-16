@@ -1,0 +1,177 @@
+{
+  "inventory": [
+    {
+      "page": "html/Blackjack.html",
+      "configuration": null,
+      "name": "Blackjack",
+      "canonicalId": "Blackjack",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/aero.html",
+      "configuration": "aero",
+      "name": "Aero",
+      "canonicalId": "Aero",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/aviator.html",
+      "configuration": "aviator",
+      "name": "Aviator",
+      "canonicalId": "Aviator",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/bigbasscrash.html",
+      "configuration": "bigbass",
+      "name": "Big Bass Crash",
+      "canonicalId": "Big Bass Crash",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/bingo.html",
+      "configuration": null,
+      "name": "Bingo",
+      "canonicalId": "Bingo",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/bookofdead.html",
+      "configuration": "bod",
+      "name": "Book of Dead",
+      "canonicalId": "Book of Dead",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/carreras.html",
+      "configuration": null,
+      "name": "Carreras",
+      "canonicalId": "Carreras",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/cashit.html",
+      "configuration": "cashit",
+      "name": "Cash It",
+      "canonicalId": "Cash It",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/cricketx.html",
+      "configuration": "cricketx",
+      "name": "Cricket X",
+      "canonicalId": "Cricket X",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/dados.html",
+      "configuration": null,
+      "name": "Dados",
+      "canonicalId": "Dados",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/gatesofolympus.html",
+      "configuration": "gates",
+      "name": "Gates of Olympus",
+      "canonicalId": "Gates of Olympus",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/highstriker.html",
+      "configuration": "highstriker",
+      "name": "High Striker",
+      "canonicalId": "High Striker",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/jetx.html",
+      "configuration": "jetx",
+      "name": "JetX",
+      "canonicalId": "JetX",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/poker.html",
+      "configuration": null,
+      "name": "Poker",
+      "canonicalId": "Poker",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/ruleta.html",
+      "configuration": null,
+      "name": "Ruleta",
+      "canonicalId": "Ruleta",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/spaceman.html",
+      "configuration": "spaceman",
+      "name": "Spaceman",
+      "canonicalId": "Spaceman",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/spacexy.html",
+      "configuration": "spacexy",
+      "name": "Space XY",
+      "canonicalId": "Space XY",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/starburst.html",
+      "configuration": "starburst",
+      "name": "Starburst",
+      "canonicalId": "Starburst",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/sweetbonanza.html",
+      "configuration": "bonanza",
+      "name": "Sweet Bonanza",
+      "canonicalId": "Sweet Bonanza",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/tragamonedas.html",
+      "configuration": null,
+      "name": "Tragamonedas",
+      "canonicalId": "Tragamonedas",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    },
+    {
+      "page": "html/zeppelin.html",
+      "configuration": "zeppelin",
+      "name": "Zeppelin",
+      "canonicalId": "Zeppelin",
+      "status": "integrado",
+      "note": "Ruta/catalogo; véanse pruebas para cobertura funcional"
+    }
+  ],
+  "tournament": "html/torneos.html: opción separada, no juego",
+  "absentRequested": [
+    "Gonzo’s Quest (gonzo / html/gonzosquest.html)",
+    "Book of Ra (bora / html/bookofra.html)"
+  ]
+}

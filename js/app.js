@@ -38,7 +38,6 @@ const RC = (() => {
   const PAGES = ROOT + 'html/';          // carpeta de las páginas
   const HOME = ROOT + 'index.html';      // portada pública
   const BASE = PAGES;                    // alias histórico: prefijo para enlazar páginas de html/
-  const GAMES = ['Tragamonedas', 'Ruleta', 'Blackjack', 'Poker', 'Dados', 'Carreras', 'Bingo', 'Aviator', 'Spaceman', 'JetX', 'Cricket X', 'Aero', 'Zeppelin', 'Space XY', 'Big Bass Crash', 'Cash It', 'High Striker'];
 
   const GAME_INFO = {
     Tragamonedas: { href: 'tragamonedas.html', icon: '🎰', desc: '3 carretes y multiplicadores.' },
@@ -58,8 +57,15 @@ const RC = (() => {
     'Big Bass Crash': { href: 'bigbasscrash.html', icon: '🎣', desc: 'Crash de pesca.' },
     'Cash It': { href: 'cashit.html', icon: '💸', desc: 'Crash de Playtech.' },
     'High Striker': { href: 'highstriker.html', icon: '📈', desc: 'Crash con curva de mercado.' },
+    'Gates of Olympus': { href: 'gatesofolympus.html', icon: '⚡', desc: 'Cascadas · variante de casa.' },
+    'Book of Dead': { href: 'bookofdead.html', icon: '📖', desc: '10 líneas · variante de casa.' },
+    Starburst: { href: 'starburst.html', icon: '🌟', desc: 'Comodines expansivos · variante de casa.' },
+    'Sweet Bonanza': { href: 'sweetbonanza.html', icon: '🍭', desc: 'Cascadas · variante de casa.' },
     Torneo: { href: 'torneos.html', icon: '🏆', desc: 'Compite contra otros jugadores.' },
   };
+
+  // Los nombres existentes son las claves canónicas de historial y habilitación.
+  const GAMES = Object.keys(GAME_INFO).filter(name => name !== 'Torneo');
 
   const NAV_ITEMS = [
     { href: 'torneos.html', label: 'Torneos' }, { href: 'ranking.html', label: 'Ranking' }, { href: 'amigos.html', label: 'Amigos' },
@@ -277,7 +283,7 @@ const RC = (() => {
     const user = getUser();
     user.gamesPlayed += 1;
     if (won) { user.wins += 1; user.winStreak += 1; user.bestWinStreak = Math.max(user.bestWinStreak, user.winStreak); }
-    else { user.losses += 1; user.winStreak = 0; }
+    else if (payout < wager) { user.losses += 1; user.winStreak = 0; }
     const gname = String(game).split(' · ')[0];
     user.gameCounts[gname] = (user.gameCounts[gname] || 0) + 1;
     const net = payout - wager;
@@ -296,14 +302,14 @@ const RC = (() => {
 
   /* ---------- Jugadores activos y ganadores en tiempo real (compartido entre pestañas del mismo navegador) ---------- */
 
-  const PAGE_GAME = { 'tragamonedas.html': 'Tragamonedas', 'ruleta.html': 'Ruleta', 'Blackjack.html': 'Blackjack', 'poker.html': 'Poker', 'dados.html': 'Dados', 'carreras.html': 'Carreras', 'bingo.html': 'Bingo', 'aviator.html': 'Aviator', 'spaceman.html': 'Spaceman', 'jetx.html': 'JetX', 'cricketx.html': 'Cricket X', 'aero.html': 'Aero', 'zeppelin.html': 'Zeppelin', 'spacexy.html': 'Space XY', 'bigbasscrash.html': 'Big Bass Crash', 'cashit.html': 'Cash It', 'highstriker.html': 'High Striker', 'torneos.html': 'Torneo' };
+  const PAGE_GAME = Object.fromEntries(GAMES.map(name => [GAME_INFO[name].href, name]));
   const ACTIVE_MS = 2 * 60 * 1000;
   let presenceTimer = null;
 
   function touchPresence() {
     const u = cu(); if (!u) return;
     const page = pageFile();
-    write(dk('p', u), { game: PAGE_GAME[page] || null, ts: Date.now() });
+    write(dk('p', u), { game: PAGE_GAME[page] || (page === 'torneos.html' ? 'Torneo' : null), ts: Date.now() });
     write(dk('l', u), Date.now());
   }
   function startPresence() {
@@ -419,7 +425,7 @@ const RC = (() => {
   function logHistory(game, won, wager, payout) {
     const u = cu(); if (!u) return;
     const list = getHistory();
-    list.unshift({ date: new Date().toISOString(), game, result: won ? 'win' : 'lose', wager, payout, balance: getUser().coins });
+    list.unshift({ date: new Date().toISOString(), game, result: payout === wager ? 'push' : (won ? 'win' : 'lose'), wager, payout, balance: getUser().coins });
     write(dk('h', u), list.slice(0, 200));
   }
   const getHistory = (u = cu()) => (u ? read(dk('h', u), []) : []);
@@ -557,30 +563,34 @@ const RC = (() => {
     const items = NAV_ITEMS;
     const href = i => BASE + i.href;
     const adminBtn = `<a class="rc-btn rc-btn-gold rc-btn-sm rc-admin-btn${inAdmin ? ' active' : ''}" href="${PAGES}admin/admin.html" title="Panel de administración">Administración</a>`;
-    const profileBtn = `<a class="rc-avatar-link" href="${BASE}mi_perfil.html" title="Mi perfil (${esc(u || '')})">👤</a>`;
+    const profileBtn = `<a class="rc-avatar-link" href="${BASE}mi_perfil.html" title="Mi perfil (${esc(u || '')})" aria-label="Mi perfil">${typeof RCIcon === 'function' ? RCIcon('user') : ''}</a>`;
 
     root.innerHTML = `
       <header class="rc-header">
         <a class="rc-brand" href="${HOME}"><span class="crown">♛</span><span class="rc-b1">ROYAL</span><span class="rc-b2">CASINO</span></a>
         <nav class="rc-nav">
-          <a class="rc-home-btn${current === 'index.html' ? ' active' : ''}" href="${HOME}" title="Volver al inicio">🏠 Inicio</a>
-          <a class="rc-casino-btn${current === 'juegos.html' ? ' active' : ''}" href="${BASE}juegos.html" title="Ver todos los juegos">🎰 Casino</a>
-          ${items.map(i => `<a href="${href(i)}" class="${i.href === current ? 'active' : ''}">${esc(i.label)}</a>`).join('')}
+          <a class="rc-home-btn${current === 'index.html' ? ' active' : ''}" href="${HOME}" title="Volver al inicio">Inicio</a>
+          <a class="rc-casino-btn${current === 'juegos.html' ? ' active' : ''}" href="${BASE}juegos.html" title="Ver todos los juegos">Casino</a>
+          ${items.slice(0, 2).map(i => `<a href="${href(i)}" class="${i.href === current ? 'active' : ''}">${esc(i.label)}</a>`).join('')}
+          <details class="rc-more"><summary class="${items.slice(2).some(i => i.href === current) ? 'active' : ''}">Más ▾</summary>
+            <div>${items.slice(2).map(i => `<a href="${href(i)}" class="${i.href === current ? 'active' : ''}">${esc(i.label)}</a>`).join('')}</div></details>
         </nav>
         <div class="rc-user">
-          <span class="rc-level-pill">${info.icon} Nv. ${user.level}</span>
-          <a class="rc-coins" href="${BASE}billetera.html" title="Billetera">💰 <span id="rc-coin-display">${formatNumber(user.coins)}</span></a>
-          <a class="rc-avatar-link" href="${BASE}notificaciones.html" title="Notificaciones" style="position:relative">🔔<span id="rc-bell" style="display:none;position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#c0392b;color:#fff;font-size:.65rem;font-weight:700;align-items:center;justify-content:center"></span></a>
+          <span class="rc-level-pill" title="${esc(info.name)}">Nv. ${user.level}</span>
+          <a class="rc-coins" href="${BASE}billetera.html" title="Billetera">${typeof RCIcon === 'function' ? RCIcon('coins') : ''}<span id="rc-coin-display">${formatNumber(user.coins)}</span></a>
+          <a class="rc-avatar-link" href="${BASE}notificaciones.html" title="Notificaciones" aria-label="Notificaciones" style="position:relative">${typeof RCIcon === 'function' ? RCIcon('bell') : ''}<span id="rc-bell" style="display:none;position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#c0392b;color:#fff;font-size:.65rem;font-weight:700;align-items:center;justify-content:center"></span></a>
           ${adm ? adminBtn : profileBtn}
           <button class="rc-btn rc-btn-ghost rc-btn-sm" id="rc-logout" type="button">Salir</button>
         </div>
       </header>
       <div class="rc-toast-wrap" id="rc-toast-wrap"></div>
     `;
+    const more = root.querySelector('.rc-more');                // el menú «Más» se cierra al pulsar fuera
+    document.addEventListener('click', e => { if (more.open && !more.contains(e.target)) more.open = false; });
     root.querySelector('#rc-logout').addEventListener('click', () => { if (confirm('¿Cerrar sesión?')) logout(); });
     refreshBell();
     // Flecha para volver al lobby de juegos (solo en las páginas de cada juego)
-    if (['tragamonedas.html', 'ruleta.html', 'Blackjack.html', 'poker.html', 'dados.html', 'carreras.html', 'bingo.html', 'aviator.html', 'spaceman.html', 'jetx.html', 'cricketx.html', 'aero.html', 'zeppelin.html', 'spacexy.html', 'bigbasscrash.html', 'cashit.html', 'highstriker.html'].includes(current)) {
+    if (PAGE_GAME[current]) {
       const main = document.querySelector('.rc-main');
       if (main && !main.querySelector('.rc-back-games')) main.insertAdjacentHTML('afterbegin', `<a class="rc-back-games" href="${BASE}juegos.html" title="Volver a los juegos" aria-label="Volver a los juegos"><span aria-hidden="true">←</span> Juegos</a>`);
     }
@@ -590,7 +600,7 @@ const RC = (() => {
     const el = document.getElementById('rc-coin-display');
     if (el) el.textContent = formatNumber(user.coins);
     const pill = document.querySelector('.rc-level-pill');
-    if (pill) { const info = levelInfo(user.level); pill.textContent = `${info.icon} Nv. ${user.level}`; }
+    if (pill) { const info = levelInfo(user.level); pill.textContent = `Nv. ${user.level}`; pill.title = info.name; }
   }
 
   function refreshBell() {
@@ -601,7 +611,7 @@ const RC = (() => {
 
   /* ---------- Avisos pequeños (toasts) ---------- */
   // toast(tipo, mensaje[, icono]) — tipos: 'info' | 'win' | 'lose' (o 'error'). Para el resultado de una jugada usa result().
-  const TOAST_ICON = { info: 'ℹ️', win: '✅', lose: '⚠️' };
+  const TOAST_ICON = { info: 'info', win: 'check', lose: 'triangle-alert' };
   function toast(type, message, icon) {
     let wrap = document.getElementById('rc-toast-wrap');
     if (!wrap) { wrap = document.createElement('div'); wrap.className = 'rc-toast-wrap'; wrap.id = 'rc-toast-wrap'; document.body.appendChild(wrap); }
@@ -610,7 +620,7 @@ const RC = (() => {
     const el = document.createElement('div');
     el.className = `rc-toast ${kind}`;
     el.setAttribute('role', kind === 'lose' ? 'alert' : 'status');
-    const ic = document.createElement('span'); ic.className = 'rc-toast-ic'; ic.setAttribute('aria-hidden', 'true'); ic.textContent = icon || TOAST_ICON[kind];
+    const ic = document.createElement('span'); ic.className = 'rc-toast-ic'; ic.setAttribute('aria-hidden', 'true'); if (typeof RCIcon === 'function') ic.innerHTML = RCIcon(TOAST_ICON[kind]); else ic.textContent = icon || '•';
     const tx = document.createElement('span'); tx.className = 'rc-toast-tx'; tx.textContent = message;
     const bar = document.createElement('i'); bar.className = 'rc-toast-bar'; bar.style.animationDuration = life + 'ms';
     el.append(ic, tx, bar);
@@ -625,10 +635,10 @@ const RC = (() => {
   //   amount = monedas ganadas o perdidas (siempre positivo; el signo lo pone el tipo)
   //   sound:false si el juego ya tiene sus propios sonidos.
   const RESULT_DEF = {
-    win:  { icon: '🏆', title: '¡GANASTE!',     ms: 2900, sign: '+' },
-    big:  { icon: '👑', title: '¡GRAN PREMIO!', ms: 4200, sign: '+' },
-    lose: { icon: '💔', title: 'PERDISTE',      ms: 2200, sign: '−' },
-    push: { icon: '🤝', title: 'EMPATE',        ms: 2000, sign: '' },
+    win:  { icon: 'check',  title: 'Ganaste',      ms: 2200, sign: '+' },
+    big:  { icon: 'crown',  title: 'Gran premio',  ms: 3000, sign: '+' },
+    lose: { icon: 'circle-x', title: 'Sin premio', ms: 1600, sign: '−' },
+    push: { icon: 'circle-dot', title: 'Empate',   ms: 1600, sign: '' },
   };
   let resNode = null, resTimer = 0, resStop = null, resCount = 0, resKey = null, resAudio = null;
 
@@ -659,7 +669,7 @@ const RC = (() => {
         const o = resAudio.createOscillator(), g = resAudio.createGain();
         o.type = bad ? 'sawtooth' : 'triangle'; o.frequency.value = f;
         g.gain.setValueAtTime(0.0001, t0 + d);
-        g.gain.exponentialRampToValueAtTime(bad ? .04 : .08, t0 + d + .02);
+        g.gain.exponentialRampToValueAtTime(bad ? .02 : .04, t0 + d + .02);
         g.gain.exponentialRampToValueAtTime(0.0001, t0 + d + dur);
         o.connect(g); g.connect(resAudio.destination);
         o.start(t0 + d); o.stop(t0 + d + dur + .05);
@@ -770,22 +780,20 @@ const RC = (() => {
     const ms = Math.max(900, o.duration || def.ms);
     const amt = Number(o.amount), hasAmt = Number.isFinite(amt) && amt > 0;
     const fmtN = v => def.sign + formatNumber(Math.round(v));
+    // Los juegos pasan títulos en mayúsculas («¡GANASTE!»); se muestran en tipo oración: «¡Ganaste!»
+    const calm = t => String(t).toLowerCase().replace(/[a-záéíóúüñ]/, c => c.toUpperCase());
 
     closeResult(true);
     const node = document.createElement('div');
     node.className = `rc-res ${type}${animOn ? '' : ' calm'}`;
     node.setAttribute('role', 'status');
     node.innerHTML = `
-      ${animOn && type !== 'lose' && type !== 'push' ? '<div class="rc-res-rays" aria-hidden="true"></div>' : ''}
       <div class="rc-res-card" title="Toca para cerrar">
-        <div class="rc-res-bulbs" aria-hidden="true"></div>
-        <div class="rc-res-icon" aria-hidden="true">${esc(o.icon || def.icon)}</div>
-        <h2 class="rc-res-title">${esc(o.title || def.title)}</h2>
+        <div class="rc-res-icon" aria-hidden="true">${typeof RCIcon === 'function' ? RCIcon(def.icon) : ''}</div>
+        <h2 class="rc-res-title">${esc(calm(o.title || def.title))}</h2>
         ${hasAmt ? `<div class="rc-res-amount"><span class="n">${fmtN(animOn && type !== 'lose' ? 0 : amt)}</span><span class="u">monedas</span></div>` : ''}
         ${o.text ? `<p class="rc-res-text">${esc(o.text)}</p>` : ''}
-        <div class="rc-res-bulbs" aria-hidden="true"></div>
-      </div>
-      ${animOn ? '<canvas class="rc-res-fx" aria-hidden="true"></canvas>' : ''}`;
+      </div>`;
     document.body.appendChild(node);
     resNode = node;
 
@@ -803,7 +811,7 @@ const RC = (() => {
       };
       resCount = requestAnimationFrame(step);
     }
-    if (animOn) resStop = startParticles(node.querySelector('canvas'), type, ms);
+    
     if (o.sound !== false && st.sound !== false) resultSound(type);
     resTimer = setTimeout(() => closeResult(), ms);
   }
@@ -1070,7 +1078,7 @@ const RC = (() => {
     getUser, saveUser, addCoins, canBet, addXP, registerGameResult, checkAchievements, resetAccount,
     getHistory, logHistory, clearHistory, getMovements, logMove,
     // datos
-    ACHIEVEMENTS, GAMES, GAME_INFO, NAV_ITEMS, DEMO,
+    ACHIEVEMENTS, GAMES, GAME_INFO, PAGE_GAME, NAV_ITEMS, DEMO,
     getRanking, globalStats, getNews, addNews, deleteNews, getTickets, addTicket, setTicketStatus, deleteTicket, markTicketRead, replyTicket, getEvents,
     isGameEnabled, setGameEnabled, notify, getNotifications, unreadCount, markAllRead, clearNotifications,
     getSettings, saveSettings, applySettings,

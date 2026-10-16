@@ -5,30 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Admin · Panel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="../../css/base.css">
 <link rel="stylesheet" href="../../css/admin.css">
 <link rel="stylesheet" href="../../css/vegas.css">
 <link rel="stylesheet" href="../../css/rendimiento.css">
+<link rel="stylesheet" href="../../css/tema.css">
 </head>
 <body class="vg" data-admin>
 
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-<h1>👨‍💼 Administración · Panel</h1>
+<h1>Administración · Panel</h1>
 <nav class="admin-nav"><a href="admin.html" class="active">Panel</a><a href="usuarios.html" class="">Usuarios</a><a href="juegos.html" class="">Juegos</a><a href="estadisticas.html" class="">Estadísticas</a><a href="noticias.html" class="">Noticias</a><a href="soporte.html" class="">Soporte</a><a href="../../index.html">← Volver al casino</a></nav>
 <p class="ad-tag">🔒 Zona de administración</p>
 <div class="rc-stat-row"><div class="rc-stat"><div class="num" id="aUsers">—</div><div class="lbl">👥 Usuarios</div></div><div class="rc-stat"><div class="num" id="aGames">—</div><div class="lbl">🎮 Partidas</div></div><div class="rc-stat"><div class="num" id="aOnline">—</div><div class="lbl">🟢 Usuarios online</div></div><div class="rc-stat"><div class="num" id="aAchv">—</div><div class="lbl">🏆 Logros</div></div></div>
 <section class="rc-panel" style="margin-top:20px;">
 <h2>Accesos rápidos</h2>
-<div class="rc-game-grid"><a class="rc-game-card" href="usuarios.html"><span class="icon">👥</span><span class="name">Usuarios</span></a><a class="rc-game-card" href="juegos.html"><span class="icon">🎮</span><span class="name">Juegos</span></a><a class="rc-game-card" href="estadisticas.html"><span class="icon">📊</span><span class="name">Estadísticas</span></a><a class="rc-game-card" href="noticias.html"><span class="icon">📰</span><span class="name">Noticias</span></a><a class="rc-game-card" href="soporte.html"><span class="icon">📞</span><span class="name">Soporte</span></a></div>
+<div class="rc-game-grid"><a class="rc-game-card" href="usuarios.html"><span class="icon"><svg class="ic ic-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span><span class="name">Usuarios</span></a><a class="rc-game-card" href="juegos.html"><span class="icon"><svg class="ic ic-layout-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></svg></span><span class="name">Juegos</span></a><a class="rc-game-card" href="estadisticas.html"><span class="icon"><svg class="ic ic-trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg></span><span class="name">Estadísticas</span></a><a class="rc-game-card" href="noticias.html"><span class="icon"><svg class="ic ic-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 7v14" /><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></svg></span><span class="name">Noticias</span></a><a class="rc-game-card" href="soporte.html"><span class="icon"><svg class="ic ic-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg></span><span class="name">Soporte</span></a></div>
 </section>
 </main>
 
-<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="../ayuda.html">Ayuda</a> · <a href="../soporte.html">Soporte</a> · <a href="../noticias.html">Noticias</a> · <a href="../configuracion.html">Configuración</a></p></footer>
+<footer class="rc-footer"><p><span class="rc-18" title="Solo mayores de edad">18+</span> © Royal Casino · Juego responsable · Monedas virtuales, sin dinero real. <a href="../ayuda.html">Ayuda</a> · <a href="../soporte.html">Soporte</a> · <a href="../noticias.html">Noticias</a> · <a href="../configuracion.html">Configuración</a></p></footer>
 
 <script src="../../js/nube.js"></script>
+<script src="../../js/iconos.js"></script>
 <script src="../../js/app.js"></script>
 <script src="../../js/firebase_auth.js"></script>
 <script src="../../js/auth.js"></script>

@@ -36,47 +36,7 @@ function freshDeck() {
 }
 
 /* ---- Evaluación de manos (7 cartas -> mejor 5) ---- */
-function combos5(arr) {
-  const res = [], n = arr.length;
-  for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) for (let c = b + 1; c < n; c++)
-    for (let d = c + 1; d < n; d++) for (let e = d + 1; e < n; e++) res.push([arr[a], arr[b], arr[c], arr[d], arr[e]]);
-  return res;
-}
-function scoreFive(cards) {
-  const ranks = cards.map(c => c.rank).sort((a, b) => b - a);
-  const isFlush = cards.every(c => c.suit === cards[0].suit);
-  const uniq = [...new Set(ranks)];
-  let isStraight = false, high = 0;
-  if (uniq.length === 5) {
-    if (uniq[0] - uniq[4] === 4) { isStraight = true; high = uniq[0]; }
-    else if (uniq.join() === '14,5,4,3,2') { isStraight = true; high = 5; }
-  }
-  const counts = {};
-  ranks.forEach(r => counts[r] = (counts[r] || 0) + 1);
-  const g = Object.entries(counts).map(([r, c]) => [Number(r), c]).sort((x, y) => y[1] - x[1] || y[0] - x[0]);
-  if (isStraight && isFlush) return [8, high];
-  if (g[0][1] === 4) return [7, g[0][0], g[1][0]];
-  if (g[0][1] === 3 && g[1][1] === 2) return [6, g[0][0], g[1][0]];
-  if (isFlush) return [5, ...ranks];
-  if (isStraight) return [4, high];
-  if (g[0][1] === 3) return [3, g[0][0], ...g.slice(1).map(x => x[0])];
-  if (g[0][1] === 2 && g[1][1] === 2) return [2, g[0][0], g[1][0], g[2][0]];
-  if (g[0][1] === 2) return [1, g[0][0], ...g.slice(1).map(x => x[0])];
-  return [0, ...ranks];
-}
-function compareScores(a, b) {
-  for (let i = 0; i < Math.max(a.length, b.length); i++) { const av = a[i] ?? 0, bv = b[i] ?? 0; if (av !== bv) return av - bv; }
-  return 0;
-}
-// Devuelve la puntuación y las 5 cartas que forman la mejor mano
-function bestHand(seven) {
-  let best = null;
-  for (const combo of combos5(seven)) {
-    const s = scoreFive(combo);
-    if (!best || compareScores(s, best.score) > 0) best = { score: s, cards: combo };
-  }
-  return best;
-}
+const { bestHand, compareScores } = PokerEngine;
 function handLabel(hole, board) {
   if (board.length < 3) return hole[0].rank === hole[1].rank ? `Pareja de ${lab(hole[0].rank)}` : `Carta alta ${lab(Math.max(hole[0].rank, hole[1].rank))}`;
   const b = bestHand([...hole, ...board]);
@@ -222,8 +182,8 @@ const iaKey = () => 'rc_ia_poker_' + String(RC.currentUser() || 'guest').toLower
 function iaLoad() { try { iaModel = RCIA.load(JSON.parse(RCMem.getItem(iaKey()))); } catch (e) { iaModel = RCIA.newModel(); } }
 function iaSave() { try { RCMem.setItem(iaKey(), JSON.stringify(iaModel)); } catch (e) {} }
 function equityVsRandom(hole, board, sims = 120) {   // probabilidad de ganar contra una mano rival al azar (no ve cartas ajenas)
-  const known = new Set([...hole, ...board].map(c => JSON.stringify(c)));
-  const rest = freshDeck().filter(c => !known.has(JSON.stringify(c)));
+  const known = new Set([...hole, ...board].map(c => c.rank + ':' + c.suit));
+  const rest = freshDeck().filter(c => !known.has(c.rank + ':' + c.suit));
   let score = 0;
   for (let i = 0; i < sims; i++) {
     const d = rest.slice();
@@ -246,7 +206,8 @@ function iaMaybeRaise() {                              // tras revelar flop/turn
 
 function deal() {
   if (live || busy) return;
-  const b = Math.max(MIN_BET, Math.floor(Number(betInput.value) || 0));
+  const b = Number(betInput.value);
+  if (!Number.isSafeInteger(b) || b < MIN_BET || b > Number.MAX_SAFE_INTEGER / 20) { RC.toast('lose', 'Apuesta inválida.'); return; }
   if (b * 2 > RC.getUser().coins) { RC.toast('lose', 'No tienes monedas suficientes para esta apuesta.'); return; }
   ante = b; betInput.value = b; raiseExtra = 0; iaLoad();
   RC.addCoins(-b);
@@ -281,16 +242,16 @@ async function bet() {
   else { community.push(deck.pop()); msgEl.textContent = 'River revelado…'; }
   render(false);
   if (stage < 3) iaMaybeRaise();
-  if (stage === 3) { await sleep(1100); await showdown(); return; }
+  if (stage === 3) { await showdown(); return; }
   await sleep(stage === 1 ? 900 : 500);
   busy = false; controls();
 }
 
 async function showdown() {
+  if (!live || stage === 4) return;
   stage = 4; setStage();
   msgEl.textContent = '¡Showdown! La banca muestra sus cartas…';
   render(true);
-  await sleep(1200);
   const P = bestHand([...playerHole, ...community]), B = bestHand([...botHole, ...community]);
   const cmp = compareScores(P.score, B.score);
   const keys = new Set((cmp > 0 ? P.cards : cmp < 0 ? B.cards : [...P.cards, ...B.cards]).map(c => c.rank + c.suit));

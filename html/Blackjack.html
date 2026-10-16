@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Royal Casino — Blackjack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/juegos.css">
 <link rel="stylesheet" href="../css/Blackjack.css">
 <link rel="stylesheet" href="../css/vegas.css">
 <link rel="stylesheet" href="../css/rendimiento.css">
+<link rel="stylesheet" href="../css/tema.css">
 </head>
 <body class="bj-page vg">
 
@@ -19,7 +20,7 @@
 <div id="rc-header-root"></div>
 
 <main class="rc-main">
-  <h1 class="game-title">♠ Blackjack ♥</h1>
+  <h1 class="game-title">Blackjack</h1>
   <p class="bj-tagline">Mesa VIP · Blackjack paga 3 a 2</p>
 
   <!-- Configuración del mazo -->
@@ -95,16 +96,19 @@
       <li>El mazo se mezcla automáticamente al llegar al porcentaje elegido (se aplica en la siguiente mano).</li>
     </ul>
   </section>
+<p>Mesa S17: la banca se planta en 17 blando. Natural de dos cartas paga 3:2 (retorno redondeado a moneda entera más cercana). Doblar: una carta; hasta cuatro manos; ases divididos: una carta, sin redividir ases. Sin seguro ni rendición. <a href="reglas.html">Reglas</a>.</p>
 </main>
 
-<footer class="rc-footer"><p>© Royal Casino · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
+<footer class="rc-footer"><p><span class="rc-18" title="Solo mayores de edad">18+</span> © Royal Casino · Juego responsable · Monedas virtuales, sin dinero real. <a href="ayuda.html">Ayuda</a> · <a href="soporte.html">Soporte</a> · <a href="noticias.html">Noticias</a> · <a href="configuracion.html">Configuración</a></p></footer>
 
 <script src="../js/nube.js"></script>
+<script src="../js/iconos.js"></script>
 <script src="../js/app.js"></script>
 <script src="../js/ia_rival_engine.js"></script>
 <script src="../js/ia_rival.js"></script>
 <script src="../js/firebase_auth.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/blackjack_engine.js"></script>
 <script src="../js/Blackjack.js"></script>
 </body>
 </html>

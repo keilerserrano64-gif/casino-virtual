@@ -46,7 +46,6 @@ body.vg .rc-brand .rc-b1{will-change:opacity}
 .lv-live i{will-change:opacity,transform}
 .lv-bulbs{will-change:opacity}
 .lv-chest{will-change:transform}
-.escena-stage{will-change:transform}
 .glow{will-change:opacity,transform}
 .scr{will-change:opacity}
 .wheel::before{will-change:transform}
@@ -58,11 +57,11 @@ body.vg .rc-brand .rc-b1{will-change:opacity}
 .ply.mesa .arm.r{will-change:transform}
 
 /* Bombillas: el brillo es fijo y solo cambia la opacidad (antes se repintaba una sombra en cada fotograma) */
-.bulb{box-shadow:0 0 8px 2px rgba(255,226,120,.9);will-change:opacity}
+.bulb{box-shadow:none;will-change:opacity}
 @keyframes bulb{0%,100%{opacity:.25}50%{opacity:1}}
-.slot-machine[data-state="win"] .bulb{box-shadow:0 0 12px 4px rgba(255,240,150,1)}
+.slot-machine[data-state="win"] .bulb{box-shadow:none}
 @keyframes bulb-win{0%,100%{opacity:.3}50%{opacity:1}}
-body.vg.slot-page .bulb,body.vg.slot-page .slot-machine[data-state="win"] .bulb{box-shadow:0 0 10px 3px currentColor}
+body.vg.slot-page .bulb,body.vg.slot-page .slot-machine[data-state="win"] .bulb{box-shadow:none}
 @keyframes vgbulb{0%,100%{opacity:.3}50%{opacity:1}}
 /* Contenido fuera de pantalla no se pinta hasta que se ve */
 .rc-panel,.lv-vip,.lv-now{content-visibility:auto;contain-intrinsic-size:auto 120px}

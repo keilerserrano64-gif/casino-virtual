@@ -8,12 +8,12 @@ test('el punto de caída siempre está entre 1.00 y el máximo', () => {
 });
 test('RTP simulado ≈ 97 % retirando siempre en 2x', () => {
   const N = 400000; let paid = 0;
-  for (let i = 0; i < N; i++) if (E.crashPoint() >= 2) paid += 2;
+  for (let i = 0; i < N; i++) if (E.crashPoint() > 2) paid += 2;
   const rtp = paid / N; assert(rtp > 0.94 && rtp < 1.0, 'rtp ' + rtp);
 });
 test('RTP simulado ≈ 97 % retirando siempre en 10x', () => {
   const N = 600000; let paid = 0;
-  for (let i = 0; i < N; i++) if (E.crashPoint() >= 10) paid += 10;
+  for (let i = 0; i < N; i++) if (E.crashPoint() > 10) paid += 10;
   const rtp = paid / N; assert(rtp > 0.90 && rtp < 1.04, 'rtp ' + rtp);
 });
 test('multiplicador y tiempo son inversos y crecen', () => {

@@ -1,0 +1,2279 @@
+[
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:0",
+    "label": "Pleno · 0",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:1",
+    "label": "Pleno · 1",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:2",
+    "label": "Pleno · 2",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:3",
+    "label": "Pleno · 3",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:4",
+    "label": "Pleno · 4",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:5",
+    "label": "Pleno · 5",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:6",
+    "label": "Pleno · 6",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:7",
+    "label": "Pleno · 7",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:8",
+    "label": "Pleno · 8",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:9",
+    "label": "Pleno · 9",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:10",
+    "label": "Pleno · 10",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:11",
+    "label": "Pleno · 11",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:12",
+    "label": "Pleno · 12",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:13",
+    "label": "Pleno · 13",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:14",
+    "label": "Pleno · 14",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:15",
+    "label": "Pleno · 15",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:16",
+    "label": "Pleno · 16",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:17",
+    "label": "Pleno · 17",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:18",
+    "label": "Pleno · 18",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:19",
+    "label": "Pleno · 19",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:20",
+    "label": "Pleno · 20",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:21",
+    "label": "Pleno · 21",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:22",
+    "label": "Pleno · 22",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:23",
+    "label": "Pleno · 23",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:24",
+    "label": "Pleno · 24",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:25",
+    "label": "Pleno · 25",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:26",
+    "label": "Pleno · 26",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:27",
+    "label": "Pleno · 27",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:28",
+    "label": "Pleno · 28",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:29",
+    "label": "Pleno · 29",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:30",
+    "label": "Pleno · 30",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:31",
+    "label": "Pleno · 31",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:32",
+    "label": "Pleno · 32",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:33",
+    "label": "Pleno · 33",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:34",
+    "label": "Pleno · 34",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:35",
+    "label": "Pleno · 35",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:36",
+    "label": "Pleno · 36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "straight:37",
+    "label": "Pleno · 00",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:1-2",
+    "label": "Split · 1, 2",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:1-4",
+    "label": "Split · 1, 4",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:1-2-4-5",
+    "label": "Cuadro · 1, 2, 4, 5",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:2-3",
+    "label": "Split · 2, 3",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:2-5",
+    "label": "Split · 2, 5",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:2-3-5-6",
+    "label": "Cuadro · 2, 3, 5, 6",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:3-6",
+    "label": "Split · 3, 6",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:4-5",
+    "label": "Split · 4, 5",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:4-7",
+    "label": "Split · 4, 7",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:4-5-7-8",
+    "label": "Cuadro · 4, 5, 7, 8",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:5-6",
+    "label": "Split · 5, 6",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:5-8",
+    "label": "Split · 5, 8",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:5-6-8-9",
+    "label": "Cuadro · 5, 6, 8, 9",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:6-9",
+    "label": "Split · 6, 9",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:7-8",
+    "label": "Split · 7, 8",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:7-10",
+    "label": "Split · 7, 10",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:7-8-10-11",
+    "label": "Cuadro · 7, 8, 10, 11",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:8-9",
+    "label": "Split · 8, 9",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:8-11",
+    "label": "Split · 8, 11",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:8-9-11-12",
+    "label": "Cuadro · 8, 9, 11, 12",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:9-12",
+    "label": "Split · 9, 12",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:10-11",
+    "label": "Split · 10, 11",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:10-13",
+    "label": "Split · 10, 13",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:10-11-13-14",
+    "label": "Cuadro · 10, 11, 13, 14",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:11-12",
+    "label": "Split · 11, 12",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:11-14",
+    "label": "Split · 11, 14",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:11-12-14-15",
+    "label": "Cuadro · 11, 12, 14, 15",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:12-15",
+    "label": "Split · 12, 15",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:13-14",
+    "label": "Split · 13, 14",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:13-16",
+    "label": "Split · 13, 16",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:13-14-16-17",
+    "label": "Cuadro · 13, 14, 16, 17",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:14-15",
+    "label": "Split · 14, 15",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:14-17",
+    "label": "Split · 14, 17",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:14-15-17-18",
+    "label": "Cuadro · 14, 15, 17, 18",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:15-18",
+    "label": "Split · 15, 18",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:16-17",
+    "label": "Split · 16, 17",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:16-19",
+    "label": "Split · 16, 19",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:16-17-19-20",
+    "label": "Cuadro · 16, 17, 19, 20",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:17-18",
+    "label": "Split · 17, 18",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:17-20",
+    "label": "Split · 17, 20",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:17-18-20-21",
+    "label": "Cuadro · 17, 18, 20, 21",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:18-21",
+    "label": "Split · 18, 21",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:19-20",
+    "label": "Split · 19, 20",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:19-22",
+    "label": "Split · 19, 22",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:19-20-22-23",
+    "label": "Cuadro · 19, 20, 22, 23",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:20-21",
+    "label": "Split · 20, 21",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:20-23",
+    "label": "Split · 20, 23",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:20-21-23-24",
+    "label": "Cuadro · 20, 21, 23, 24",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:21-24",
+    "label": "Split · 21, 24",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:22-23",
+    "label": "Split · 22, 23",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:22-25",
+    "label": "Split · 22, 25",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:22-23-25-26",
+    "label": "Cuadro · 22, 23, 25, 26",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:23-24",
+    "label": "Split · 23, 24",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:23-26",
+    "label": "Split · 23, 26",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:23-24-26-27",
+    "label": "Cuadro · 23, 24, 26, 27",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:24-27",
+    "label": "Split · 24, 27",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:25-26",
+    "label": "Split · 25, 26",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:25-28",
+    "label": "Split · 25, 28",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:25-26-28-29",
+    "label": "Cuadro · 25, 26, 28, 29",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:26-27",
+    "label": "Split · 26, 27",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:26-29",
+    "label": "Split · 26, 29",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:26-27-29-30",
+    "label": "Cuadro · 26, 27, 29, 30",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:27-30",
+    "label": "Split · 27, 30",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:28-29",
+    "label": "Split · 28, 29",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:28-31",
+    "label": "Split · 28, 31",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:28-29-31-32",
+    "label": "Cuadro · 28, 29, 31, 32",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:29-30",
+    "label": "Split · 29, 30",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:29-32",
+    "label": "Split · 29, 32",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:29-30-32-33",
+    "label": "Cuadro · 29, 30, 32, 33",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:30-33",
+    "label": "Split · 30, 33",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:31-32",
+    "label": "Split · 31, 32",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:31-34",
+    "label": "Split · 31, 34",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:31-32-34-35",
+    "label": "Cuadro · 31, 32, 34, 35",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:32-33",
+    "label": "Split · 32, 33",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:32-35",
+    "label": "Split · 32, 35",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "corner:32-33-35-36",
+    "label": "Cuadro · 32, 33, 35, 36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:33-36",
+    "label": "Split · 33, 36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:34-35",
+    "label": "Split · 34, 35",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:35-36",
+    "label": "Split · 35, 36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:0-37",
+    "label": "Split · 0, 00",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:0-1",
+    "label": "Split · 0, 1",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:0-2",
+    "label": "Split · 0, 2",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:37-2",
+    "label": "Split · 00, 2",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "split:37-3",
+    "label": "Split · 00, 3",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:1-2-3",
+    "label": "Calle · 1, 2, 3",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:1-2-3-4-5-6",
+    "label": "Seisena · 1, 2, 3, 4, 5, 6",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:4-5-6",
+    "label": "Calle · 4, 5, 6",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:4-5-6-7-8-9",
+    "label": "Seisena · 4, 5, 6, 7, 8, 9",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:7-8-9",
+    "label": "Calle · 7, 8, 9",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:7-8-9-10-11-12",
+    "label": "Seisena · 7, 8, 9, 10, 11, 12",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:10-11-12",
+    "label": "Calle · 10, 11, 12",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:10-11-12-13-14-15",
+    "label": "Seisena · 10, 11, 12, 13, 14, 15",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:13-14-15",
+    "label": "Calle · 13, 14, 15",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:13-14-15-16-17-18",
+    "label": "Seisena · 13, 14, 15, 16, 17, 18",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:16-17-18",
+    "label": "Calle · 16, 17, 18",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:16-17-18-19-20-21",
+    "label": "Seisena · 16, 17, 18, 19, 20, 21",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:19-20-21",
+    "label": "Calle · 19, 20, 21",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:19-20-21-22-23-24",
+    "label": "Seisena · 19, 20, 21, 22, 23, 24",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:22-23-24",
+    "label": "Calle · 22, 23, 24",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:22-23-24-25-26-27",
+    "label": "Seisena · 22, 23, 24, 25, 26, 27",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:25-26-27",
+    "label": "Calle · 25, 26, 27",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:25-26-27-28-29-30",
+    "label": "Seisena · 25, 26, 27, 28, 29, 30",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:28-29-30",
+    "label": "Calle · 28, 29, 30",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:28-29-30-31-32-33",
+    "label": "Seisena · 28, 29, 30, 31, 32, 33",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:31-32-33",
+    "label": "Calle · 31, 32, 33",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "sixline:31-32-33-34-35-36",
+    "label": "Seisena · 31, 32, 33, 34, 35, 36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:34-35-36",
+    "label": "Calle · 34, 35, 36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:0-1-2",
+    "label": "Trío · 0, 1, 2",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:0-2-37",
+    "label": "Trío · 0, 2, 00",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "street:37-2-3",
+    "label": "Trío · 00, 2, 3",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "basket:0-37-1-2-3",
+    "label": "Cesta · 0, 00, 1, 2, 3",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2100,
+    "total_stake": 2280,
+    "rtp": 0.9210526315789473
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "dozen:1-2-3-4-5-6-7-8-9-10-11-12",
+    "label": "Docena · 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "column:1-4-7-10-13-16-19-22-25-28-31-34",
+    "label": "Columna · 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "dozen:13-14-15-16-17-18-19-20-21-22-23-24",
+    "label": "Docena · 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "column:2-5-8-11-14-17-20-23-26-29-32-35",
+    "label": "Columna · 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "dozen:25-26-27-28-29-30-31-32-33-34-35-36",
+    "label": "Docena · 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "column:3-6-9-12-15-18-21-24-27-30-33-36",
+    "label": "Columna · 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "red",
+    "label": "Rojo",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "black",
+    "label": "Negro",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "odd",
+    "label": "Impar",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "even",
+    "label": "Par",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "low",
+    "label": "1–18",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "american-roulette",
+    "bet": "high",
+    "label": "19–36",
+    "equiprobable_outcomes": 38,
+    "total_credit": 2160,
+    "total_stake": 2280,
+    "rtp": 0.9473684210526315
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "small",
+    "label": "Small · 4–10 sin triples",
+    "equiprobable_outcomes": 216,
+    "total_credit": 12600,
+    "total_stake": 12960,
+    "rtp": 0.9722222222222222
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "big",
+    "label": "Big · 11–17 sin triples",
+    "equiprobable_outcomes": 216,
+    "total_credit": 12600,
+    "total_stake": 12960,
+    "rtp": 0.9722222222222222
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "any-triple",
+    "label": "Cualquier triple",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9000,
+    "total_stake": 12960,
+    "rtp": 0.6944444444444444
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "triple:1",
+    "label": "Triple 1",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9060,
+    "total_stake": 12960,
+    "rtp": 0.6990740740740741
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "double:1",
+    "label": "Doble 1",
+    "equiprobable_outcomes": 216,
+    "total_credit": 8640,
+    "total_stake": 12960,
+    "rtp": 0.6666666666666666
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "single:1",
+    "label": "Número individual 1",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11940,
+    "total_stake": 12960,
+    "rtp": 0.9212962962962963
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "triple:2",
+    "label": "Triple 2",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9060,
+    "total_stake": 12960,
+    "rtp": 0.6990740740740741
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "double:2",
+    "label": "Doble 2",
+    "equiprobable_outcomes": 216,
+    "total_credit": 8640,
+    "total_stake": 12960,
+    "rtp": 0.6666666666666666
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "single:2",
+    "label": "Número individual 2",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11940,
+    "total_stake": 12960,
+    "rtp": 0.9212962962962963
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "triple:3",
+    "label": "Triple 3",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9060,
+    "total_stake": 12960,
+    "rtp": 0.6990740740740741
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "double:3",
+    "label": "Doble 3",
+    "equiprobable_outcomes": 216,
+    "total_credit": 8640,
+    "total_stake": 12960,
+    "rtp": 0.6666666666666666
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "single:3",
+    "label": "Número individual 3",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11940,
+    "total_stake": 12960,
+    "rtp": 0.9212962962962963
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "triple:4",
+    "label": "Triple 4",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9060,
+    "total_stake": 12960,
+    "rtp": 0.6990740740740741
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "double:4",
+    "label": "Doble 4",
+    "equiprobable_outcomes": 216,
+    "total_credit": 8640,
+    "total_stake": 12960,
+    "rtp": 0.6666666666666666
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "single:4",
+    "label": "Número individual 4",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11940,
+    "total_stake": 12960,
+    "rtp": 0.9212962962962963
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "triple:5",
+    "label": "Triple 5",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9060,
+    "total_stake": 12960,
+    "rtp": 0.6990740740740741
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "double:5",
+    "label": "Doble 5",
+    "equiprobable_outcomes": 216,
+    "total_credit": 8640,
+    "total_stake": 12960,
+    "rtp": 0.6666666666666666
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "single:5",
+    "label": "Número individual 5",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11940,
+    "total_stake": 12960,
+    "rtp": 0.9212962962962963
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "triple:6",
+    "label": "Triple 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9060,
+    "total_stake": 12960,
+    "rtp": 0.6990740740740741
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "double:6",
+    "label": "Doble 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 8640,
+    "total_stake": 12960,
+    "rtp": 0.6666666666666666
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "single:6",
+    "label": "Número individual 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11940,
+    "total_stake": 12960,
+    "rtp": 0.9212962962962963
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:4",
+    "label": "Suma 4",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9180,
+    "total_stake": 12960,
+    "rtp": 0.7083333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:5",
+    "label": "Suma 5",
+    "equiprobable_outcomes": 216,
+    "total_credit": 6840,
+    "total_stake": 12960,
+    "rtp": 0.5277777777777778
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:6",
+    "label": "Suma 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9000,
+    "total_stake": 12960,
+    "rtp": 0.6944444444444444
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:7",
+    "label": "Suma 7",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11700,
+    "total_stake": 12960,
+    "rtp": 0.9027777777777778
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:8",
+    "label": "Suma 8",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11340,
+    "total_stake": 12960,
+    "rtp": 0.875
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:9",
+    "label": "Suma 9",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10500,
+    "total_stake": 12960,
+    "rtp": 0.8101851851851852
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:10",
+    "label": "Suma 10",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11340,
+    "total_stake": 12960,
+    "rtp": 0.875
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:11",
+    "label": "Suma 11",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11340,
+    "total_stake": 12960,
+    "rtp": 0.875
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:12",
+    "label": "Suma 12",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10500,
+    "total_stake": 12960,
+    "rtp": 0.8101851851851852
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:13",
+    "label": "Suma 13",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11340,
+    "total_stake": 12960,
+    "rtp": 0.875
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:14",
+    "label": "Suma 14",
+    "equiprobable_outcomes": 216,
+    "total_credit": 11700,
+    "total_stake": 12960,
+    "rtp": 0.9027777777777778
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:15",
+    "label": "Suma 15",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9000,
+    "total_stake": 12960,
+    "rtp": 0.6944444444444444
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:16",
+    "label": "Suma 16",
+    "equiprobable_outcomes": 216,
+    "total_credit": 6840,
+    "total_stake": 12960,
+    "rtp": 0.5277777777777778
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "sum:17",
+    "label": "Suma 17",
+    "equiprobable_outcomes": 216,
+    "total_credit": 9180,
+    "total_stake": 12960,
+    "rtp": 0.7083333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:1-2",
+    "label": "Dos caras 1 y 2",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:1-3",
+    "label": "Dos caras 1 y 3",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:1-4",
+    "label": "Dos caras 1 y 4",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:1-5",
+    "label": "Dos caras 1 y 5",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:1-6",
+    "label": "Dos caras 1 y 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:2-3",
+    "label": "Dos caras 2 y 3",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:2-4",
+    "label": "Dos caras 2 y 4",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:2-5",
+    "label": "Dos caras 2 y 5",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:2-6",
+    "label": "Dos caras 2 y 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:3-4",
+    "label": "Dos caras 3 y 4",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:3-5",
+    "label": "Dos caras 3 y 5",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:3-6",
+    "label": "Dos caras 3 y 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:4-5",
+    "label": "Dos caras 4 y 5",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:4-6",
+    "label": "Dos caras 4 y 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "sic-bo",
+    "bet": "pair:5-6",
+    "label": "Dos caras 5 y 6",
+    "equiprobable_outcomes": 216,
+    "total_credit": 10800,
+    "total_stake": 12960,
+    "rtp": 0.8333333333333334
+  },
+  {
+    "game_id": "dragon-tiger",
+    "bet": "dragon",
+    "label": "Dragón",
+    "equiprobable_outcomes": 172640,
+    "total_credit": 9971520,
+    "total_stake": 10358400,
+    "rtp": 0.9626506024096385
+  },
+  {
+    "game_id": "dragon-tiger",
+    "bet": "tiger",
+    "label": "Tigre",
+    "equiprobable_outcomes": 172640,
+    "total_credit": 9971520,
+    "total_stake": 10358400,
+    "rtp": 0.9626506024096385
+  },
+  {
+    "game_id": "dragon-tiger",
+    "bet": "tie",
+    "label": "Empate",
+    "equiprobable_outcomes": 172640,
+    "total_credit": 9285120,
+    "total_stake": 10358400,
+    "rtp": 0.8963855421686747
+  },
+  {
+    "game_id": "dragon-tiger",
+    "bet": "suited",
+    "label": "Empate del mismo palo",
+    "equiprobable_outcomes": 172640,
+    "total_credit": 8910720,
+    "total_stake": 10358400,
+    "rtp": 0.8602409638554217
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "fan:1",
+    "label": "Fan · gana 1",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4620,
+    "total_stake": 4800,
+    "rtp": 0.9625
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:1:2",
+    "label": "Nim · gana 1 · devuelve 2",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:1:3",
+    "label": "Nim · gana 1 · devuelve 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:1:4",
+    "label": "Nim · gana 1 · devuelve 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "sheh:2-3-4",
+    "label": "Sheh-Sam-Hong · gana 2, 3, 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "kwok:1-2",
+    "label": "Kwok · gana 1, 2",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:1-2:3",
+    "label": "Nga Tan · gana 1, 2 · devuelve 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:1-2:4",
+    "label": "Nga Tan · gana 1, 2 · devuelve 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "kwok:1-3",
+    "label": "Kwok · gana 1, 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:1-3:2",
+    "label": "Nga Tan · gana 1, 3 · devuelve 2",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:1-3:4",
+    "label": "Nga Tan · gana 1, 3 · devuelve 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "kwok:1-4",
+    "label": "Kwok · gana 1, 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:1-4:2",
+    "label": "Nga Tan · gana 1, 4 · devuelve 2",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:1-4:3",
+    "label": "Nga Tan · gana 1, 4 · devuelve 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "fan:2",
+    "label": "Fan · gana 2",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4620,
+    "total_stake": 4800,
+    "rtp": 0.9625
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:2:1",
+    "label": "Nim · gana 2 · devuelve 1",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:2:3",
+    "label": "Nim · gana 2 · devuelve 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:2:4",
+    "label": "Nim · gana 2 · devuelve 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "sheh:1-3-4",
+    "label": "Sheh-Sam-Hong · gana 1, 3, 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "kwok:2-3",
+    "label": "Kwok · gana 2, 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:2-3:1",
+    "label": "Nga Tan · gana 2, 3 · devuelve 1",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:2-3:4",
+    "label": "Nga Tan · gana 2, 3 · devuelve 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "kwok:2-4",
+    "label": "Kwok · gana 2, 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:2-4:1",
+    "label": "Nga Tan · gana 2, 4 · devuelve 1",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:2-4:3",
+    "label": "Nga Tan · gana 2, 4 · devuelve 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "fan:3",
+    "label": "Fan · gana 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4620,
+    "total_stake": 4800,
+    "rtp": 0.9625
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:3:1",
+    "label": "Nim · gana 3 · devuelve 1",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:3:2",
+    "label": "Nim · gana 3 · devuelve 2",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:3:4",
+    "label": "Nim · gana 3 · devuelve 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "sheh:1-2-4",
+    "label": "Sheh-Sam-Hong · gana 1, 2, 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "kwok:3-4",
+    "label": "Kwok · gana 3, 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:3-4:1",
+    "label": "Nga Tan · gana 3, 4 · devuelve 1",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nga:3-4:2",
+    "label": "Nga Tan · gana 3, 4 · devuelve 2",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "fan:4",
+    "label": "Fan · gana 4",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4620,
+    "total_stake": 4800,
+    "rtp": 0.9625
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:4:1",
+    "label": "Nim · gana 4 · devuelve 1",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:4:2",
+    "label": "Nim · gana 4 · devuelve 2",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "nim:4:3",
+    "label": "Nim · gana 4 · devuelve 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4680,
+    "total_stake": 4800,
+    "rtp": 0.975
+  },
+  {
+    "game_id": "fan-tan",
+    "bet": "sheh:1-2-3",
+    "label": "Sheh-Sam-Hong · gana 1, 2, 3",
+    "equiprobable_outcomes": 40,
+    "total_credit": 4740,
+    "total_stake": 4800,
+    "rtp": 0.9875
+  }
+]

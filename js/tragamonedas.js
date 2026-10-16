@@ -62,6 +62,7 @@ function loadPending() {
 }
 
 let spinning = false;
+const settledSpins = new WeakSet();
 let autoLeft = 0;
 
 function setAuto(n) {
@@ -84,7 +85,8 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) setAu
 async function doSpin(fromAuto) {
   if (spinning) return;
   if (fromAuto && autoLeft <= 0) return;
-  const bet = SlotEngine.normalizeBet(betInput.value);
+  const bet = Number(betInput.value);
+  if (!Number.isSafeInteger(bet) || bet < SlotEngine.MIN_BET || bet > Number.MAX_SAFE_INTEGER / 100) { RC.toast('lose', 'Apuesta inválida.'); return; }
   const user = RC.getUser();
   if (bet > user.coins) { RC.toast('lose', 'No tienes monedas suficientes.'); setAuto(0); return; }
 
@@ -98,8 +100,17 @@ async function doSpin(fromAuto) {
   RC.addCoins(-bet);
   fx('hud');
 
+  settleResult(result);
   await fx('spin', result, { turbo: autoLeft > 0 });
   await resolveSpin(result);
+}
+
+function settleResult(result) {
+  if (settledSpins.has(result)) return;
+  settledSpins.add(result);
+  clearPending();
+  if (result.payout > 0) RC.addCoins(result.payout);
+  RC.registerGameResult('Tragamonedas', result.payout > result.bet, result.bet, result.payout);
 }
 
 async function resolveSpin(result) {
@@ -115,8 +126,7 @@ async function resolveSpin(result) {
   }
 
   // Primero se acredita y se registra (aunque falle un efecto), después se celebra.
-  if (payout > 0) RC.addCoins(payout);
-  clearPending();
+  settleResult(result);
   // Los premios grandes (×10 o más) los celebra el Big Win propio de la máquina; el resto usa el cartel central.
   const ownBigWin = kind === 'triple' && mult >= 10 && RC.getSettings().anim !== false;
   if (!ownBigWin) {
@@ -125,7 +135,6 @@ async function resolveSpin(result) {
     else if (kind === 'pair') RC.result({ type: 'push', title: '¡CASI!', text: 'Dos iguales: recuperas tu apuesta.', sound: false, duration: quick });
     else RC.result({ type: 'lose', title: 'SIN PREMIO', amount: bet, text: 'Sigue intentándolo.', sound: false, duration: quick });
   }
-  RC.registerGameResult('Tragamonedas', payout > bet, bet, payout);
   fx('hud');
 
   await fx('celebrate', result);

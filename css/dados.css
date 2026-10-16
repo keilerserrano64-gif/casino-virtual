@@ -1,8 +1,8 @@
 /* === BASE COMÚN (variables y componentes rc-*) — repetida en cada CSS para que funcione sin archivos extra === */
 :root {
-  --gold-300: #e6cf7a;
-  --gold-400: #d6b64a;
-  --gold-500: #c9a227;
+  --gold-300: #d8bd7a;
+  --gold-400: #c9a24a;
+  --gold-500: #b8913f;
   --cream-050: #fbf6e9;
   --cream-100: #efe6cc;
   --ink-900: #14110f;
@@ -48,7 +48,7 @@ a {
 
 .rc-panel {
   background: rgba(0, 0, 0, .22);
-  border: 1px solid rgba(201, 162, 39, .25);
+  border: 1px solid rgba(201,162,74,0.25);
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
@@ -84,7 +84,7 @@ a {
 .rc-btn-ghost {
   background: transparent;
   color: var(--cream-050);
-  border-color: rgba(201, 162, 39, .4);
+  border-color: rgba(201,162,74,0.4);
 }
 
 .rc-bet-row {
@@ -103,7 +103,7 @@ a {
   width: 110px;
   padding: 8px 10px;
   border-radius: 4px;
-  border: 1px solid rgba(201, 162, 39, .4);
+  border: 1px solid rgba(201,162,74,0.4);
   background: rgba(0, 0, 0, .3);
   color: var(--cream-050);
   font-weight: 700;
@@ -113,7 +113,7 @@ a {
   padding: 7px 12px;
   border-radius: 999px;
   border: 1px solid var(--gold-500);
-  background: rgba(201, 162, 39, .12);
+  background: rgba(201,162,74,0.12);
   color: var(--gold-300);
   font-weight: 700;
   font-size: .78rem;
@@ -130,7 +130,7 @@ a {
 .rc-table td {
   padding: 9px 10px;
   text-align: left;
-  border-bottom: 1px solid rgba(201, 162, 39, .15);
+  border-bottom: 1px solid rgba(201,162,74,0.15);
 }
 
 .rc-table th {
@@ -150,7 +150,7 @@ a {
 .rc-stat {
   padding: 14px;
   text-align: center;
-  border: 1px solid rgba(201, 162, 39, .25);
+  border: 1px solid rgba(201,162,74,0.25);
   border-radius: 8px;
   background: rgba(0, 0, 0, .18);
 }
@@ -203,7 +203,7 @@ a {
   gap: 6px;
   padding: 18px;
   border-radius: 8px;
-  border: 1px solid rgba(201, 162, 39, .25);
+  border: 1px solid rgba(201,162,74,0.25);
   background: rgba(0, 0, 0, .18);
 }
 
@@ -261,7 +261,7 @@ a {
 code { background: rgba(0,0,0,.35); padding: 1px 5px; border-radius: 4px; font-size: .75rem; }
 
 /* --- Estado del punto --- */
-.point-status { text-align: center; padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(201,162,39,.3); background: rgba(0,0,0,.25); transition: background .4s, border-color .4s; }
+.point-status { text-align: center; padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(201,162,74,0.3); background: rgba(0,0,0,.25); transition: background .4s, border-color .4s; }
 .point-status.on { background: rgba(31,122,74,.3); border-color: #4fd08a; }
 .ps-label { font-family: var(--font-display); font-size: 1.3rem; color: var(--gold-400); letter-spacing: .06em; }
 .ps-sub { font-size: .8rem; opacity: .75; }
@@ -342,7 +342,7 @@ code { background: rgba(0,0,0,.35); padding: 1px 5px; border-radius: 4px; font-s
 .z-dp { background: rgba(168,50,50,.38); border-color: #f07575; }
 .z-come { background: rgba(14,140,118,.36); border-color: #3fd0b3; }
 .z-dcome { background: rgba(120,70,170,.4); border-color: #b58be8; }
-.z-field { background: rgba(201,162,39,.32); border-color: var(--gold-400); }
+.z-field { background: rgba(201,162,74,0.32); border-color: var(--gold-400); }
 .z-place { background: rgba(255,255,255,.09); border-color: var(--cream-100); }
 .z-podds { background: rgba(31,95,168,.2); border-color: #5aa4f0; border-style: dashed; min-height: 42px; }
 .z-dpodds { background: rgba(168,50,50,.2); border-color: #f07575; border-style: dashed; min-height: 42px; }
@@ -358,10 +358,10 @@ code { background: rgba(0,0,0,.35); padding: 1px 5px; border-radius: 4px; font-s
 /* disco ON / OFF */
 .puck { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; font-size: .72rem; font-weight: 900; letter-spacing: .05em; position: absolute; right: 4px; top: 4px; z-index: 3; box-shadow: 0 3px 8px rgba(0,0,0,.6); pointer-events: none; }
 .puck.off { background: #111; color: #fff; border: 3px solid #666; }
-.puck.on { background: #fff; color: #111; border: 3px solid #d9c16a; box-shadow: 0 0 14px rgba(255,255,255,.7), 0 3px 8px rgba(0,0,0,.6); }
+.puck.on { background: #fff; color: #111; border: 3px solid #d9c16a; box-shadow: 0 3px 8px rgba(0,0,0,.6); }
 .puck-home .puck { right: 0; top: 0; }
 
-.info-bar { min-height: 70px; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,.3); border: 1px solid rgba(201,162,39,.3); font-size: .86rem; }
+.info-bar { min-height: 70px; padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,.3); border: 1px solid rgba(201,162,74,0.3); font-size: .86rem; }
 .info-bar strong { color: var(--gold-300); font-size: 1rem; }
 .info-bar .kv { display: inline-block; margin-right: 14px; }
 .info-bar .desc { display: block; opacity: .8; font-size: .8rem; margin-top: 3px; }
@@ -399,7 +399,7 @@ code { background: rgba(0,0,0,.35); padding: 1px 5px; border-radius: 4px; font-s
 .freq .c { position: absolute; top: 0; opacity: .7; }
 .audit { font-size: .74rem; margin-top: 8px; }
 .audit table { width: 100%; border-collapse: collapse; }
-.audit td, .audit th { padding: 2px 4px; text-align: right; border-bottom: 1px solid rgba(201,162,39,.12); }
+.audit td, .audit th { padding: 2px 4px; text-align: right; border-bottom: 1px solid rgba(201,162,74,0.12); }
 .audit .verdict { margin-top: 6px; font-weight: 700; color: #7fd39a; }
 
 button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-400); outline-offset: 2px; }
@@ -437,21 +437,21 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-400); 
 @keyframes dc-sway { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
 .dice-page .rc-main { position: relative; }
 .dice-page .game-title { font-size: clamp(2.2rem, 7vw, 3.4rem); letter-spacing: .14em; text-transform: uppercase; margin: 8px 0 0;
-  background: linear-gradient(90deg, #a67c10, #ffe9a0, #a67c10, #ffe9a0); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: dc-run 6s linear infinite; filter: drop-shadow(0 0 14px rgba(230,207,122,.45)); }
+  background: linear-gradient(90deg, #a67c10, #cbbf9f, #a67c10, #cbbf9f); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: dc-run 6s linear infinite; filter: none; }
 @keyframes dc-run { to { background-position: -300% 0; } }
 .dice-page .subtitle { color: var(--gold-300); letter-spacing: .04em; }
 
 /* panel de punto */
 .dice-page .point-status { border-radius: 999px; padding: 10px 22px; border: 2px solid rgba(214,182,74,.55);
-  background: linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,.25)); box-shadow: 0 0 18px rgba(214,182,74,.15), inset 0 0 14px rgba(0,0,0,.6); }
-.dice-page .point-status.on { box-shadow: 0 0 26px rgba(79,208,138,.55), inset 0 0 14px rgba(0,0,0,.6); animation: dc-on 1.8s ease-in-out infinite; }
-@keyframes dc-on { 50% { box-shadow: 0 0 40px rgba(255,214,90,.6), inset 0 0 14px rgba(0,0,0,.6); } }
-.dice-page .ps-label { text-shadow: 0 0 12px rgba(230,207,122,.7); }
+  background: linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,.25)); box-shadow: inset 0 0 14px rgba(0,0,0,.6); }
+.dice-page .point-status.on { box-shadow: inset 0 0 14px rgba(0,0,0,.6); animation: dc-on 1.8s ease-in-out infinite; }
+@keyframes dc-on { 50% { box-shadow: inset 0 0 14px rgba(0,0,0,.6); } }
+.dice-page .ps-label { text-shadow: none; }
 
 /* pista de dados: borde de caoba con filo dorado */
 .dice-page .arena { height: 360px; border: 0; border-radius: 22px;
-  box-shadow: 0 0 0 9px #4b2a14, 0 0 0 11px #2a170a, 0 0 0 13px #d6b64a, 0 0 0 15px #6d5210, 0 24px 50px rgba(0,0,0,.65), inset 0 0 70px rgba(0,0,0,.75);
+  box-shadow: 0 0 0 9px #4b2a14, 0 0 0 11px #2a170a, 0 0 0 13px #c9a24a, 0 0 0 15px #3b311c, 0 24px 50px rgba(0,0,0,.65), inset 0 0 70px rgba(0,0,0,.75);
   background: radial-gradient(ellipse at 50% 20%, #0f3a2b, #04100b); }
 .dice-page .arena::before { content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: 16px;
   background: radial-gradient(ellipse at 50% 30%, rgba(255,235,170,.14), transparent 55%), linear-gradient(180deg, rgba(255,255,255,.06), transparent 22%); }
@@ -459,7 +459,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-400); 
   repeating-linear-gradient(45deg, rgba(255,255,255,.03) 0 2px, transparent 2px 5px),
   radial-gradient(ellipse at 50% 45%, #2a9a6a 0%, #16653f 45%, #0a3222 100%);
   box-shadow: inset 0 0 50px rgba(0,0,0,.7), inset 0 0 0 3px rgba(214,182,74,.35); }
-.dice-page .floor::after { color: rgba(230,207,122,.13); text-shadow: 0 0 18px rgba(230,207,122,.2); }
+.dice-page .floor::after { color: rgba(230,207,122,.13); text-shadow: none; }
 .dice-page .wall { background:
   linear-gradient(135deg, rgba(255,255,255,.2) 25%, transparent 25%) -10px 0 / 20px 20px,
   linear-gradient(225deg, rgba(255,255,255,.2) 25%, transparent 25%) -10px 0 / 20px 20px,
@@ -477,27 +477,27 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--gold-400); 
 .dice-page .face .pip { width: 11px; height: 11px;
   background: radial-gradient(circle at 38% 32%, #fff 0%, #f3ecd9 55%, #cfc6ae 100%);
   box-shadow: inset 0 -1px 2px rgba(0,0,0,.45), 0 0 0 1.5px rgba(90,0,10,.55), 0 1px 1px rgba(255,255,255,.35); }
-.dice-page .f1 .pip.on { background: radial-gradient(circle at 38% 32%, #fff, #ffe08a 60%, #c9a227); width: 14px; height: 14px; }
+.dice-page .f1 .pip.on { background: radial-gradient(circle at 38% 32%, #fff, #ffe08a 60%, #b8913f); width: 14px; height: 14px; }
 
 /* marcador y mensajes */
-.dice-page .sum-display { font-size: 2.2rem; letter-spacing: .08em; text-shadow: 0 0 14px rgba(230,207,122,.7), 0 2px 0 #5a4308; }
+.dice-page .sum-display { font-size: 2.2rem; letter-spacing: .08em; text-shadow: none; }
 .dice-page .game-msg { padding: 8px 24px; border-radius: 999px; border: 1px solid rgba(214,182,74,.45); background: rgba(0,0,0,.4); box-shadow: inset 0 0 12px rgba(0,0,0,.5); }
-.dice-page .call-banner { font-size: 1.6rem; box-shadow: 0 0 26px rgba(230,207,122,.7), 0 6px 16px rgba(0,0,0,.6); }
+.dice-page .call-banner { font-size: 1.6rem; box-shadow: 0 6px 16px rgba(0,0,0,.6); }
 
 /* mesa de apuestas con marco dorado */
 .dice-page .table { border: 0; border-radius: 24px;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.02) 0 2px, transparent 2px 5px), radial-gradient(ellipse at 50% 24%, #24885d 0%, #16523a 46%, #0a2c20 100%);
-  box-shadow: 0 0 0 8px #4b2a14, 0 0 0 10px #2a170a, 0 0 0 12px #d6b64a, 0 0 0 13px #6d5210, 0 20px 40px rgba(0,0,0,.6), inset 0 0 70px rgba(0,0,0,.55); }
+  box-shadow: 0 0 0 8px #4b2a14, 0 0 0 10px #2a170a, 0 0 0 12px #c9a24a, 0 0 0 13px #3b311c, 0 20px 40px rgba(0,0,0,.6), inset 0 0 70px rgba(0,0,0,.55); }
 .dice-page .zone { box-shadow: inset 0 0 10px rgba(0,0,0,.35), 0 2px 0 rgba(0,0,0,.4); text-shadow: 0 1px 2px rgba(0,0,0,.6); }
-.dice-page .zone:hover, .dice-page .zone:focus-visible { box-shadow: 0 0 16px rgba(255,226,140,.6), 0 8px 16px rgba(0,0,0,.5); }
+.dice-page .zone:hover, .dice-page .zone:focus-visible { box-shadow: 0 8px 16px rgba(0,0,0,.5); }
 
 /* botón LANZAR y paneles */
-.dice-page #rollBtn { font-size: 1.25rem; letter-spacing: .18em; padding: 16px 30px; border-radius: 14px; border: 2px solid #fff3b0;
-  box-shadow: 0 6px 0 #8a6a12, 0 12px 26px rgba(0,0,0,.55), 0 0 26px rgba(230,207,122,.5); animation: dc-pulse 1.8s ease-in-out infinite; }
+.dice-page #rollBtn { font-size: 1.25rem; letter-spacing: .18em; padding: 16px 30px; border-radius: 14px; border: 2px solid #e8dcb8;
+  box-shadow: 0 6px 0 #8a6a12, 0 12px 26px rgba(0,0,0,.55); animation: dc-pulse 1.8s ease-in-out infinite; }
 .dice-page #rollBtn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 #8a6a12, 0 6px 14px rgba(0,0,0,.5); }
 .dice-page #rollBtn:disabled { animation: none; }
-@keyframes dc-pulse { 50% { box-shadow: 0 6px 0 #8a6a12, 0 12px 26px rgba(0,0,0,.55), 0 0 44px rgba(255,226,140,.85); } }
+@keyframes dc-pulse { 50% { box-shadow: 0 6px 0 #8a6a12, 0 12px 26px rgba(0,0,0,.55); } }
 .dice-page .rc-panel { border: 1px solid rgba(214,182,74,.4); background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.28)); box-shadow: 0 8px 24px rgba(0,0,0,.45), inset 0 0 20px rgba(0,0,0,.35); }
 .dice-page .rc-panel h2 { color: var(--gold-300); letter-spacing: .06em; }
-.dice-page .puck { box-shadow: 0 0 14px rgba(255,255,255,.6), 0 3px 6px rgba(0,0,0,.6); }
+.dice-page .puck { box-shadow: 0 3px 6px rgba(0,0,0,.6); }
 @media (prefers-reduced-motion: reduce) { .dice-page * { animation: none !important; } }

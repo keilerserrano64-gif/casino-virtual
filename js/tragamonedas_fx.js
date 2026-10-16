@@ -75,7 +75,7 @@
 
   function buildStrip(i, list) {
     strips[i].replaceChildren(...list.map(s => {
-      const d = document.createElement('div'); d.className = 'cell'; d.textContent = s; return d;
+      const d = document.createElement('div'); d.className = 'cell'; d.dataset.sym = s; d.innerHTML = RCSym(s); return d;
     }));
   }
   function setSymbols(symbols) {
@@ -166,7 +166,7 @@
     const frag = document.createDocumentFragment();
     for (let k = 0; k < count; k++) {
       const s = document.createElement('span');
-      s.textContent = '🪙';
+      s.innerHTML = RCIcon('coins');
       s.style.setProperty('--x', (Math.random() * 100).toFixed(1) + '%');
       s.style.setProperty('--s', (1.2 + Math.random() * 1.6).toFixed(2) + 'rem');
       s.style.setProperty('--d', (1.8 + Math.random() * 1.6).toFixed(2) + 's');
@@ -181,7 +181,7 @@
       const box = $('bigWin');
       box.className = 'bigwin ' + tier;
       box.hidden = false;
-      $('bigWinTitle').textContent = { big: 'BIG WIN', mega: 'MEGA WIN', jackpot: '¡JACKPOT!' }[tier];
+      $('bigWinTitle').textContent = { big: 'Gran premio', mega: 'Premio mayor', jackpot: 'Jackpot' }[tier];
       $('bigWinMult').textContent = '×' + mult;
       const dur = tier === 'jackpot' ? 3200 : tier === 'mega' ? 2600 : 2000;
       rain(tier === 'jackpot' ? 70 : tier === 'mega' ? 50 : 30);
@@ -245,7 +245,7 @@
   }
   function paintSound() {
     const b = $('soundBtn'); if (!b) return;
-    b.textContent = soundOn() ? '🔊' : '🔇';
+    b.innerHTML = RCIcon(soundOn() ? 'volume-2' : 'volume-x');
     b.setAttribute('aria-pressed', String(soundPref));
   }
   function initSoundBtn() {
@@ -260,6 +260,11 @@
     paintSound();
   }
 
+  // tabla de pagos: los emojis del HTML se dibujan como símbolos de línea (el HTML sigue siendo la referencia de las pruebas)
+  document.querySelectorAll('.paytable tbody td:first-child').forEach(td => {
+    const parts = td.textContent.trim().split(/\s+/);
+    if (parts.every(p => SYMS.includes(p))) td.innerHTML = parts.map(RCSym).join(' ');
+  });
   initReels(); buildLights(); initSoundBtn(); hud();
   const bet = $('bet'); if (bet) bet.addEventListener('input', hud);
 

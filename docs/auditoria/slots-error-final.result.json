@@ -1,0 +1,5 @@
+{
+  "command": "npx playwright test -g slots: inv\u00e1lidas",
+  "exitCode": 0,
+  "seconds": 2.85
+}

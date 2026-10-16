@@ -2,6 +2,10 @@
 
 Casino virtual hecho con HTML, CSS y JavaScript. **Monedas 100% ficticias, sin dinero real.**
 
+## Reglas auditadas
+
+Consulta [variantes, fuentes y límites](docs/REGLAS_Y_FUENTES.md), la página `html/reglas.html` y `INFORME_CAMBIOS.md`. Esta revisión recibida contenía 17 juegos y cuatro slots ocultos, no Gonzo’s Quest ni Book of Ra.
+
 ## Cómo usarlo
 Abre **`index.html`** (la portada, en la raíz del proyecto) en el navegador, o usa la extensión Live Server de VS Code.
 Desde ahí se llega a todo: *Registrarse*, *Iniciar sesión* y el resto de páginas.
@@ -18,6 +22,11 @@ Solo hay que subir la carpeta completa conservando `index.html`, `html/`, `css/`
 - `html/`  páginas (juegos, usuario, contenido) y `html/admin/` (panel de administración)
 - `css/`   `base.css` (núcleo compartido), `juegos.css` y un CSS por página
 - `js/`    `app.js` (cuentas, monedas, XP, logros, notificaciones), `auth.js` (sesión y rutas) y un JS por página
+
+## Estilo visual (tema sobrio)
+- `css/tema.css` se carga el **último** en todas las páginas: paleta grafito + dorado apagado, Cinzel para títulos e Inter para el resto, sin neón ni bombillas, botones planos y avisos de resultado discretos. Quitando ese `<link>` vuelve el aspecto anterior.
+- `js/iconos.js` (antes de `app.js`): iconos de línea [Lucide](https://lucide.dev) (licencia ISC, ver `js/LICENCIA-LUCIDE.txt`). `RCIcon(nombre)`, `RCGameIcon(juego)` y `RCSym(símbolo)`. Los motores siguen usando sus símbolos de texto; los iconos solo se dibujan.
+- Para usar fotos o ilustraciones propias en las portadas, cambia `.gt-art` en `css/tema.css` o el icono de cada juego en `RCGameIcon` (`js/iconos.js`).
 
 ## Base de datos: Firebase Realtime Database (proyecto `royal--casino`)
 No se usa `localStorage`. Los datos viven en memoria (`RCMem`, en `js/app.js`) y se guardan en Firebase:
@@ -45,7 +54,7 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 - **RTP teórico**: 95,96 % (ventaja de la casa 4,04 %), calculado de forma exacta recorriendo las 40³ combinaciones.
 - **Volatilidad**: media (desviación típica ≈ 2,7 apuestas). Hay premio en el 57,6 % de los giros; 7️⃣ 7️⃣ 7️⃣ sale 1 de cada 2 370.
 - **Tabla de pagos**: 7️⃣ ×100 · 💎 ×30 · ⭐ ×15 · 🍊 ×10 · 🍋 ×6 · 🍒 ×4 · dos iguales ×1. Los pesos de cada símbolo en la tira virtual están en `WEIGHTS`.
-- El resultado se decide y se guarda antes de animar: si se cierra la página durante el giro, el premio se acredita al volver.
+- El resultado se decide y se guarda antes de animar: el premio y el historial se liquidan antes de animar; los pendientes de versiones anteriores se recuperan al volver.
 - `js/tragamonedas_fx.js`: capa visual y sonora (`SlotFX`). Solo anima y suena; nunca decide resultados. Incluye cabina con luces de marquesina, marcadores (saldo, apuesta, último premio), carretes que giran con desenfoque y frenan uno a uno, línea de pago que se ilumina, Big Win / Mega Win / Jackpot con lluvia de monedas, sonidos sintetizados (WebAudio) y botón de sonido.
 - Controles: apuesta −/+ (escalones 10 · 20 · 50 · 100 · 200 · 500 · 1000 · 2000 · 5000 · 10000), **AUTO** (10 giros; se detiene con JACKPOT, sin saldo o al cambiar de pestaña).
 - Los símbolos de arriba y abajo de la línea central son decorativos y nunca forman pares ni triples, para que no parezcan un premio.
@@ -60,10 +69,10 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 
 ## Crash Games
 `html/aviator.html`, `spaceman.html`, `jetx.html`, `cricketx.html`, `aero.html`, `zeppelin.html`, `spacexy.html`, `bigbasscrash.html`, `cashit.html` y `highstriker.html` — el multiplicador sube desde 1,00x y hay que retirar antes de que caiga.
-- `js/crash_engine.js`: RNG (crypto), punto de caída con ventaja de la casa 3 % (RTP 97 %), multiplicador e^(k·t) y pagos. Sin DOM; se prueba en Node (`node tests/crash_engine.test.js`).
+- `js/crash_engine.js`: RNG (crypto), punto de caída con distribución propia con parámetro de ventaja 3 % (retorno efectivo depende del retiro y redondeo), multiplicador e^(k·t) y pagos. Sin DOM; se prueba en Node (`node tests/crash_engine.test.js`).
 - `js/crash.js` + `css/crash.css`: lógica y estilos compartidos; cada página declara `data-crash="..."` en el `<body>` y uno o más bloques `.cx-slot` (una apuesta cada uno). Los juegos se diferencian por velocidad (`k`) e icono en `GAMES` del motor.
-- Apuesta mínima 10, retiro manual o automático (x). Spaceman permite retirar el 50 %, Zeppelin tiene dos apuestas simultáneas (la segunda es opcional) Aero muestra estadísticas en vivo y High Striker dibuja la curva del multiplicador en un `<canvas>`. Si se cierra la página a mitad de ronda cuenta como caída.
-- Para añadir otro crash: nueva entrada en `GAMES` del motor, una página copiando `aviator.html`, y registrarlo en `app.js` (GAMES, GAME_INFO), `auth.js`, `lobby.js` y el admin.
+- Apuesta mínima 10, retiro manual o automático (x). Spaceman y Big Bass permiten retirar el 50 %, Zeppelin y Space XY tienen dos apuestas simultáneas (la segunda es opcional) Aero muestra estadísticas en vivo y High Striker dibuja la curva del multiplicador en un `<canvas>`. Si se cierra la página a mitad de ronda, la parte pendiente cuenta como pérdida y se registra el cobro previo.
+- Para añadir otro crash: nueva entrada en `GAMES` del motor, una página copiando `aviator.html`, y registrarlo en `app.js` (GAME_INFO); las rutas de acceso y el admin se derivan del catálogo. Añadir la presentación al lobby y sus pruebas.
 
 ## Bingo
 `html/bingo.html` — dos salas: **Bingo 75** (cartón 5x5, centro libre) y **Bingo 90** (cartón 3x9 con 15 números).
@@ -82,10 +91,6 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 |---|---|---|
 | `backend/` | **TypeScript + Node.js** (Express, Socket.IO) | API que sortea los giros en el servidor y WebSockets para chat/ganadores en vivo. `cd backend && npm install && npm run dev` |
 | `python/` | **Python** | `python python/simulador_rtp.py` verifica el RTP del tragamonedas |
-| `scss/` | **SCSS** | Variables y mixins del tema; `npx sass scss/main.scss css/tema.css` |
-| `graphql/` | **GraphQL** | Esquema para perfil, ranking, historial y estadísticas |
-| `rust/` | **Rust → WebAssembly** | Cálculo rápido de RTP; `cd rust && wasm-pack build --target web` |
-| `glsl/` | **GLSL** | Shader para efectos 3D de la ruleta (Three.js) |
 
 ## Integración con el backend
 `js/api.js` (`RCApi`) llama a `POST /api/tragamonedas/girar` del backend; si no hay servidor usa el motor local sin esperar (y no reintenta durante 60 s), así el sitio sigue funcionando. El cliente recalcula el premio con `SlotEngine.evaluate`. Para usar el servidor: `cd backend && npm install && npm run dev` y, si lo publicas, define `window.RC_API_URL` antes de cargar `api.js`.
@@ -97,15 +102,14 @@ apuestas automáticas, modo Turbo, sonido ambiente y voz de stickman.
 | Carpeta / archivo | Lenguaje | Para qué |
 |---|---|---|
 | `ts/api.ts` + `types/` | **TypeScript** (frontend) | `npm run build:ts` genera `js/api.js`. Pasa el resto de `js/` a TS poco a poco |
-| `web-next/` | **React / Next.js** (TSX) | Cabecera y menú en un componente, SSR para SEO. `cd web-next && npm install && npm run dev` |
 | `.github/workflows/ci.yml` | **YAML** (GitHub Actions) | Corre pruebas, compila TS y backend en cada push |
-| `scripts/*.sh` | **Bash** | `levantar.sh` (bases de datos), `respaldo_db.sh`, `desplegar.sh` |
+| `scripts/desplegar.sh` | **Bash** | Compila TypeScript (frontend y backend) |
 | `nginx/nginx.conf` | **Nginx** | HTTPS, gzip, caché y proxy a `/api` y `/socket.io` |
 | `robots.txt`, `sitemap.xml`, JSON-LD en `index.html` | **SEO** | Cambia `TU-DOMINIO.com` por tu dominio real |
 | `tests/unit`, `tests/e2e` | **Vitest + Playwright** | `npm run test:unit` y `npm run test:e2e` (tras `npm install`) |
 
 ## IA que aprende cómo juegas (Poker)
-`js/ia_engine.js` (`RCIA`) crea un modelo de ti: cuenta cuántas veces te retiras cuando la banca **sube** y cuántas cuando no, olvidando poco a poco lo viejo (se adapta si cambias de estilo). La banca decide subir comparando el valor esperado: sube con manos fuertes y hace **faroles** si aprendió que te retiras mucho; si nunca te retiras, deja de farolear. Calcula su probabilidad de ganar con sus propias cartas y el tablero; **nunca ve tus cartas**. El modelo se guarda por usuario en `localStorage` (`rc_ia_poker_<usuario>`). Pruebas: `node tests/ia_engine.test.js`.
+`js/ia_engine.js` (`RCIA`) crea un modelo de ti: cuenta cuántas veces te retiras cuando la banca **sube** y cuántas cuando no, olvidando poco a poco lo viejo (se adapta si cambias de estilo). La banca decide subir comparando el valor esperado: sube con manos fuertes y hace **faroles** si aprendió que te retiras mucho; si nunca te retiras, deja de farolear. Calcula su probabilidad de ganar con sus propias cartas y el tablero; su función de decisión no recibe tus cartas. El modelo se guarda por usuario en `localStorage` (`rc_ia_poker_<usuario>`). Pruebas: `node tests/ia_engine.test.js`.
 
 Esta IA no cambia las probabilidades de tragamonedas, ruleta, dados ni bingo: son azar (RNG) y su RTP publicado debe mantenerse.
 

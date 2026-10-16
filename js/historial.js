@@ -18,7 +18,7 @@ function render() {
   const wins = history.filter(h => h.result === 'win').length;
   document.getElementById('hsGames').textContent = RC.formatNumber(history.length);
   document.getElementById('hsWins').textContent = RC.formatNumber(wins);
-  document.getElementById('hsLosses').textContent = RC.formatNumber(history.length - wins);
+  document.getElementById('hsLosses').textContent = RC.formatNumber(history.filter(h => h.result === 'lose').length);
   document.getElementById('hsRate').textContent = history.length ? Math.round(wins / history.length * 100) + '%' : '0%';
   const wrap = document.getElementById('tableWrap');
 
@@ -35,7 +35,7 @@ function render() {
           <tr>
             <td>${RC.fmtDate(h.date)}</td>
             <td>${RC.esc(h.game)}</td>
-            <td><span class="rc-badge ${h.result}">${h.result === 'win' ? 'Ganada' : 'Perdida'}</span></td>
+            <td><span class="rc-badge ${h.result}">${h.result === 'win' ? 'Ganada' : h.result === 'push' ? 'Empate' : 'Perdida'}</span></td>
             <td>${RC.formatNumber(h.wager)}</td>
             <td>${h.payout > 0 ? '+' + RC.formatNumber(h.payout) : '—'}</td>
             <td>${RC.formatNumber(h.balance)}</td>
